@@ -1,0 +1,33 @@
+#notFoundContainer {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 25px;
+}
+
+a {
+  text-decoration: none;
+}
+
+#indexBtn {
+  border: 2px solid #3f3fff;
+  padding: 10px 15px;
+  text-decoration: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+  color: #3f3fff;
+}
+
+#indexBtn:hover {
+  background-color: #3f3fff;
+  color: #fff;
+}
+
+#notFoundContainer > p:last-child {
+  position: absolute;
+  bottom: 40px;
+}

@@ -1,0 +1,82 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  height: 300px;
+
+  border-radius: 10px;
+  /* box-shadow: 0px 5px 8px rgba(150, 150, 150, 0.2); */
+
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  box-shadow: 0px 7px 6px rgba(150, 150, 150, 0.3);
+}
+
+.card > img {
+  width: 250px;
+  height: 50%;
+  object-fit: cover;
+  margin-top: -38px;
+}
+
+.card > .likeBtn {
+  padding: 8px;
+  border: none;
+  box-shadow: 0px 2px 8px rgba(141, 141, 141, 0.5);
+  background-color: #fff;
+  width: fit-content;
+
+  position: relative;
+  left: 10px;
+  top: 10px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.card > .likeBtn.clicked {
+  background-color: blue;
+  color: #fff;
+}
+
+.card > .likeBtn.clicked:hover {
+  background-color: blue;
+  color: #fff;
+}
+
+.card > .likeBtn:hover {
+  background-color: #f8f8f8;
+  color: #4e4e4e;
+}
+
+.card > .text {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  .card {
+    min-width: 50%;
+    max-width: 50%;
+  }
+
+  .card:hover {
+    box-shadow: none;
+  }
+
+  .card > img {
+    width: 100%;
+    /* height: 50%; */
+    /* object-fit: cover; */
+    /* margin-top: -38px; */
+  }
+}

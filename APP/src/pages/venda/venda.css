@@ -1,0 +1,130 @@
+#telaVenda {
+  background-color: #ebebeb;
+  max-width: 100vw;
+  min-height: 100vh;
+
+  /* padding: 50px 11%; */
+}
+
+#telaVenda > section {
+  padding: 40px 11%;
+}
+
+#telaVenda > section > #content {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  gap: 20px;
+}
+
+#telaVenda > section > #content > img {
+  width: 33.33%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+#telaVenda > section > #content > #infosProduto {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 33.33%;
+}
+
+#telaVenda > section > #content > #infosProduto > strong {
+  font-weight: 100;
+  cursor: default;
+}
+
+#telaVenda > section > #content > #infosProduto > strong:first-child {
+  font-size: x-large;
+}
+
+#telaVenda > section > #content > #infosProduto > strong {
+  font-size: xx-large;
+}
+
+#telaVenda > section > #content > #infosProduto > .selectBox {
+  display: flex;
+  flex-direction: column;
+  width: 80px;
+}
+
+.selectBox > select {
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 5px;
+  background-color: #fff;
+}
+
+#telaVenda > section > #content > #compraBox {
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#telaVenda > section > #content > #compraBox > #buttonsBox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* margin-top: 15px; */
+}
+
+#telaVenda > section > #content > #compraBox > #buttonsBox > button {
+  padding: 15px;
+  border-radius: 5px;
+  border: none;
+  background-color: blue;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#telaVenda > section > #content > #compraBox > #buttonsBox > button.clicked {
+  background-color: green;
+}
+
+#telaVenda
+  > section
+  > #content
+  > #compraBox
+  > #buttonsBox
+  > button.clicked:hover {
+  background-color: green;
+}
+
+#telaVenda > section > #content > #compraBox > #buttonsBox > button:hover {
+  background-color: #4e4eff;
+}
+
+@media screen and (max-width: 768px) {
+  #telaVenda > section {
+    padding: 40px 20px;
+  }
+
+  #telaVenda > section > #content {
+    flex-direction: column;
+    /* padding: 30px; */
+    gap: 20px;
+  }
+
+  #telaVenda > section > #content > img {
+    width: 100%;
+    height: 300px;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+
+  #telaVenda > section > #content > #infosProduto {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+}

@@ -1,0 +1,97 @@
+#cartContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+}
+
+#cartContainer > button {
+  position: fixed;
+  top: 10px;
+  right: calc(50% + 20px);
+  padding: 10px 12px;
+  border: none;
+  border-radius: 50%;
+  background-color: #fff;
+  box-shadow: 0px 2px 8px rgba(183, 183, 183, 0.5);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#cartContainer > button:hover {
+  box-shadow: none;
+  background-color: #f2f2f2;
+}
+
+#cartBox,
+#emptyCart {
+  width: 50%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  background-color: #fff;
+  box-shadow: -1px 0px 8px rgba(183, 183, 183, 0.5);
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 30px 3%;
+  padding-bottom: 130px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+#cartBox::-webkit-scrollbar,
+#emptyCart::-webkit-scrollbar {
+  display: none;
+}
+
+#cartBox > div {
+  display: flex;
+  gap: 10px;
+}
+
+#emptyCart {
+  align-items: center;
+  justify-content: center;
+}
+
+#emptyCart > div {
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+#emptyCart > div > div {
+  width: 370px;
+  cursor: default;
+}
+
+#emptyCart > div > div > strong {
+  font-size: x-large;
+}
+
+#emptyCart > div > div > p {
+  margin-top: 5px;
+  font-size: large;
+}
+
+@media screen and (max-width: 768px) {
+  #cartBox,
+  #emptyCart {
+    width: 100%;
+    box-shadow: none;
+    padding: 30px 20px;
+    padding-bottom: 120px;
+  }
+
+  #cartContainer > button {
+    top: 15px;
+    right: 20px;
+    z-index: 1000;
+    border: none;
+  }
+}

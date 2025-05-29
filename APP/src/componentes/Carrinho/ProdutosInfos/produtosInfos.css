@@ -1,0 +1,40 @@
+#produtosInfos {
+  position: fixed;
+  width: 50%;
+  right: 0;
+  bottom: 0;
+  bottom: 0px;
+  background-color: #fff;
+  cursor: default;
+  padding: 20px 50px;
+}
+
+#produtosInfos > div > strong {
+  font-size: x-large;
+  font-weight: 500;
+}
+
+#produtosInfos > button {
+  width: 100%;
+  cursor: pointer;
+  border: none;
+  background-color: blue;
+  transition: 0.2s;
+  color: #fff;
+  font-weight: bold;
+  padding: 15px;
+  border-radius: 10px;
+  margin-left: 10px;
+}
+
+#produtosInfos > button:hover {
+  background-color: #6565ff;
+}
+
+@media screen and (max-width: 768px),
+  (max-width: 768px) and (orientation: landscape) {
+  #produtosInfos {
+    width: 100%;
+    padding: 20px 30px;
+  }
+}

@@ -1,0 +1,33 @@
+.prateleira {
+  padding: 30px 5%;
+}
+
+.prateleira > h1 {
+  margin-bottom: 15px;
+}
+
+.prateleira .carroussel {
+  display: flex;
+  gap: 28px;
+  /* justify-content: space-between; */
+  max-width: 100vw;
+  flex-wrap: wrap;
+}
+
+@media screen and (max-width: 768px),
+  (max-width: 768px) and (orientation: landscape) {
+  .prateleira {
+    overflow-x: scroll;
+    scrollbar-width: none;
+  }
+
+  .prateleira::-webkit-scrollbar {
+    display: none;
+  }
+
+  .prateleira .carroussel {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 40px;
+  }
+}

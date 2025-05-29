@@ -1,0 +1,82 @@
+#itensInfos {
+  max-width: 100vw;
+  padding: 40px;
+}
+
+#itensQnt {
+  width: 100%;
+  padding: 20px 0px;
+  margin-bottom: 20px;
+}
+
+#itensContain {
+  width: 100%;
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+#msgmContainer {
+  max-width: 100vw;
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#msgmContainer > #msgm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  background-color: #ccc;
+  padding: 20px 25px;
+  border-radius: 8px;
+}
+
+#msgmContainer > #msgm > div > ul {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+  margin-left: 20px;
+}
+
+#searchIcon {
+  width: 100px;
+  height: 100px;
+}
+
+#link {
+  cursor: pointer;
+  color: blue;
+  text-decoration: none;
+}
+
+@media screen and (max-width: 768px),
+  (max-width: 768px) and (orientation: landscape) {
+  #itensInfos {
+    padding: 0;
+  }
+
+  #itensQnt {
+    padding: 20px 20px 0px 20px;
+  }
+
+  #itensContain {
+    padding: 0;
+    justify-content: left;
+    gap: 0px;
+  }
+
+  #msgmContainer > #msgm {
+    max-width: 300px;
+    word-break: break-all;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  #msgmContainer > #msgm > div > ul {
+    gap: 10px;
+  }
+}

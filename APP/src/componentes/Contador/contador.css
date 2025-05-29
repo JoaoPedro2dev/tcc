@@ -1,0 +1,31 @@
+.countContainer > p {
+  margin-bottom: 10px;
+}
+
+.countBox {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.countBox > button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+
+  width: 30px;
+  height: 30px;
+
+  font-size: large;
+  cursor: pointer;
+  border: none;
+  background-color: blue;
+  color: #fff;
+
+  transition: 0.2s;
+}
+
+.countBox > button:hover {
+  background-color: #6c6cff;
+}
