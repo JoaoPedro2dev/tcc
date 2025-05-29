@@ -81,7 +81,10 @@ function Venda() {
       <Header />
       <section>
         <div id="content">
-          <img src={`images/${data.imagem}`} alt="Imagem do Produto" />
+          <img
+            src={"http://localhost/tcc/tcc/API/UPLOADS/images/imagem1.png"}
+            alt="Imagem do Produto"
+          />
 
           <div id="infosProduto">
             <strong>{data.nome}</strong>

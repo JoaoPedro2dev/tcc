@@ -3,7 +3,7 @@ import Contador from "../../Contador/Contador";
 import { Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-function CartCard({ item, idItem, img, nome, preco, frete, qnt }) {
+function CartCard({ item, idItem, nome, preco, frete, qnt }) {
   const storage = localStorage.getItem("idItem");
   const navigate = useNavigate();
 
@@ -29,15 +29,12 @@ function CartCard({ item, idItem, img, nome, preco, frete, qnt }) {
   return (
     <div className="cartCard">
       <img
-        src={`images/${img}`}
+        src={"http://localhost/tcc/tcc/API/UPLOADS/images/imagem1.png"}
         alt=""
         onClick={() => {
           navigate("/venda?", { state: item });
         }}
       />
-
-      {/* <img 
-      src={`../../images/${item.imagem}`} alt="" /> */}
 
       <div>
         <div className="itemInfos">

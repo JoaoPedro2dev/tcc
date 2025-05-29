@@ -74,7 +74,10 @@ function Card({ item }) {
       >
         <ShoppingCart />
       </button>
-      <img src={`../../images/${item.imagem}`} alt="" />
+      <img
+        src={"http://localhost/tcc/tcc/API/UPLOADS/images/imagem1.png"}
+        alt=""
+      />
       <div className="text">
         <p>{item.nome}</p>
         <span>{item.categoria}</span>

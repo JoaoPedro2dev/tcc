@@ -1,4 +1,5 @@
 import "./App.css";
+import Carousel from "./componentes/Carousel/Carousel.jsx";
 import Footer from "./componentes/Footer/Footer.jsx";
 import Header from "./componentes/Header/Header.jsx";
 import Prateleira from "./componentes/Prateleira/Prateleira.jsx";
@@ -13,6 +14,7 @@ function App() {
   return (
     <div>
       <Header />
+      <Carousel />
       <div>{criarPrateleira("casual", "Tênis Casuais")}</div>
       <div>{criarPrateleira("esportivo", "Tênis Esportivos")}</div>
       <div>{criarPrateleira("luxo", "Tênis de luxo")}</div>
