@@ -5,7 +5,7 @@
   cursor: pointer;
 }
 
-.login-container {
+.conta-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,7 +14,7 @@
   padding: 20px;
 }
 
-.login-form {
+.conta-form {
   background: #fff;
   padding: 40px;
   border-radius: 12px;
@@ -48,7 +48,7 @@
   border-color: #007bff;
 }
 
-.btn-login {
+.btn-criar-conta {
   width: 100%;
   padding: 12px;
   background-color: #007bff;
@@ -62,32 +62,29 @@
   margin-top: 20px;
 }
 
-.btn-login:hover,
-.btn-voltar:hover {
+.btn-criar-conta:hover {
   background-color: #0056b3;
 }
 
-.pass-link {
-  text-align: left;
+.voltar-login {
+  margin-top: 25px;
+  text-align: center;
   font-size: 14px;
   color: #666;
 }
 
-.pass-link a,
-.create-account-paragraph > a {
+.voltar-login a {
   color: #007bff;
   text-decoration: none;
 }
 
-.pass-link a:hover,
-.create-account-paragraph > a:hover {
+.voltar-login a:hover {
   text-decoration: underline;
 }
 
-.create-account-paragraph {
-  margin-top: 25px;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  gap: 10px;
+.input-error {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #e53935;
+  height: 16px; /* reserva o espaço mesmo sem erro */
 }

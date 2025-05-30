@@ -40,8 +40,8 @@ function Login() {
         </button>
 
         <p className="create-account-paragraph">
-          <a href="#">Crirar conta pessoal</a>
-          <a href="#">Quero ser um vendedor</a>
+          <a href="/contapessoal">Crirar conta pessoal</a>
+          <a href="/contavendedor">Quero ser um vendedor</a>
         </p>
       </form>
     </div>

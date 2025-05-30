@@ -7,6 +7,8 @@ import Venda from "./pages/venda/Venda.jsx";
 import Pesquisa from "./pages/pesquisa/Pesquisa.jsx";
 import NotFound from "./pages/notFound/NotFound.jsx";
 import Login from "./pages/Login/Login.jsx";
+import ContaPessoal from "./pages/ContaPessoal/ContaPessoal.jsx";
+import ContaVendedor from "./pages/ContaVendedor/ContaVendedor.jsx";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +29,16 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/contapessoal",
+    element: <ContaPessoal />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/contavendedor",
+    element: <ContaVendedor />,
     errorElement: <NotFound />,
   },
 ]);
