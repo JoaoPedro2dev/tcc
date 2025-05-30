@@ -1,8 +1,8 @@
-/* Reset básico */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+.dnv-logo {
+  position: absolute;
+  top: 30px;
+  left: 40px;
+  cursor: pointer;
 }
 
 .login-container {
@@ -22,13 +22,13 @@
   width: 100%;
   max-width: 400px;
 }
-
+/* 
 .login-form h2 {
   text-align: center;
   margin-bottom: 24px;
   font-weight: 600;
   color: #333;
-}
+} */
 
 .input-group {
   margin-bottom: 20px;
@@ -55,8 +55,8 @@
   border-color: #007bff;
 }
 
-.btn-login,
-.btn-voltar {
+.btn-login
+/* .btn-voltar*/ {
   width: 100%;
   padding: 12px;
   background-color: #007bff;
@@ -67,29 +67,39 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-top: 20px;
 }
 
-.btn-voltar {
+/* .btn-voltar {
   margin-top: 12px;
-}
+} */
 
 .btn-login:hover,
 .btn-voltar:hover {
   background-color: #0056b3;
 }
 
-.login-footer {
-  text-align: center;
-  margin-top: 16px;
+.pass-link {
+  text-align: left;
   font-size: 14px;
   color: #666;
 }
 
-.login-footer a {
+.pass-link a,
+.create-account-paragraph > a {
   color: #007bff;
   text-decoration: none;
 }
 
-.login-footer a:hover {
+.pass-link a:hover,
+.create-account-paragraph > a:hover {
   text-decoration: underline;
+}
+
+.create-account-paragraph {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 10px;
 }

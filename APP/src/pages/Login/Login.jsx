@@ -6,9 +6,16 @@ function Login() {
 
   return (
     <div className="login-container">
-      <form className="login-form">
-        <h2>DNV WEAR</h2>
+      <h2
+        className="dnv-logo"
+        onClick={() => {
+          navigate("/");
+        }}
+      >
+        DNV WEAR
+      </h2>
 
+      <form className="login-form">
         <div className="input-group">
           <label htmlFor="email">Email</label>
           <input
@@ -24,21 +31,17 @@ function Login() {
           <input type="password" id="senha" required placeholder="sua senha" />
         </div>
 
+        <p className="pass-link">
+          Esqueceu a senha? <a href="#">Recuperar</a>
+        </p>
+
         <button type="submit" className="btn-login">
           Acessar
         </button>
 
-        <button
-          className="btn-voltar"
-          onClick={() => {
-            navigate("/");
-          }}
-        >
-          Voltar
-        </button>
-
-        <p className="login-footer">
-          Esqueceu a senha? <a href="#">Recuperar</a>
+        <p className="create-account-paragraph">
+          <a href="#">Crirar conta pessoal</a>
+          <a href="#">Quero ser um vendedor</a>
         </p>
       </form>
     </div>
