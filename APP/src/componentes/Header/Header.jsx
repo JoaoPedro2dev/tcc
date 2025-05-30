@@ -1,4 +1,4 @@
-import { SearchIcon, ShoppingCart } from "lucide-react";
+import { SearchIcon, ShoppingCart, User } from "lucide-react";
 import "./header.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -72,6 +72,16 @@ function Header({ value }) {
           <SearchIcon className="searchIcon" />
         </label>
       </div>
+
+      <button
+        id="buttonLogin"
+        onClick={() => {
+          navigate("/login");
+        }}
+      >
+        <User />
+        <p>Entrar</p>
+      </button>
 
       <button id="buttonCart" onClick={cart}>
         <div id="cartCount">{cartCount}</div>

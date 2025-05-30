@@ -48,13 +48,26 @@ header .inputBox > label {
   cursor: pointer;
 }
 
-header #buttonCart {
+header #buttonCart,
+header #buttonLogin {
   padding: 10px;
   border-radius: 5px;
   border: none;
   box-shadow: 0px 4px 5px rgba(136, 136, 136, 0.4);
   background-color: #fff;
   cursor: pointer;
+}
+
+header #buttonLogin {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+}
+
+header #buttonLogin > p {
+  font-size: medium;
+  font-weight: 500;
 }
 
 @media screen and (max-width: 768px) {

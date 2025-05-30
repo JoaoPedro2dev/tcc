@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Venda from "./pages/venda/Venda.jsx";
 import Pesquisa from "./pages/pesquisa/Pesquisa.jsx";
 import NotFound from "./pages/notFound/NotFound.jsx";
+import Login from "./pages/Login/Login.jsx";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,11 @@ const router = createBrowserRouter([
   {
     path: "/pesquisa",
     element: <Pesquisa />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
     errorElement: <NotFound />,
   },
 ]);
