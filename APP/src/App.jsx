@@ -15,10 +15,15 @@ function App() {
     <div>
       <Header />
       <Carousel />
-      <div>{criarPrateleira("casual", "Tênis Casuais")}</div>
-      <div>{criarPrateleira("esportivo", "Tênis Esportivos")}</div>
-      <div>{criarPrateleira("luxo", "Tênis de luxo")}</div>
-      <div>{criarPrateleira("infantil", "Tênis infantis")}</div>
+      <section>
+        <div>{criarPrateleira("casual", "Ofertas")}</div>
+        <div>{criarPrateleira("esportivo", "Camisetas")}</div>
+        <div>{criarPrateleira("luxo", "Calças")}</div>
+        <div>{criarPrateleira("infantil", "Shorts")}</div>
+        <div>{criarPrateleira("luxo", "Calçados")}</div>
+        <div>{criarPrateleira("infantil", "Acessórios")}</div>
+        <div>{criarPrateleira("infantil", "Infantil")}</div>
+      </section>
       <Footer />
     </div>
   );
