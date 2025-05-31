@@ -3,6 +3,7 @@ import "./header.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Carrinho from "../Carrinho/Carrinho";
+import MenuUser from "../MenuUser/MenuUser";
 
 function Header({ value }) {
   const [cartCount, setCartCount] = useState(0);
@@ -34,14 +35,16 @@ function Header({ value }) {
   }
 
   const [openCart, setOpenCart] = useState(false);
-
   function cart() {
-    if (!openCart) {
-      setOpenCart(true);
-    } else {
-      setOpenCart(false);
-    }
+    !openCart ? setOpenCart(true) : setOpenCart(false);
   }
+
+  const [openMenu, setOpenMenu] = useState(false);
+  function menu() {
+    !openMenu ? setOpenMenu(true) : setOpenMenu(false);
+  }
+
+  const userLogged = true;
 
   return (
     <header>
@@ -86,15 +89,24 @@ function Header({ value }) {
         </label>
       </div>
 
-      <button
-        id="buttonLogin"
-        onClick={() => {
-          navigate("/login");
-        }}
-      >
-        <User />
-        <p>Entrar</p>
-      </button>
+      {userLogged ? (
+        <button className="usser-account-btn" onClick={menu}>
+          <img
+            src="http://localhost/tcc/tcc/API/UPLOADS/images/imagem3.png"
+            alt=""
+          />
+        </button>
+      ) : (
+        <button
+          id="buttonLogin"
+          onClick={() => {
+            navigate("/login");
+          }}
+        >
+          <User />
+          <p>Entrar</p>
+        </button>
+      )}
 
       <button id="buttonCart" onClick={cart}>
         <div id="cartCount">{cartCount}</div>
@@ -105,6 +117,16 @@ function Header({ value }) {
         <Carrinho
           funcao={() => {
             cart();
+          }}
+        />
+      ) : (
+        ""
+      )}
+
+      {openMenu ? (
+        <MenuUser
+          funcao={() => {
+            menu();
           }}
         />
       ) : (

@@ -1,0 +1,23 @@
+.menu-card {
+  width: 100%;
+  padding: 25px 40px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.menu-card:hover {
+  background-color: #f2f2f2;
+}
+
+.menu-card > .menu-icon {
+  width: 35px;
+  height: auto;
+}
+
+.menu-card > p {
+  font-size: large;
+  font-weight: 500;
+}
