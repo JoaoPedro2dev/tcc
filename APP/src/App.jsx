@@ -2,7 +2,6 @@ import "./App.css";
 import Carousel from "./componentes/Carousel/Carousel.jsx";
 import Footer from "./componentes/Footer/Footer.jsx";
 import Header from "./componentes/Header/Header.jsx";
-// import MenuUser from "./componentes/MenuUser/MenuUser.jsx";
 import Prateleira from "./componentes/Prateleira/Prateleira.jsx";
 import tenis from "./json/tenis.json";
 
@@ -25,7 +24,6 @@ function App() {
         <div>{criarPrateleira("infantil", "Acessórios")}</div>
         <div>{criarPrateleira("infantil", "Infantil")}</div>
       </section>
-      {/* <MenuUser /> */}
       <Footer />
     </div>
   );

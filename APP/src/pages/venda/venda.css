@@ -103,6 +103,9 @@
   background-color: #4e4eff;
 }
 
+#similar-items {
+  width: 100%;
+}
 @media screen and (max-width: 768px) {
   #telaVenda > section {
     padding: 40px 20px;

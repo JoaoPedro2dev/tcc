@@ -2,13 +2,18 @@ import { useLocation } from "react-router-dom";
 import Contador from "../../componentes/Contador/Contador.jsx";
 import Footer from "../../componentes/Footer/Footer.jsx";
 import Header from "../../componentes/Header/Header.jsx";
+import Prateleira from "../../componentes/Prateleira/Prateleira.jsx";
 import "./venda.css";
 import { useState } from "react";
 import Feedback from "../../componentes/Feedback/Feedback";
 
+import tenis from "../../json/tenis.json";
+
 function Venda() {
   const location = useLocation();
   const data = location.state;
+
+  console.log(data);
 
   const [feedback, setFeedback] = useState("");
 
@@ -76,6 +81,11 @@ function Venda() {
     qntItem = value;
   };
 
+  function criarPrateleira(categoria, title) {
+    const itens = tenis.filter((item) => item.categoria === categoria);
+    return <Prateleira title={title} itens={itens} />;
+  }
+
   return (
     <div id="telaVenda">
       <Header />
@@ -139,6 +149,11 @@ function Venda() {
           </div>
         </div>
       </section>
+
+      <section id="similar-items">
+        {criarPrateleira(data.categoria, "Itens parecidos")}
+      </section>
+
       <Footer />
 
       {feedback}

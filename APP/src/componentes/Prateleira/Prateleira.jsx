@@ -28,6 +28,12 @@ function Prateleira({ title, itens }) {
     prevArrow: <PrevArrow />,
     responsive: [
       {
+        breakpoint: 1600,
+        settings: {
+          slidesToShow: 3.5,
+        },
+      },
+      {
         breakpoint: 1024,
         settings: {
           slidesToShow: 3.5,
