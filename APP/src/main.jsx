@@ -9,6 +9,7 @@ import NotFound from "./pages/notFound/NotFound.jsx";
 import Login from "./pages/Login/Login.jsx";
 import ContaPessoal from "./pages/ContaPessoal/ContaPessoal.jsx";
 import ContaVendedor from "./pages/ContaVendedor/ContaVendedor.jsx";
+import CadastrarCep from "./pages/CadastrarCep/CadastrarCep.jsx";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,11 @@ const router = createBrowserRouter([
   {
     path: "/contavendedor",
     element: <ContaVendedor />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/cadastrarcep",
+    element: <CadastrarCep />,
     errorElement: <NotFound />,
   },
 ]);

@@ -1,4 +1,4 @@
-import { SearchIcon, ShoppingCart, User } from "lucide-react";
+import { SearchIcon, ShoppingCart, User, MapPin } from "lucide-react";
 import "./header.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -52,6 +52,19 @@ function Header({ value }) {
       >
         DNV WEAR
       </strong>
+
+      <p
+        className="cepBtn"
+        onClick={() => {
+          navigate("/cadastrarcep");
+        }}
+      >
+        Meu endereço
+        <span>
+          <MapPin height={"20px"} />
+          CEP
+        </span>
+      </p>
 
       <div className="inputBox">
         <input
