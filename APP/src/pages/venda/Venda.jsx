@@ -6,6 +6,7 @@ import Prateleira from "../../componentes/Prateleira/Prateleira.jsx";
 import "./venda.css";
 import { useState } from "react";
 import Feedback from "../../componentes/Feedback/Feedback";
+import Comentarios from "../../componentes/Comentarios/Comentarios.jsx";
 
 import tenis from "../../json/tenis.json";
 
@@ -148,6 +149,10 @@ function Venda() {
             <p>Garantia de até 30 dias após receber o produto</p>
           </div>
         </div>
+      </section>
+
+      <section>
+        <Comentarios />
       </section>
 
       <section id="similar-items">
