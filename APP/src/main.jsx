@@ -10,6 +10,7 @@ import Login from "./pages/Login/Login.jsx";
 import ContaPessoal from "./pages/ContaPessoal/ContaPessoal.jsx";
 import ContaVendedor from "./pages/ContaVendedor/ContaVendedor.jsx";
 import CadastrarCep from "./pages/CadastrarCep/CadastrarCep.jsx";
+import PaginaVendedor from "./pages/PaginaVendedor/PaginaVendedor.jsx";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,11 @@ const router = createBrowserRouter([
   {
     path: "/cadastrarcep",
     element: <CadastrarCep />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/paginavendedor",
+    element: <PaginaVendedor />,
     errorElement: <NotFound />,
   },
 ]);

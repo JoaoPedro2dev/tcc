@@ -29,7 +29,7 @@ function CartCard({ item, idItem, nome, preco, frete, qnt }) {
   return (
     <div className="cartCard">
       <img
-        src={"http://localhost/tcc/tcc/API/UPLOADS/images/imagem1.png"}
+        src={"http://localhost/tcc/API/UPLOADS/images/imagem1.png"}
         alt=""
         onClick={() => {
           navigate("/venda?", { state: item });

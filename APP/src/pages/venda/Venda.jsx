@@ -93,7 +93,7 @@ function Venda() {
       <section>
         <div id="content">
           <img
-            src={"http://localhost/tcc/tcc/API/UPLOADS/images/imagem1.png"}
+            src={"http://localhost/tcc/API/UPLOADS/images/imagem1.png"}
             alt="Imagem do Produto"
           />
 

@@ -92,7 +92,7 @@ function Header({ value }) {
       {userLogged ? (
         <button className="usser-account-btn" onClick={menu}>
           <img
-            src="http://localhost/tcc/tcc/API/UPLOADS/images/imagem3.png"
+            src="http://localhost/tcc/API/UPLOADS/images/imagem3.png"
             alt=""
           />
         </button>

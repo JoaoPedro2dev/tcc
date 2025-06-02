@@ -45,7 +45,7 @@ function MenuUser({ funcao }) {
         <MenuCard
           icon={<Layout className="menu-icon" />}
           title={"Painel"}
-          link={"/minhaConta"}
+          link={"/paginavendedor"}
         />
         <MenuCard
           icon={<ShoppingBasket className="menu-icon" />}
