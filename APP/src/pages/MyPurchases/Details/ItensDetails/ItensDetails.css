@@ -1,0 +1,41 @@
+#itensDetailsBody {
+  width: 700px;
+  background-color: #fff;
+  /* display: flex; */
+  padding: 25px;
+
+  margin-top: 20px;
+}
+
+#itensDetailsBody > h1 {
+  font-size: medium;
+}
+
+#itensDetailsBody > div {
+  /* min-       width: 100%; */
+  display: flex;
+  gap: 20px;
+}
+
+#itensDetailsBody > div > img {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 50%;
+  max-width: 30%;
+  max-height: 100px;
+  object-fit: contain;
+}
+
+#itensDetailsBody > div > aside {
+  min-width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#itensDetailsBody > div > aside > div {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}

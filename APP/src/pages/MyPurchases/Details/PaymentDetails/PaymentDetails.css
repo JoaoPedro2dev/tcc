@@ -1,0 +1,39 @@
+#paymentDetailsBody {
+  width: 700px;
+  background-color: #fff;
+  padding: 30px;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#paymentDetailsBody > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* max-width: 65px; */
+}
+
+#paymentDetailsBody > div > span {
+  border: 1px solid #ccc;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#paymentDetailsBody > div > p {
+  margin-top: 10px;
+  font-size: small;
+}
+
+#paymentDetailsBody > aside {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  gap: 20px;
+}

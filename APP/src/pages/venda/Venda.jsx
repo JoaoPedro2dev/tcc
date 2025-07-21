@@ -9,6 +9,7 @@ import Feedback from "../../componentes/Feedback/Feedback";
 import Comentarios from "../../componentes/Comentarios/Comentarios.jsx";
 
 import tenis from "../../json/tenis.json";
+import LinkPerfil from "../../componentes/LinkPerfil/LinkPerfil.jsx";
 
 function Venda() {
   const location = useLocation();
@@ -98,6 +99,7 @@ function Venda() {
           />
 
           <div id="infosProduto">
+            <LinkPerfil />
             <strong>{data.nome}</strong>
             <p>{data.descricao}</p>
             <strong>

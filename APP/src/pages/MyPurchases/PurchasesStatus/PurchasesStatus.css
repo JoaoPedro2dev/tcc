@@ -1,0 +1,144 @@
+#purchasesStatusBody {
+  min-height: 100vh;
+}
+
+#purchasesStatusBody > main {
+  height: 86vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 11% 80px;
+  background-color: #f2f2f2;
+}
+
+#purchasesStatusBody > main > section {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding: 35px;
+  height: 100%;
+  gap: 40px;
+
+  background-color: #fff;
+  box-shadow: 0px 8px 7px rgba(160, 149, 149, 0.3);
+
+  border-radius: 10px;
+}
+
+#purchasesStatusBody > main > section > div {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  width: 50%;
+  /* max-width: 50%; */
+  cursor: default;
+}
+
+#purchasesStatusBody > main > section > div > img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.green {
+  color: green;
+  font-weight: bold;
+}
+
+.red {
+  color: red;
+  font-weight: bold;
+}
+
+.gray {
+  color: #878686;
+}
+
+#purchasesStatusBody #nfBox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* background-color: #ccc; */
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+#purchasesStatusBody #nfBox > div {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+#purchasesStatusBody #nfBox > div > span {
+  display: grid;
+  place-items: center;
+  min-width: 45px;
+  min-height: 45px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+}
+
+#purchasesStatusBody #nfBox > div > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+#purchasesStatusBody
+  > main
+  > section
+  > section
+  > div:last-child
+  > div
+  > div
+  > p {
+  font-size: small;
+}
+
+#purchasesStatusBody #details-btn {
+  margin-top: 20px;
+
+  border-radius: 5px;
+  border: 1px solid;
+  color: blue;
+  padding: 15px;
+  cursor: pointer;
+  font-weight: bold;
+
+  transition: 0.2s;
+}
+
+#purchasesStatusBody #details-btn:hover {
+  color: rgb(103, 103, 255);
+}
+
+#purchasesStatusBody #nfBox > a {
+  margin-top: 5px;
+}
+
+#purchasesStatusBody > #backBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 40px;
+
+  padding: 15px 20px;
+  border-radius: 5px;
+  border: none;
+
+  color: #fff;
+  background-color: blue;
+
+  font-weight: bold;
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+#purchasesStatusBody > #backBtn:hover {
+  background-color: rgb(48, 48, 255);
+}

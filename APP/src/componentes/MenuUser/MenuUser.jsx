@@ -50,12 +50,12 @@ function MenuUser({ funcao }) {
         <MenuCard
           icon={<ShoppingBasket className="menu-icon" />}
           title={"Minhas compras"}
-          link={"/minhaConta"}
+          link={"/minhas-compras"}
         />
         <MenuCard
           icon={<History className="menu-icon" />}
-          title={"Minhas compras"}
-          link={"/minhaConta"}
+          title={"Histórico"}
+          link={"/historico"}
         />
         <MenuCard
           icon={<Headset className="menu-icon" />}

@@ -1,0 +1,26 @@
+#pagamentoCardBody {
+  width: 700px;
+  background-color: #fff;
+  padding: 30px;
+  cursor: default;
+}
+
+#pagamentoCardBody > div:nth-child(3) {
+  flex-direction: column;
+  align-items: start;
+}
+
+#pagamentoCardBody > div:nth-child(3) > p {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#pagamentoCardBody > div {
+  display: flex;
+  /* flex-direction: column; */
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+}

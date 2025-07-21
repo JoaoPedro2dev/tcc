@@ -1,0 +1,40 @@
+#detailsBody > main {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px 0px 100px 0px;
+  background-color: #f2f2f2;
+}
+
+#detailsBody > main > h1 {
+  width: 700px;
+  text-align: left;
+  font-size: large;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+#detailsBody > #backBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 40px;
+
+  padding: 15px 20px;
+  border-radius: 5px;
+  border: none;
+
+  color: #fff;
+  background-color: blue;
+
+  font-weight: bold;
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+#detailsBody > #backBtn:hover {
+  background-color: rgb(48, 48, 255);
+}

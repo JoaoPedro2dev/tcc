@@ -1,0 +1,96 @@
+#purcahsesCardBody {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 8px 7px rgba(160, 149, 149, 0.3);
+  width: 800px;
+  padding: 25px;
+
+  margin-top: 20px;
+}
+
+#purcahsesCardBody > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#purcahsesCardBody > section {
+  margin-top: 20px;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+}
+
+#purcahsesCardBody > #deliveryOptions {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+#purcahsesCardBody > #deliveryOptions > button {
+  width: 50%;
+  padding: 12px;
+  border-radius: 5px;
+  border: 1px solid;
+  color: blue;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+#purcahsesCardBody > #deliveryOptions > button:first-child:hover {
+  color: #4092e0;
+}
+
+#purcahsesCardBody > #deliveryOptions > button:last-child:hover {
+  color: #ff5555;
+}
+
+#purcahsesCardBody > section > img {
+  min-width: 200px;
+  height: 150px;
+  object-fit: contain;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#purcahsesCardBody > section > div {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  gap: 8px;
+}
+
+#purcahsesCardBody > section > div > button {
+  padding: 8px 20px;
+  border-radius: 4px;
+  border: 1.5px solid;
+  margin-top: 10px;
+  /* background-color: #ff5555; */
+  color: blue;
+  font-size: 12px;
+  font-weight: bold;
+  width: fit-content;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#purcahsesCardBody > section > div > button:hover {
+  /* background-color: #ff2b2b; */
+  color: #ff5555;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
+.noTrackBox {
+  display: flex;
+  flex-direction: column;
+}

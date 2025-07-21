@@ -11,6 +11,10 @@ import ContaPessoal from "./pages/ContaPessoal/ContaPessoal.jsx";
 import ContaVendedor from "./pages/ContaVendedor/ContaVendedor.jsx";
 import CadastrarCep from "./pages/CadastrarCep/CadastrarCep.jsx";
 import PaginaVendedor from "./pages/PaginaVendedor/PaginaVendedor.jsx";
+import MyPurchases from "./pages/MyPurchases/MyPurchases.jsx";
+import Track from "./pages/MyPurchases/Track/Track.jsx";
+import PurchasesStatus from "./pages/MyPurchases/PurchasesStatus/PurchasesStatus.jsx";
+import Details from "./pages/MyPurchases/Details/Details.jsx";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +55,26 @@ const router = createBrowserRouter([
   {
     path: "/paginavendedor",
     element: <PaginaVendedor />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/minhas-compras",
+    element: <MyPurchases />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/minhas-compras/rastrear",
+    element: <Track />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/minhas-compras/status",
+    element: <PurchasesStatus />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/minhas-compras/detalhes",
+    element: <Details />,
     errorElement: <NotFound />,
   },
 ]);

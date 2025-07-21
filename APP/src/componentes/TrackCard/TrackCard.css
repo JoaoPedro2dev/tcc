@@ -1,0 +1,115 @@
+#trackCardBody {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 8px 7px rgba(160, 149, 149, 0.3);
+  width: 100%;
+  padding: 25px 40px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#trackCardBody > h1 {
+  font-size: 2em;
+}
+
+#trackCardBody h2 {
+  font-size: 1.5em;
+}
+
+#trackCardBody > section {
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+
+  margin-top: 20px;
+}
+
+#trackCardBody > section > div {
+  width: fit-content;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  /* gap: 15px; */
+}
+
+#trackCardBody > section > div > img {
+  min-width: 200px;
+  height: 150px;
+  object-fit: contain;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#trackCardBody > section > div:last-child {
+  padding: 0px 10px;
+  width: 100%;
+}
+
+#trackCardBody > section > div > div {
+  /* width: 100%; */
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+#trackCardBody > section > div > div > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 33.33%;
+
+  margin-top: 10px;
+  /* font-size: medium; */
+}
+
+#trackCardBody > section > div > div > div > span {
+  width: 100%;
+  height: 5px;
+  background-color: #8cf58c;
+  border-radius: 10px;
+}
+
+@keyframes infinito {
+  0% {
+    width: 1.33%;
+  }
+
+  50% {
+    width: 66.66%;
+  }
+
+  100% {
+    width: 100%;
+  }
+}
+
+.animated {
+  background-color: #18ea18;
+  animation: infinito 1.5s linear infinite;
+}
+
+#trackCardBody span.green {
+  background-color: #18ea18;
+}
+
+#trackCardBody #details-btn {
+  margin-top: 20px;
+  width: 30%;
+  border-radius: 5px;
+  border: 1px solid;
+  color: blue;
+  padding: 15px;
+  cursor: pointer;
+  font-weight: bold;
+
+  transition: 0.2s;
+}
+
+#trackCardBody #details-btn:hover {
+  color: rgb(103, 103, 255);
+}

@@ -1,0 +1,25 @@
+#linkPerfilBody {
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+#linkPerfilBody > img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#linkPerfilBody > P {
+  transition: 0.2s;
+}
+
+#linkPerfilBody:hover p {
+  color: #858585;
+}

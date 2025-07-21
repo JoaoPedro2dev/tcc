@@ -1,0 +1,82 @@
+#cancellationFormBody {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 1001;
+
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+#cancellationFormBody > #closeBtn {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+
+  width: 50px;
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  border: none;
+  background-color: #fff;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+#cancellationFormBody > form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  width: 500px;
+  background-color: #fff;
+  padding: 35px;
+}
+
+#cancellationFormBody > #closeBtn:hover {
+  background-color: #f2f2f2;
+}
+
+#cancellationFormBody > form > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#cancellationFormBody > form > div > div {
+  display: flex;
+  gap: 10px;
+}
+
+#cancellationFormBody > form > div > input[type="text"] {
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  outline: none;
+}
+
+#cancellationFormBody > form > input[type="submit"] {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  font-weight: bold;
+  color: #fff;
+  background-color: blue;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#cancellationFormBody > form > input[type="submit"]:hover {
+  background-color: #6b6bf3;
+}
