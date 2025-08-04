@@ -1,0 +1,12 @@
+#productFeaturesBody > div > div > div > p > input[type="radio"] {
+  width: 18px;
+  height: 18px;
+}
+
+#productFeaturesBody > div > div > div > p {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+}

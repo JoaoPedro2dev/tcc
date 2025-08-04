@@ -1,112 +1,195 @@
-.pagina-vendedor {
+#pagina-vendedor {
   font-family: Arial, sans-serif;
   width: 100%;
-  padding-left: 5%;
-  padding-right: 5%;
+  background-color: #f2f2f2;
 }
 
-/* Imagem de fundo do topo */
-.fundo {
+#pagina-vendedor > #backgroundImage {
   background-size: cover;
   background-position: center;
-  height: 200px;
+  height: 290px;
   position: relative;
 }
 
-/* Header flutuante estilo Facebook */
-.cabecalho-loja {
+#pagina-vendedor > .cabecalho-loja {
   position: relative;
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 25px;
-  padding: 0 30px;
-  margin-top: -80px; /* empurra o bloco para invadir o fundo */
+  padding: 0px 10%;
+  margin-top: -65px;
   z-index: 2;
 }
 
-/* Avatar flutuando entre fundo e conteúdo */
-.logo {
-  width: 180px;
-  height: 180px;
+#pagina-vendedor > .cabecalho-loja > button {
+  padding: 5px;
+  position: absolute;
+  right: 10%;
+  margin-top: 40px;
+  border: none;
+
+  background-color: #fff;
+
+  width: 50px;
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#pagina-vendedor > .cabecalho-loja > button:hover {
+  background-color: #fbfbfb;
+}
+
+#pagina-vendedor > .cabecalho-loja > .logo {
+  width: 215px;
+  height: 215px;
   object-fit: cover;
   border-radius: 50%;
-  border: 6px solid white;
-  background-color: white;
-  box-shadow: 0 0 15px #00000020;
+  border: 6px solid #f2f2f2;
 }
 
-/* Nome da loja ao lado do avatar */
-.nome-loja {
-  font-size: 2.8rem;
-  font-weight: bold;
-  color: #333;
-  margin: 0;
+#pagina-vendedor > .cabecalho-loja > div {
+  line-height: 1.5;
+  margin-top: 30px;
 }
 
-/* Container abaixo do cabeçalho */
-.conteudo-principal {
+/* #pagina-vendedor > .cabecalho-loja > div > h1 {
+  font-size: xx-large;
+} */
+
+#pagina-vendedor > .cabecalho-loja > div > div {
+  display: flex;
+  gap: 10px;
+}
+
+#pagina-vendedor > main {
   display: flex;
   flex-direction: row;
-  padding: 40px 20px 60px;
-  gap: 40px;
-  flex-wrap: wrap;
+  padding: 40px 10%;
+
+  gap: 30px;
 }
 
-/* Bloco lateral esquerdo com info */
-.info-loja {
-  flex: 1;
-  min-width: 320px;
+#pagina-vendedor > main > aside {
+  position: sticky;
+  top: 130px;
+
+  width: 30%;
   max-width: 450px;
-  background: linear-gradient(135deg, #fafafa 0%, #e6e6e6 100%);
+
+  max-height: fit-content;
   padding: 30px 25px;
-  border-radius: 16px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  border: 1px solid #ddd;
-  color: #444;
+  /* color: #444; */
   line-height: 1.5;
   font-size: 1.05rem;
   transition: box-shadow 0.3s ease;
+
+  background-color: #fff;
+
+  cursor: default;
 }
 
-.info-loja:hover {
-  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+#pagina-vendedor > main > aside:hover {
+  box-shadow: 0 1px 10px rgba(99, 99, 99, 0.15);
 }
 
-/* Pequeno destaque para descrição */
-.descricao {
+#pagina-vendedor > main > aside > .descricao {
   margin-bottom: 18px;
-  font-style: italic;
-  color: #555;
+  text-align: center;
   font-size: 1.1rem;
 }
 
-/* Bloco direito com produtos */
-.produtos {
-  flex: 2;
-  min-width: 350px;
+#pagina-vendedor > main > aside > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.produtos h2 {
+#pagina-vendedor > main > section {
+  padding: 20px;
+  width: 70%;
+  background-color: #fff;
+}
+
+#pagina-vendedor > main > section > div > h2 {
   margin-bottom: 18px;
   color: #222;
 }
 
-/* Container dos cards */
-.lista-cards {
+#pagina-vendedor > main > section > div > .lista-cards {
+  min-width: 100%;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
 }
 
-/* Indicador de status da loja */
-.status.aberta {
-  color: green;
-  font-weight: 700;
-  font-size: 1.1rem;
+#pagina-vendedor > main > section > div > .lista-cards > #addItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  width: 250px;
+  height: 300px;
+
+  border: 4px dotted;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-.status.fechada {
-  color: red;
-  font-weight: 700;
-  font-size: 1.1rem;
+#pagina-vendedor > main > section > div > .lista-cards > #addItem:hover {
+  color: gray;
+  /* transform: scale(0.99); */
+}
+
+.noItens {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+}
+
+.noItens > h2 {
+  max-width: 480px;
+}
+
+.noItens > p {
+  width: 500px;
+  margin-bottom: 20px;
+}
+
+.noItens > button {
+  border: 2px solid;
+  color: blue;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  padding: 10px 20px;
+  font-weight: bold;
+
+  cursor: pointer;
+  transition: 0.2s;
+  margin-top: 10px;
+}
+
+.noItens > button:hover {
+  color: #5656ff;
+  transform: scale(1.01);
 }

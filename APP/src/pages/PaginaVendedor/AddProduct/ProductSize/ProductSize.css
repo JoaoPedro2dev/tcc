@@ -1,0 +1,62 @@
+#productSizeBody input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+}
+
+#productSizeBody > div:nth-child(4) {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#productSizeBody > div > div > div {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#productSizeBody > div > div > div > p {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 10px;
+}
+
+#productSizeBody > div > section {
+  border: 1px solid #ccc;
+  padding: 15px;
+}
+
+#productSizeBody > div > section > p {
+  display: flex;
+  gap: 10px;
+  justify-content: start;
+  align-items: center;
+}
+
+#productSizeBody > div > section > p > span {
+  min-width: 18px;
+  height: 18px;
+  border: 1px solid gray;
+  border-radius: 50%;
+}
+
+#productSizeBody > div > section > div {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  /* background-color: rgb(8, 87, 61); */
+}
+
+#productSizeBody > div > section > div > p {
+  display: flex;
+  flex-direction: column;
+  width: calc(calc(100% / 3) - 6.7px);
+  /* min-width: calc(100% / 4); */
+  /* max-width: calc(100% / 3); */
+  /* background-color: aqua; */
+}
+
+/* #productSizeBody > div > section > div > p > input {
+  max-width: 100% !important;
+} */

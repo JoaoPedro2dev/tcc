@@ -8,7 +8,7 @@ function PaymentDetails() {
     id_string: "#092103NJDJFSDNCA",
     data: "2025-01-01",
     pagamentoAprovado: true,
-    tipo: "PIX",
+    tipo: "Cartão",
     identificação: "Identificação pix",
     avista: true,
     parcelas: 0,

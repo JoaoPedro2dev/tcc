@@ -1,0 +1,169 @@
+#editSellerBody {
+  background-color: #f2f2f2;
+}
+
+#editSellerBody > main {
+  padding: 80px 9% 120px;
+}
+
+#editSellerBody > main > div {
+  background-color: #fff;
+  padding: 40px 2%;
+  /* border-radius: 10px; */
+}
+
+#editSellerBody > main > div > h1 {
+  margin-bottom: 30px;
+}
+
+#editSellerBody > main > div > #backgroundBox {
+  width: 100%;
+  cursor: pointer;
+}
+
+#editSellerBody > main > div > #backgroundBox > img {
+  width: 100%;
+  height: 300px;
+
+  object-fit: cover;
+  transition: 0.2s;
+}
+
+#editSellerBody > main > div > #backgroundBox:hover img {
+  transform: scale(1.01);
+}
+
+#editSellerBody > main > div > section {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  /* align-items: end; */
+  margin-top: -80px;
+  z-index: 1;
+}
+
+#editSellerBody > main > div > section > #perfilBox {
+  border-radius: 50%;
+  overflow: hidden;
+  width: 200px;
+  height: 200px;
+  border: 4px solid #fff;
+  cursor: pointer;
+  transition: 0.2s;
+  /* box-shadow: 0px 10px 7px rgba(160, 149, 149, 0.3); */
+}
+
+#editSellerBody > main > div > section > #perfilBox > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#editSellerBody > main > div > section > #perfilBox:hover {
+  transform: scale(1.01);
+}
+
+#editSellerBody > main > div > section > p {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 100px;
+}
+
+#editSellerBody > main > div > section > p > input {
+  border: none;
+  /* border-color: #a5a5a5; */
+  /* border-radius: 5px; */
+  /* padding: 10px 20px; */
+  font-size: xx-large;
+  font-weight: bold;
+  width: 350px;
+  outline: none;
+  cursor: pointer;
+}
+
+#editSellerBody > main > div > section:last-child {
+  margin-top: 40px;
+  padding: 0px;
+}
+
+#editSellerBody > main > div > section > aside {
+  border: 1px solid rgb(232, 232, 232);
+  background-color: #fff;
+  padding: 25px;
+  width: 30%;
+}
+
+#editSellerBody > main > div > section > aside > textarea {
+  resize: none;
+  width: 100%;
+  height: 150px;
+  outline: none;
+  border: none;
+  text-align: center;
+  font-size: medium;
+  cursor: pointer;
+}
+
+#editSellerBody > main > div > section > aside > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#editSellerBody > main > div > section > aside > div > p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+#editSellerBody > main > div > section > aside > div > p > input {
+  border: none;
+  /* border-radius: 5px; */
+  /* padding: 5px 10px; */
+  outline: none;
+  /* width: 130px; */
+  /* text-align: center; */
+
+  font-size: medium;
+  cursor: pointer;
+}
+
+#editSellerBody > main > div > section > aside > div > p > select {
+  /* padding: 0; */
+  /* border-radius: 5px; */
+  outline: none;
+  border: none;
+  cursor: pointer;
+  font-size: medium;
+}
+
+#editSellerBody > #btnsNav {
+  position: fixed;
+  right: 11%;
+  bottom: 40px;
+  display: flex;
+  gap: 10px;
+  z-index: 1000;
+}
+
+#editSellerBody > #btnsNav > button {
+  width: 100px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 2px solid;
+  color: blue;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#editSellerBody > #btnsNav > button:hover {
+  color: #5a5aff;
+}
+
+strong {
+  word-break: break-all;
+  /* word-wrap: break-word; */
+}

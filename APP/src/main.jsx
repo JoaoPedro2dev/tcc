@@ -15,6 +15,8 @@ import MyPurchases from "./pages/MyPurchases/MyPurchases.jsx";
 import Track from "./pages/MyPurchases/Track/Track.jsx";
 import PurchasesStatus from "./pages/MyPurchases/PurchasesStatus/PurchasesStatus.jsx";
 import Details from "./pages/MyPurchases/Details/Details.jsx";
+import EditSeller from "./pages/PaginaVendedor/EditSeller/EditSeller.jsx";
+import AddProduct from "./pages/PaginaVendedor/AddProduct/AddProduct.jsx";
 
 const router = createBrowserRouter([
   {
@@ -55,6 +57,16 @@ const router = createBrowserRouter([
   {
     path: "/paginavendedor",
     element: <PaginaVendedor />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/paginavendedor/editar-perfil",
+    element: <EditSeller />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/paginavendedor/adicionar-produto",
+    element: <AddProduct />,
     errorElement: <NotFound />,
   },
   {

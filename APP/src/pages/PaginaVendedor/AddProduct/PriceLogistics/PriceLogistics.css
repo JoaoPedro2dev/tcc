@@ -1,0 +1,7 @@
+#priceLogisticsBody > div > p {
+  width: calc(100% / 3);
+}
+
+#priceLogisticsBody > div > p > input {
+  min-width: 100%;
+}

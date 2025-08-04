@@ -1,0 +1,53 @@
+#productImagesBody > div > label {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed rgb(157, 157, 157);
+  padding: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#productImagesBody > #imagesDisplay {
+  width: 100%;
+  display: flex;
+  gap: 15px;
+
+  flex-wrap: wrap;
+}
+
+#productImagesBody > #imagesDisplay > div {
+  display: flex;
+  min-width: calc(calc(100% / 4) - 15px);
+  width: calc(calc(100% / 4) - 15px);
+  max-width: calc(calc(100% / 4) - 10px);
+  position: relative;
+}
+
+#productImagesBody > #imagesDisplay > div > span {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: red;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#productImagesBody > #imagesDisplay > div > span:hover {
+  background-color: #d61616;
+}
+
+#productImagesBody > #imagesDisplay > div > img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
