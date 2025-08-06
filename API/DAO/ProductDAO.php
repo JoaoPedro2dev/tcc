@@ -48,6 +48,44 @@
             return $stmt->fetchAll(DAO::FETCH_CLASS, "Model\Product");
         }
 
+        public function getBeLike($search): ?array{
+            $like = "%$search%";
+
+            $sql = " SELECT 
+                    p.id, p.sellerId,
+                    p.productName,
+                    v.sellerName,
+                    p.category,
+                    p.gender,
+                    p.`condition`,
+                    p.price,
+                    p.salesQuantity,
+                    p.stockTotal,
+                    p.description,
+                    p.promotionPrice,
+                    p.installments,
+                    p.fees
+                    
+                    FROM produtos p
+                    INNER JOIN vendedores v ON p.sellerId = v.id
+                    WHERE MATCH(p.productName, p.description, p.category) AGAINST(? IN NATURAL LANGUAGE MODE)
+                    OR p.productName LIKE ?
+                    OR p.description LIKE ?
+                    OR p.category LIKE ?
+                    OR v.sellerName LIKE ?";
+
+            $stmt = parent::$conexao->prepare($sql);
+            $stmt->bindValue(1, $search);
+            $stmt->bindValue(2, $like);
+            $stmt->bindValue(3, $like);
+            $stmt->bindValue(4, $like);
+            $stmt->bindValue(5, $like);
+
+            $stmt->execute();
+
+            return $stmt->fetchAll(DAO::FETCH_CLASS, "Model\Product") ?: null;
+        }
+
         public function update(Product $model) : ?bool{
             $sql = "SELECT id from lembretes WHERE id = ?";
             $stmt = parent::$conexao->prepare($sql);

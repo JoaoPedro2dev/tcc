@@ -8,6 +8,7 @@
         public int $id;
         public int $sellerId;
         public string $productName;
+        public string $sellerName;
         public string $category;
         public string $gender;
         public string $condition;
@@ -15,8 +16,12 @@
         public string $availableSizes;
         public string $description;
         public float $price;
+        public string $paymentMethods;
+        public int $installments;
+        public int $fees;
         public float $shippingCost;
         public int $salesQuantity;
+        public int $stockTotal;
         public string $promotionStartDate;  // YYYY-MM-DD
         public string $promotionEndDate;    // YYYY-MM-DD
         public float $promotionPrice;
@@ -25,6 +30,10 @@
 
         public function selectAll(): array{
             return ((new ProductDAO())->selectAll());
+        }
+
+        public function getBeLike($search): ?array{
+            return ((new ProductDAO())->getBeLike($search));
         }
         
         // Getters e Setters

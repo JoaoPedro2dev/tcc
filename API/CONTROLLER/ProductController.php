@@ -7,5 +7,9 @@ use Model\Product;
         public static function index(){
             return ((new Product())->selectAll());
         }
+        
+        public static function selectSearch($search){
+            return ((new Product())->getBeLike($search));
+        }
     }
 ?>
