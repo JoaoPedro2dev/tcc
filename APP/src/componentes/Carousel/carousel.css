@@ -2,6 +2,7 @@
   max-width: 100vw;
   position: relative;
   margin-bottom: 40px;
+  background-color: #f2f2f2;
 }
 
 .custom-arrow {
@@ -26,11 +27,11 @@
 }
 
 .custom-arrow.prev {
-  left: 15px;
+  left: 60px;
 }
 
 .custom-arrow.next {
-  right: 15px;
+  right: 60px;
 }
 
 @media (max-width: 768px) {

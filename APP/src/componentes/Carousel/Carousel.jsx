@@ -1,4 +1,3 @@
-import React from "react";
 import Slider from "react-slick";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import "slick-carousel/slick/slick.css";
@@ -39,15 +38,15 @@ const Carousel = () => {
 
   return (
     <div className="carousel-container">
-      <Slider {...settings}>
+      <Slider {...settings} className="slider">
         {imagens.map((src, index) => (
-          <div key={index}>
+          <div key={index} id="imgContainer">
             <img
               src={src}
               alt={`Slide ${index}`}
               style={{
                 width: "100%",
-                height: "300px",
+                height: "340px",
                 objectFit: "cover",
                 outline: "none",
               }}

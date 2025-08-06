@@ -1,30 +1,45 @@
 .prateleira .carroussel .slick-list {
-  overflow-y: visible !important;
-  padding: 0px 0px;
+  padding: 0;
 }
 
+/* .carroussel {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+} */
+
 .prateleira {
-  padding: 30px;
   position: relative;
-  background-color: #fff;
   border-radius: 10px;
+  background-color: #fff;
+  padding: 25px 30px;
+}
+
+.carroussel {
+  min-width: 100%;
 }
 
 .prateleira > h2 {
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
+
+/* .carroussel {
+  display: flex;
+  gap: 100%;
+  justify-content: start;
+} */
 
 /* Carrossel estilizado */
 .prateleira .carroussel {
   max-width: 100vw;
-  padding: 0px 0px;
+  height: fit-content;
 }
 
 .custom-arrow-prateleira {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 1);
   border-radius: 50%;
 
   width: 60px;

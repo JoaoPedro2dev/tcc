@@ -10,7 +10,7 @@
     
     switch(Functions::formatUrl()){
         case '/':
-            echo 'Bem vindo a Index ';
+            // echo 'Bem vindo a Index ';
             echo json_encode(ProductController::index(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
             break;

@@ -7,7 +7,19 @@ import { useState } from "react";
 function Card({ item }) {
   const navigate = useNavigate();
 
-  const precoFormat = item.preco.toFixed(2);
+  const priceFormat = item.price.toFixed(2).toString().replace(".", ",");
+
+  const promotionFormat = item.promotionPrice
+    .toFixed(2)
+    .toString()
+    .replace(".", ",");
+
+  const deliveryFormat = item.shippingCost
+    .toFixed(2)
+    .toString()
+    .replace(".", ",");
+
+  const colorsArray = JSON.parse(item.availableColors);
 
   const [feedback, setFeedback] = useState("");
 
@@ -61,7 +73,7 @@ function Card({ item }) {
 
   return (
     <div
-      className="card"
+      className="card borderRadius"
       onClick={() => {
         navigate("/venda?", { state: item });
       }}
@@ -74,11 +86,36 @@ function Card({ item }) {
       >
         <ShoppingCart />
       </button>
-      <img src={"http://localhost/tcc/API/UPLOADS/images/imagem1.png"} alt="" />
+      <img src={item.images} alt="" />
+      <div className="arrayColorsLength">{colorsArray.length} Cores</div>
       <div className="text">
-        <p>{item.nome}</p>
-        <span>{item.categoria}</span>
-        <strong>R${precoFormat.replace(".", ",")} em até 3x sem juros</strong>
+        <p>{item.productName}</p>
+        {item.promotionPrice ? (
+          <div>
+            <strong>R${promotionFormat}</strong>
+            <p className="line-through colorGray small">R${priceFormat}</p>
+          </div>
+        ) : (
+          <strong>R${priceFormat}</strong>
+        )}
+        <div>
+          <p className="colorGray small">{item.category}</p>
+          <p
+            className="colorGray small"
+            style={{ color: item.stockTotal === 0 && "red" }}
+          >
+            {item.stockTotal} em estoque
+          </p>
+        </div>
+
+        <p>
+          Frete
+          {item.shippingCost === 0 ? (
+            <span className="colorGreen"> Grátis</span>
+          ) : (
+            " " + deliveryFormat
+          )}
+        </p>
       </div>
 
       {feedback}

@@ -9,6 +9,10 @@
   /* font-family: Roboto; */
 }
 
+body {
+  background-color: #f2f2f2;
+}
+
 address {
   font-style: normal;
 }

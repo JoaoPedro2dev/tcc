@@ -21,8 +21,8 @@ function Prateleira({ title, itens }) {
     dots: false,
     infinite: false,
     speed: 250,
-    slidesToShow: 4.5,
-    slidesToScroll: 1,
+    slidesToShow: 100,
+    slidesToScroll: 2,
     arrows: true,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
@@ -59,7 +59,7 @@ function Prateleira({ title, itens }) {
   };
 
   return (
-    <div className="prateleira">
+    <div className="prateleira boxShadow">
       <h2>{title}</h2>
       <Slider {...settings} className="carroussel">
         {itens.map((item) => (
