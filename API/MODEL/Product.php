@@ -27,13 +27,14 @@
         public float $promotionPrice;
         public int $deliveryTime;            // prazo_entrega em dias
         public string $images;
+        public $relevancia;
 
         public function selectAll(): array{
             return ((new ProductDAO())->selectAll());
         }
 
-        public function getBeLike($search): ?array{
-            return ((new ProductDAO())->getBeLike($search));
+        public function getBeLike($search, $colors, $sizes, $genders, $conditions): ?array{
+            return ((new ProductDAO())->getBeLike($search, $colors, $sizes, $genders, $conditions));
         }
         
         // Getters e Setters

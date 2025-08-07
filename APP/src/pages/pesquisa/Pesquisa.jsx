@@ -1,42 +1,48 @@
 import { Link, useSearchParams } from "react-router-dom";
 import Header from "../../componentes/Header/Header";
-import tenis from "../../json/tenis.json";
 import Card from "../../componentes/Card/Card";
+import FilterMenu from "./FilterMenu/FilterMenu.jsx";
 import "./pesquisa.css";
 import Footer from "../../componentes/Footer/Footer.jsx";
 import { SearchX } from "lucide-react";
+import { useEffect, useState } from "react";
 
 function Pesquisa() {
   const [searchParams] = useSearchParams();
   const s = searchParams.get("s").toLowerCase().trim();
 
-  const itens = tenis.filter((i) => {
-    return (
-      i.nome.toLowerCase().includes(s) ||
-      i.categoria.toLowerCase().includes(s) ||
-      i.descricao.toLowerCase().includes(s) ||
-      i.cores.some((cor) => cor.toLowerCase().includes(s))
-    );
-  });
+  const [dataProducts, setDataProducts] = useState([]);
+
+  useEffect(() => {
+    fetch(`http://localhost/tcc/API/search?search=${s}`)
+      .then((r) => r.json())
+      .then((data) => {
+        setDataProducts(data);
+        console.log(data);
+      });
+  }, [s]);
 
   return (
     <div id="pesquisaContainer">
       <Header value={s} />
-      {itens.length > 0 ? (
+      {dataProducts && dataProducts.length > 0 ? (
         <section id="itensInfos">
           <div id="itensQnt">
             <p>
-              {itens.length} Resultados encontrados para "
+              {dataProducts.length} Resultados encontrados para "
               <span>
                 {s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()}
               </span>
               "
             </p>
           </div>
-          <div id="itensContain">
-            {itens.map((item, key) => (
-              <Card key={key} item={item} />
-            ))}
+          <div className="boxShadow">
+            <FilterMenu />
+            <div id="itensContain">
+              {dataProducts.map((item, key) => (
+                <Card key={key} item={item} />
+              ))}
+            </div>
           </div>
         </section>
       ) : (

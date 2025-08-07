@@ -8,8 +8,8 @@ use Model\Product;
             return ((new Product())->selectAll());
         }
         
-        public static function selectSearch($search){
-            return ((new Product())->getBeLike($search));
+        public static function selectSearch($search, $colors, $sizes, $genders, $conditions){
+            return ((new Product())->getBeLike($search, $colors, $sizes, $genders, $conditions));
         }
     }
 ?>

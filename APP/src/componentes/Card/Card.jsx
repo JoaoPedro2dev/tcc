@@ -71,6 +71,8 @@ function Card({ item }) {
     }, 1000);
   }
 
+  const images = JSON.parse(item.images);
+
   return (
     <div
       className="card borderRadius"
@@ -86,7 +88,8 @@ function Card({ item }) {
       >
         <ShoppingCart />
       </button>
-      <img src={item.images} alt="" />
+      <img src={images[0]} alt="" />
+
       <div className="arrayColorsLength">{colorsArray.length} Cores</div>
       <div className="text">
         <p>{item.productName}</p>
@@ -99,7 +102,9 @@ function Card({ item }) {
           <strong>R${priceFormat}</strong>
         )}
         <div>
-          <p className="colorGray small">{item.category}</p>
+          <p className="colorGray small">
+            {item.category} - {item.condition}
+          </p>
           <p
             className="colorGray small"
             style={{ color: item.stockTotal === 0 && "red" }}

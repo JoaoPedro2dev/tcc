@@ -48,10 +48,48 @@
             return $stmt->fetchAll(DAO::FETCH_CLASS, "Model\Product");
         }
 
-        public function getBeLike($search): ?array{
-            $like = "%$search%";
+        public function getBeLike($search, $colors, $sizes, $gender, $condition): ?array {
+            // $like = "%$search%";
 
-            $sql = " SELECT 
+            $array = [
+                [
+                    'var' => $colors,
+                    'field' => 'p.availableColors'
+                ],
+
+                [
+                    'var' => $sizes,
+                    'field' => 'p.availableSizes'
+                ],
+
+                [
+                    'var' => $gender,
+                    'field' => 'p.gender'
+                ],
+
+                [
+                    'var' => $condition,
+                    'field' => 'p.condition'
+                ],
+            ];
+
+            $condicoes = [];
+            $peso = [];
+            
+            foreach($array as $item){
+                foreach($item['var'] as $value){
+                    $json = json_encode($value);
+                    $condicao = "JSON_CONTAINS({$item['field']},$json)";
+                    $condicoes[] =  $condicao;
+                    $peso[] = "IF($condicao, 1, 0)"; 
+                }
+            }
+            
+            $where = implode(' OR ', $condicoes);
+            $score = implode(' + ', $peso);
+
+            
+            $sql = "SELECT 
                     p.id, p.sellerId,
                     p.productName,
                     v.sellerName,
@@ -59,32 +97,43 @@
                     p.gender,
                     p.`condition`,
                     p.price,
+                    p.shippingCost,
                     p.salesQuantity,
                     p.stockTotal,
                     p.description,
                     p.promotionPrice,
                     p.installments,
-                    p.fees
-                    
-                    FROM produtos p
-                    INNER JOIN vendedores v ON p.sellerId = v.id
-                    WHERE MATCH(p.productName, p.description, p.category) AGAINST(? IN NATURAL LANGUAGE MODE)
-                    OR p.productName LIKE ?
-                    OR p.description LIKE ?
-                    OR p.category LIKE ?
-                    OR v.sellerName LIKE ?";
+                    p.fees,
+                    p.availableColors,
+                    p.availableSizes,
+                    p.images,
+
+                    -- ✅ relevância calculada aqui dentro do SELECT
+                    (
+                        MATCH(p.productName, p.description, p.category) AGAINST(? IN NATURAL LANGUAGE MODE)
+                        " . (!empty($peso) ? " + " . implode(' + ', $peso) : "") . "
+                    ) AS relevancia
+
+                FROM produtos p
+                INNER JOIN vendedores v ON p.sellerId = v.id
+
+                WHERE (
+                    MATCH(p.productName, p.description, p.category) AGAINST(? IN NATURAL LANGUAGE MODE)
+                    " . (!empty($where) ? " OR ($where)" : "") . "
+                )
+
+                ORDER BY relevancia DESC";
+
 
             $stmt = parent::$conexao->prepare($sql);
             $stmt->bindValue(1, $search);
-            $stmt->bindValue(2, $like);
-            $stmt->bindValue(3, $like);
-            $stmt->bindValue(4, $like);
-            $stmt->bindValue(5, $like);
+            $stmt->bindValue(2, $search);
 
             $stmt->execute();
 
             return $stmt->fetchAll(DAO::FETCH_CLASS, "Model\Product") ?: null;
         }
+
 
         public function update(Product $model) : ?bool{
             $sql = "SELECT id from lembretes WHERE id = ?";

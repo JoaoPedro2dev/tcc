@@ -1,19 +1,32 @@
 #itensInfos {
   max-width: 100vw;
-  padding: 40px;
+  padding: 40px 11%;
+}
+
+#itensInfos > div:last-child {
+  display: flex;
+  background-color: #fff;
+  border-radius: 10px;
+  /* overflow: hidden; */
+  min-height: fit-content;
 }
 
 #itensQnt {
-  width: 100%;
   padding: 20px 0px;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 
 #itensContain {
+  background-color: #fff;
+  padding: 40px;
+  /* border-radius: 10px; */
   width: 100%;
+  height: fit-content;
   display: flex;
-  gap: 40px;
+  flex-direction: row;
+  /* justify-content: space-around; */
   flex-wrap: wrap;
+  gap: 35px;
 }
 
 #msgmContainer {
