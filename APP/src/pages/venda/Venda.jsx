@@ -4,18 +4,41 @@ import Footer from "../../componentes/Footer/Footer.jsx";
 import Header from "../../componentes/Header/Header.jsx";
 import Prateleira from "../../componentes/Prateleira/Prateleira.jsx";
 import "./venda.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Feedback from "../../componentes/Feedback/Feedback";
 import Comentarios from "../../componentes/Comentarios/Comentarios.jsx";
 
 import tenis from "../../json/tenis.json";
 import LinkPerfil from "../../componentes/LinkPerfil/LinkPerfil.jsx";
+import {
+  calculatinDelivery,
+  monetaryFormatting,
+} from "../../helpers/functions.jsx";
+import Loading from "../../componentes/Loading/Loading.jsx";
+import NotFound from "../notFound/NotFound.jsx";
+
+import ImagesCarroussel from "./ImagesCarroussel/ImagesCarroussel.jsx";
 
 function Venda() {
   const location = useLocation();
-  const data = location.state;
+  const id = location.state;
 
-  console.log(data);
+  const [loading, setLoading] = useState(true);
+
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    const url = `http://localhost/tcc/API/GET?id=${id}`;
+
+    fetch(url)
+      .then((r) => r.json())
+      .then((data) => {
+        setData(data);
+        console.log("DATA API", data);
+        setLoading(false);
+      })
+      .catch((error) => console.log(error));
+  }, []);
 
   const [feedback, setFeedback] = useState("");
 
@@ -88,56 +111,73 @@ function Venda() {
     return <Prateleira title={title} itens={itens} />;
   }
 
+  if (loading) return <Loading />;
+
+  if (!data) return <NotFound />;
+
   return (
     <div id="telaVenda">
       <Header />
       <section>
         <div id="content">
-          <img
-            src={"http://localhost/tcc/API/UPLOADS/images/imagem1.png"}
-            alt="Imagem do Produto"
-          />
+          <ImagesCarroussel images={data.images} />
 
           <div id="infosProduto">
-            <LinkPerfil />
-            <strong>{data.nome}</strong>
-            <p>{data.descricao}</p>
-            <strong>
-              R${data.preco.toFixed(2).toString().replace(".", ",")}
-            </strong>
+            <LinkPerfil
+              img={data.profilePhoto}
+              name={data.sellerName}
+              url={"/"}
+            />
+            <strong>{data.productName}</strong>
+            <p>{data.description}</p>
+            <strong>R${monetaryFormatting(data.price)}</strong>
 
             <div className="selectBox">
               <label htmlFor="sizeSeelct">Tamanho</label>
               <select id="sizeSeelct">
-                {data.tamanhos.map((tamanho, key) => {
-                  return (
-                    <option key={key} value={tamanho}>
-                      {tamanho}
-                    </option>
-                  );
-                })}
+                {data.availableSizes.map((size, key) => (
+                  <option key={key} value={size}>
+                    {size}
+                  </option>
+                ))}
               </select>
             </div>
 
             <div className="selectBox">
               <label htmlFor="colorSelect">Cor</label>
               <select id="colorSelect">
-                {data.cores.map((cor, key) => {
-                  return (
-                    <option key={key} value={cor}>
-                      {cor}
-                    </option>
-                  );
-                })}
+                {data.availableColors.map((color, key) => (
+                  <option key={key} value={color}>
+                    {color}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
 
           <div id="compraBox">
-            <span>+{data.vendas - 1} vendas</span>
-            <p>Chegara até o dia 22/02/2025 comprando dentro de 24 horas</p>
+            <span className="colorGray">
+              {data.salesQuantity > 0
+                ? "+" + (data.salesQuantity - 1)
+                : data.salesQuantity}{" "}
+              vendas
+            </span>
+
             <p>
-              Frete de R${data.frete.toFixed(2).toString().replace(".", ",")}
+              Chegara até o dia{" "}
+              <strong className="strong">
+                {calculatinDelivery(data.deliveryTime)}
+              </strong>{" "}
+              comprando dentro de 24 horas
+            </p>
+
+            <p>
+              Frete{" "}
+              {data.shippingCost === 0 ? (
+                <span className="colorGreen">Grátis</span>
+              ) : (
+                "de " + monetaryFormatting(data.shippingCost)
+              )}
             </p>
 
             <Contador isCart={false} valueCont={qntValue} />
@@ -148,6 +188,7 @@ function Venda() {
                 Adicionar ao carrinho
               </button>
             </div>
+
             <p>Garantia de até 30 dias após receber o produto</p>
           </div>
         </div>
@@ -158,7 +199,7 @@ function Venda() {
       </section>
 
       <section id="similar-items">
-        {criarPrateleira(data.categoria, "Itens parecidos")}
+        {criarPrateleira("Camisetas", "Itens parecidos")}
       </section>
 
       <Footer />

@@ -1,0 +1,72 @@
+.ic-container {
+  max-width: 33.33%;
+  height: fit-content;
+  background-color: #fff;
+}
+
+.ic-container:hover .ic-arrow {
+  opacity: 1;
+}
+
+.ic-img-container {
+  outline: none;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.ic-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 123, 255, 0.7);
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+  opacity: 0;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ic-arrow:hover {
+  background-color: rgba(0, 123, 255, 1);
+}
+
+.ic-prev {
+  left: 6px;
+}
+
+.ic-next {
+  right: 6px;
+}
+
+#ic-body .slick-dots {
+  display: none !important;
+}
+
+.ic-thumbs {
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.ic-thumbs img {
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  opacity: 0.6;
+}
+
+.ic-thumbs img:hover {
+  opacity: 1;
+  border-color: #007bff;
+}
+
+.ic-thumbs img.active {
+  border-color: #007bff;
+  opacity: 1 !important;
+}

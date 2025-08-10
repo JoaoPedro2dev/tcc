@@ -60,3 +60,24 @@ export function verificarPagamento(metodoPagamento, reembolso) {
 export function verificarFrete(frete) {
   return frete <= 0 ? "Grátis" : formatarMonetario(frete);
 }
+
+export function monetaryFormatting(value) {
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(Number(value));
+}
+
+export function brDateFormatting(data) {
+  const date = new Date(data);
+  return new Intl.DateTimeFormat("pt-BR", {
+    day: "numeric",
+    month: "long",
+  }).format(date);
+}
+
+export function calculatinDelivery(deliveryTime) {
+  const date = new Date();
+  date.setDate(date.getDate() + deliveryTime);
+  return brDateFormatting(date);
+}

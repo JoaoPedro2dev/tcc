@@ -30,13 +30,32 @@
         }  
 
         public function getById(int $id) : ?Product {
-            $sql = "SELECT * FROM lembretes WHERE id = ?";
+            $sql = "SELECT p.*, v.sellerName, v.profilePhoto
+                    FROM produtos p
+                    INNER JOIN vendedores v ON v.id = p.sellerId
+                    WHERE p.id = ?";
 
             $stmt = parent::$conexao->prepare($sql);
             $stmt->bindValue(1, $id);
             $stmt->execute();
 
-            return $stmt->fetchObject("Model\Task") ?: null;
+            $product =  $stmt->fetchObject("Model\Product");
+
+            if($product){
+                if(!empty($product->availableColors)){
+                    $product->availableColors = json_decode($product->availableColors);
+                }
+
+                if(!empty($product->availableSizes)){
+                    $product->availableSizes = json_decode($product->availableSizes);
+                }
+
+                if(!empty($product->images)){
+                    $product->images = json_decode($product->images);
+                }
+            }
+
+            return $product ?: null ;
         }
 
         public function selectAll(): array {

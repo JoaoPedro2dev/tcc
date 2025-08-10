@@ -16,6 +16,7 @@
             break;
 
         case '/search':
+            
             $var = trim($_GET['search'] ?? '');
 
             $search = htmlspecialchars($var, ENT_QUOTES, 'UTF-8');
@@ -33,6 +34,22 @@
             // echo 'Bem vindo a procura por texto ';
             
             echo json_encode(ProductController::selectSearch($search, $colors, $sizes, $genders, $condictions), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+            break;
+
+        case '/GET':
+            // echo 'Bem vindo a Index ';
+            $id = trim($_GET['id'] ?? '');
+
+            if($id === ''){
+                die(json_encode(['status' => 'erro', 'desc' => 'Você precisa de um id']));
+            }
+
+            if(!filter_var($id, FILTER_VALIDATE_INT)){
+                die(json_encode(['status' => 'erro', 'desc' => 'Digite um id valido']));
+            }
+
+            echo json_encode(ProductController::selectProduct($id), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
             break;
             

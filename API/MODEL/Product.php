@@ -12,8 +12,8 @@
         public string $category;
         public string $gender;
         public string $condition;
-        public string $availableColors;
-        public string $availableSizes;
+        public  $availableColors;
+        public  $availableSizes;
         public string $description;
         public float $price;
         public string $paymentMethods;
@@ -26,11 +26,16 @@
         public string $promotionEndDate;    // YYYY-MM-DD
         public float $promotionPrice;
         public int $deliveryTime;            // prazo_entrega em dias
-        public string $images;
+        public  $images;
+        public string $profilePhoto;
         public $relevancia;
 
         public function selectAll(): array{
             return ((new ProductDAO())->selectAll());
+        }
+
+        public function getById(int $id): ?Product{
+            return ((new ProductDAO())->getById($id));
         }
 
         public function getBeLike($search, $colors, $sizes, $genders, $conditions): ?array{
@@ -93,7 +98,7 @@
             $this->condition = $condition;
         }
 
-        public function getAvailableColors(): string
+        public function getAvailableColors()
         {
             return $this->availableColors;
         }
@@ -102,7 +107,7 @@
             $this->availableColors = $availableColors;
         }
 
-        public function getAvailableSizes(): string
+        public function getAvailableSizes()
         {
             return $this->availableSizes;
         }
@@ -183,7 +188,7 @@
             $this->deliveryTime = $deliveryTime;
         }
 
-        public function getImages(): string
+        public function getImages()
         {
             return $this->images;
         }

@@ -77,7 +77,7 @@ function Card({ item }) {
     <div
       className="card borderRadius"
       onClick={() => {
-        navigate("/venda?", { state: item });
+        navigate("/venda?", { state: item.id });
       }}
     >
       <button
