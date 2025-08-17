@@ -13,6 +13,7 @@ import LinkPerfil from "../../componentes/LinkPerfil/LinkPerfil.jsx";
 import {
   calculatinDelivery,
   monetaryFormatting,
+  // shootCartCounter,
 } from "../../helpers/functions.jsx";
 import Loading from "../../componentes/Loading/Loading.jsx";
 import NotFound from "../notFound/NotFound.jsx";
@@ -40,71 +41,34 @@ function Venda() {
       .catch((error) => console.log(error));
   }, []);
 
-  const [feedback, setFeedback] = useState("");
+  const [qtyIten, setQtyIten] = useState(1);
+  const [addedToCart, setAddedToCart] = useState(false);
+  const [btnLoading, setBtnLoading] = useState(false);
+  function addToCart() {
+    const url = `http://localhost/tcc/API/POST/cart-item-add?user_id=${1}&product_id=${
+      data.id
+    }&qty=${qtyIten ?? 1}`;
 
-  function addCart() {
-    const addBtn = document.querySelector("#addToCart");
+    fetch(url)
+      .then((r) => r.json())
+      .then((data) => {
+        setBtnLoading(true);
 
-    addBtn.classList.add("clicked");
-    addBtn.disabled = true;
-    addBtn.textContent = "Produto adicionado";
+        if (data == true) {
+          setBtnLoading(false);
+          setAddedToCart(true); // adiciona a classe
+          setTimeout(() => {
+            setAddedToCart(false); // remove a classe depois de 2s
+          }, 2000);
 
-    setTimeout(() => {
-      addBtn.classList.remove("clicked");
-      addBtn.disabled = false;
-      addBtn.textContent = "Adicionar ao carrinho";
-    }, 1200);
-
-    let storage = localStorage.getItem("idItem");
-
-    let itensCart;
-
-    if (storage) {
-      itensCart = JSON.parse(storage);
-    } else {
-      itensCart = [];
-    }
-
-    if (!itensCart.some((item) => item.id === data.id)) {
-      itensCart.push({ id: data.id, qnt: qntItem });
-
-      localStorage.setItem("idItem", JSON.stringify(itensCart));
-      window.dispatchEvent(new Event("CarrinhoAtualizado"));
-      window.dispatchEvent(new Event("countUpdate"));
-    } else {
-      const novosItens = itensCart.map((it, i) => {
-        if (it.id === data.id) {
-          let qnt = Number(qntItem);
-
-          if (itensCart[i].qnt + qnt > 100) {
-            if (itensCart[i].qnt + 1 <= 100) {
-              return { ...it, qnt: itensCart[i].qnt + 1 };
-            }
-
-            return { ...it, qnt: itensCart[i].qnt };
-          }
-
-          return { ...it, qnt: itensCart[i].qnt + qnt };
+          // shootCartCounter();
         }
-
-        return it;
+      })
+      .catch((error) => {
+        console.log(error);
+        setBtnLoading(false);
       });
-
-      localStorage.setItem("idItem", JSON.stringify(novosItens));
-    }
-
-    setFeedback(<Feedback text={"Produto adicionado!"} emoji={"🥳"} />);
-
-    setTimeout(() => {
-      setFeedback("");
-    }, 1000);
   }
-
-  let qntItem = 0;
-
-  const qntValue = (value) => {
-    qntItem = value;
-  };
 
   function criarPrateleira(categoria, title) {
     const itens = tenis.filter((item) => item.categoria === categoria);
@@ -180,12 +144,33 @@ function Venda() {
               )}
             </p>
 
-            <Contador isCart={false} valueCont={qntValue} />
+            <Contador
+              isCart={false}
+              maxCount={data.stockTotal}
+              qtyIten={qtyIten}
+              setQtyIten={setQtyIten}
+            />
 
             <div id="buttonsBox">
               <button>Comprar agora</button>
-              <button id="addToCart" onClick={addCart}>
-                Adicionar ao carrinho
+
+              <button
+                id="addToCartBtn"
+                className={
+                  btnLoading
+                    ? "loading-button"
+                    : addedToCart
+                    ? "clicked-button"
+                    : ""
+                }
+                onClick={addToCart}
+                disabled={btnLoading || addedToCart}
+              >
+                {btnLoading
+                  ? ""
+                  : addedToCart
+                  ? "Produto adicionado"
+                  : "Adicionar ao carrinho"}
               </button>
             </div>
 
@@ -204,7 +189,7 @@ function Venda() {
 
       <Footer />
 
-      {feedback}
+      {/* {feedback} */}
     </div>
   );
 }

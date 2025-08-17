@@ -21,11 +21,11 @@ function Prateleira({ title, itens }) {
     dots: false,
     infinite: false,
     speed: 250,
-    slidesToShow: 100,
     slidesToScroll: 2,
     arrows: true,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
+    // cancelable: false,
     responsive: [
       {
         breakpoint: 1600,

@@ -2,53 +2,89 @@ import "./cartcard.css";
 import Contador from "../../Contador/Contador";
 import { Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { monetaryFormatting } from "../../../helpers/functions";
+// import /*shootCartCounter*/ "../../../helpers/functions";
 
-function CartCard({ item, idItem, nome, preco, frete, qnt }) {
-  const storage = localStorage.getItem("idItem");
+function CartCard({ item, setProductsArray }) {
   const navigate = useNavigate();
 
-  let itens = [];
-
-  if (storage) {
-    itens = JSON.parse(storage);
-  } else {
-    itens = [];
+  function removeFromCart() {
+    const url = `http://localhost/tcc/API/DELETE/cart-item?product_id=${item.id}`;
+    fetch(url)
+      .then((r) => r.json())
+      .then((data) => {
+        console.log(data);
+        if (data === true) {
+          setProductsArray((prev) => prev.filter((p) => p.id !== item.id));
+          // shootCartCounter(-1);
+        } else {
+          alert("algo deu errado");
+        }
+      })
+      .catch((error) => {
+        console.error("erro", error);
+      });
   }
 
-  function removeCart(id) {
-    if (itens.some((i) => i.id === id)) {
-      const novosItens = itens.filter((item) => item.id !== id);
+  const images = JSON.parse(item.images);
 
-      localStorage.setItem("idItem", JSON.stringify(novosItens));
-
-      window.dispatchEvent(new Event("CarrinhoAtualizado"));
-      window.dispatchEvent(new Event("countUpdate"));
-    }
-  }
+  const [count, setCount] = useState(item.quantity ?? 1);
 
   return (
     <div className="cartCard">
       <img
-        src={"http://localhost/tcc/API/UPLOADS/images/imagem1.png"}
+        src={images[0]}
         alt=""
         onClick={() => {
-          navigate("/venda?", { state: item });
+          navigate("/venda?", { state: item.id });
         }}
       />
 
       <div>
         <div className="itemInfos">
-          <p>{nome}</p>
-          <strong>R${preco.toFixed(2).toString().replace(".", ",")}</strong>
-          <p>Frete de R${frete.toFixed(2).toString().replace(".", ",")}</p>
+          <p>{item.productName}</p>
+
+          {item.promotionPrice ? (
+            <div>
+              <strong>{monetaryFormatting(item.promotionPrice)}</strong>
+              <p className="line-through colorGray small">
+                {monetaryFormatting(item.price)}
+              </p>
+            </div>
+          ) : (
+            <strong>{monetaryFormatting(item.price)}</strong>
+          )}
+
+          <p>
+            Frete {""}
+            {item.shippingCost > 0 ? (
+              monetaryFormatting(item.shippingCost)
+            ) : (
+              <span className="colorGreen">Grátis</span>
+            )}
+          </p>
         </div>
 
-        <Contador id={idItem} isCart={true} qnt={qnt} />
+        <Contador
+          id={item.id}
+          maxCount={item.stockTotal}
+          isCart={true}
+          qtyIten={count}
+          setQtyIten={(newQty) => {
+            setCount(newQty);
+            setProductsArray((prev) =>
+              prev.map((p) =>
+                p.id === item.id ? { ...p, quantity: newQty } : p
+              )
+            );
+          }}
+        />
 
         <button
           className="deleteCart"
           onClick={() => {
-            removeCart(idItem);
+            removeFromCart();
           }}
         >
           <Trash2 />

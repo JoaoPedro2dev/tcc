@@ -1,0 +1,72 @@
+<?php 
+
+    namespace Model;
+
+    use DAO\CartItemDAO;
+
+    class CartItem {
+        public int $itemId;
+        public ?int $cartId;
+        public int $productId;
+        public int $quantity;
+
+        // public function __construct($cartId = 0, $productId = 0, $quantity = 0) {
+        //     $this->cartId = $cartId;
+        //     $this->productId = $productId;
+        //     $this->quantity = $quantity;
+        // }
+
+        public function insert(int $cartId, int $productId, int $qty):bool{
+            $this->setCartId($cartId);
+            $this->setProductId($productId);
+            $this->setQuantity($qty);
+            
+            return ((new CartItemDAO())->insert($this));
+        }
+
+        public function getByUserId(int $cartId) : ?array{
+            return ((new CartItemDAO())->getByUserId($cartId));
+        }
+
+        public function quantityControll(int $productId, string $operation){
+            return ((new CartItemDAO())->quantityControll($productId, $operation));
+        }
+
+        public function delete(int $productId){
+            return ((new CartItemDAO())->delete($productId));
+        }
+
+        // Getters e Setters
+        public function getItemId(): int {
+            return $this->itemId;
+        }
+
+        public function setItemId(int $itemId): void {
+            $this->itemId = $itemId;
+        }
+
+        public function getCartId(): int {
+            return $this->cartId;
+        }
+
+        public function setCartId(int $cartId): void {
+            $this->cartId = $cartId;
+        }
+
+        public function getProductId(): int {
+            return $this->productId;
+        }
+
+        public function setProductId(int $productId): void {
+            $this->productId = $productId;
+        }
+
+        public function getQuantity(): int {
+            return $this->quantity;
+        }
+
+        public function setQuantity(int $quantity): void {
+            $this->quantity = $quantity;
+        }
+    }
+?>

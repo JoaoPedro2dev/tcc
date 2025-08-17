@@ -29,6 +29,7 @@
         public  $images;
         public string $profilePhoto;
         public $relevancia;
+        public ?int $quantity; 
 
         public function selectAll(): array{
             return ((new ProductDAO())->selectAll());
@@ -195,6 +196,14 @@
         public function setImages(string $images): void
         {
             $this->images = $images;
+        }
+
+        public function getQuantity(): int {
+            return $this->quantity;
+        }
+
+        public function setQuantity($quantity): void{
+            $this->quantity = $quantity;
         }
     }
 

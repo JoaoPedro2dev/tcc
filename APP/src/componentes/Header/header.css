@@ -14,10 +14,17 @@ header {
   position: absolute;
   right: 9.9%;
   top: 16px;
+
+  width: 25px;
+  height: 25px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   background-color: red;
   color: #fff;
   font-weight: bold;
-  padding: 5px 8px;
   border-radius: 50%;
 }
 

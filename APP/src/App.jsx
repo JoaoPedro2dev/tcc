@@ -4,6 +4,7 @@ import Carousel from "./componentes/Carousel/Carousel.jsx";
 import Footer from "./componentes/Footer/Footer.jsx";
 import Header from "./componentes/Header/Header.jsx";
 import Prateleira from "./componentes/Prateleira/Prateleira.jsx";
+import Loading from "./componentes/Loading/Loading.jsx";
 
 const categorys = [
   "Camisetas",
@@ -21,15 +22,24 @@ function App() {
   }
 
   const [dataProducts, setDataProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetch("http://localhost/tcc/API/")
       .then((r) => r.json())
       .then((data) => {
-        setDataProducts(data);
-        console.log(data);
+        setLoading(true);
+        if (data) {
+          setLoading(false);
+          setDataProducts(data);
+          console.log(data);
+        }
       });
   }, []);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div>

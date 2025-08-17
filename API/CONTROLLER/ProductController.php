@@ -1,7 +1,7 @@
 <?php 
     namespace Controller;
 
-use Model\Product;
+    use Model\Product;
 
     abstract class ProductController{
         public static function index(){

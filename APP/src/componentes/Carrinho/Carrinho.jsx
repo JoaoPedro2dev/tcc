@@ -2,80 +2,25 @@ import "./carrinho.css";
 import { X } from "lucide-react";
 import CartCard from "./CartCard/CartCard";
 import { useEffect, useState } from "react";
-import tenis from "../../json/tenis.json";
 import CarrinhoVazil from "./CarrinhoVazil/CarrinhoVazil";
 import ProdutosInfos from "./ProdutosInfos/ProdutosInfos";
 
 function Carrinho({ funcao }) {
-  const [view, setView] = useState(<CarrinhoVazil />);
-
-  function viewCart() {
-    const storage = localStorage.getItem("idItem");
-
-    if (!storage) {
-      setView(<CarrinhoVazil />);
-      return;
-    }
-
-    const itens = JSON.parse(storage);
-
-    if (itens.length === 0) {
-      setView(<CarrinhoVazil />);
-      return;
-    }
-
-    const itensSelecionados = itens
-      .map((it) => {
-        const produto = tenis.find((t) => t.id === it.id);
-        return produto ? { ...produto, quantidade: it.qnt } : null;
-      })
-      .filter(Boolean);
-
-    let total = itensSelecionados.reduce(
-      (soma, item) => soma + (item.preco + item.frete) * item.quantidade,
-      0
-    );
-
-    setView(
-      <div id="cartBox">
-        <div>
-          <p>Seus itens salvos</p>
-
-          <p>{`(${itensSelecionados.length})`}</p>
-        </div>
-
-        {itensSelecionados.map((item) => {
-          return (
-            <CartCard
-              key={item.id}
-              item={item}
-              idItem={item.id}
-              img={item.imagem}
-              nome={item.nome}
-              preco={item.preco}
-              frete={item.frete}
-              qnt={item.quantidade}
-            />
-          );
-        })}
-
-        <ProdutosInfos total={Number(total)} />
-      </div>
-    );
-  }
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    viewCart();
+    const url = "http://localhost/tcc/API/GET/cartItens?user_id=1";
+    fetch(url)
+      .then((r) => r.json())
+      .then((data) => {
+        console.log(data);
+        setProducts(data);
+      });
 
-    function verificarCarrinho() {
-      viewCart();
-    }
-
-    window.addEventListener("CarrinhoAtualizado", verificarCarrinho);
-
-    return () => {
-      window.removeEventListener("CarrinhoAtualizado", verificarCarrinho);
-    };
+    // window.addEventListener("CarrinhoAtualizado", verificarCarrinho);
+    // return () => {
+    //   window.removeEventListener("CarrinhoAtualizado", verificarCarrinho);
+    // };
   }, []);
 
   function close(event) {
@@ -90,6 +35,28 @@ function Carrinho({ funcao }) {
     }
   }
 
+  const [totalValue, setTotalValue] = useState(0);
+
+  useEffect(() => {
+    if (products.length > 0) {
+      const soma = products.reduce(
+        (sum, item) =>
+          sum +
+          (item.promotionPrice ? item.promotionPrice : item.price) *
+            item.quantity +
+          item.shippingCost,
+        0
+      );
+
+      setTotalValue(
+        new Intl.NumberFormat("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        }).format(soma)
+      );
+    }
+  }, [products]);
+
   return (
     <div
       id="cartContainer"
@@ -101,7 +68,27 @@ function Carrinho({ funcao }) {
         <X />
       </button>
 
-      {view}
+      {products.length === 0 ? (
+        <CarrinhoVazil />
+      ) : (
+        <div id="cartBox">
+          <div>
+            <p>Seus itens salvos</p>
+
+            <p>{`(${products.length})`}</p>
+          </div>
+
+          {products.map((item, key) => (
+            <CartCard
+              key={item.id + key}
+              item={{ ...item }}
+              setProductsArray={setProducts}
+            />
+          ))}
+
+          <ProdutosInfos valorTotal={totalValue} />
+        </div>
+      )}
     </div>
   );
 }

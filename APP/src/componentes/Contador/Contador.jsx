@@ -1,67 +1,56 @@
 import "./contador.css";
-import { useEffect, useState } from "react";
+import {} from "react";
 
-function Contador({ id, isCart, valueCont, qnt }) {
-  const [i, setI] = useState(qnt ?? 1);
+function Contador({ id, maxCount, isCart, qtyIten, setQtyIten }) {
+  function qtyControll(controll) {
+    console.log("Id do produto ", id);
+    const url = `http://localhost/tcc/API/POST/cart-item-controll?product_id=${id}&operation=${controll}`;
+
+    console.log("URL", url);
+
+    fetch(url)
+      .then((r) => r.json())
+      .then((data) => {
+        console.log(data);
+        if (data == true) {
+          controll ? more() : less();
+        } else {
+          alert("algo deu errado");
+        }
+      })
+      .catch((error) => {
+        console.error("erro", error);
+      });
+  }
 
   function more() {
-    if (i < 100) {
-      setI(i + 1);
+    if (qtyIten < maxCount) {
+      setQtyIten(qtyIten + 1);
     }
   }
 
   function less() {
-    if (i > 1) {
-      setI(i - 1);
+    if (qtyIten > 1) {
+      setQtyIten(qtyIten - 1);
     }
-  }
-
-  useEffect(() => {
-    if (valueCont) {
-      valueCont(i);
-    }
-
-    if (isCart) {
-      qntStorage(i, id);
-    }
-  }, [i, valueCont, isCart, id]);
-
-  function qntStorage(quantidade, idItem) {
-    const storage = localStorage.getItem("idItem");
-
-    let itens = [];
-
-    if (!storage) return;
-
-    itens = JSON.parse(storage);
-
-    const novosItens = itens.map((it) => {
-      if (it.id === idItem) {
-        return { ...it, qnt: quantidade };
-      }
-
-      return it;
-    });
-
-    localStorage.setItem("idItem", JSON.stringify(novosItens));
-    window.dispatchEvent(new Event("CarrinhoAtualizado"));
   }
 
   return (
     <div className="countContainer">
       {isCart ? "" : <p>Quantidade</p>}
+
       <div className="countBox">
         <button
           onClick={() => {
-            less();
+            isCart ? qtyControll("") : less();
           }}
         >
           -
         </button>
-        <span>{i}</span>
+        <span>{qtyIten}</span>
         <button
           onClick={() => {
-            more();
+            isCart ? qtyControll("more") : more();
           }}
         >
           +

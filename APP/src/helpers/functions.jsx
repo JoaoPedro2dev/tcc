@@ -81,3 +81,11 @@ export function calculatinDelivery(deliveryTime) {
   date.setDate(date.getDate() + deliveryTime);
   return brDateFormatting(date);
 }
+
+export function shootCartCounter(number) {
+  window.dispatchEvent(
+    new CustomEvent("countUpdate", {
+      detail: number ?? 1,
+    })
+  );
+}

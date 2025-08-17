@@ -1,11 +1,11 @@
 import "./produtosInfos.css";
 
-function ProdutosInfos({ total }) {
+function ProdutosInfos({ valorTotal }) {
   return (
     <div id="produtosInfos">
       <div>
         <p>Total</p>
-        <strong>R${total.toFixed(2).toString().replace(".", ",")}</strong>
+        <strong>{valorTotal}</strong>
       </div>
       <button>Comprar tudo</button>
     </div>

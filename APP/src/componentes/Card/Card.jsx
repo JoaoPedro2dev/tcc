@@ -3,72 +3,43 @@ import "./card.css";
 import { ShoppingCart } from "lucide-react";
 import Feedback from "../Feedback/Feedback";
 import { useState } from "react";
+import { monetaryFormatting } from "../../helpers/functions";
+// import /*shootCartCounter*/ "../../helpers/functions";
 
 function Card({ item }) {
   const navigate = useNavigate();
 
-  const priceFormat = item.price.toFixed(2).toString().replace(".", ",");
-
-  const promotionFormat = item.promotionPrice
-    .toFixed(2)
-    .toString()
-    .replace(".", ",");
-
-  const deliveryFormat = item.shippingCost
-    .toFixed(2)
-    .toString()
-    .replace(".", ",");
-
   const colorsArray = JSON.parse(item.availableColors);
 
-  const [feedback, setFeedback] = useState("");
+  // const [feedback, setFeedback] = useState("");
 
-  function addCart(e) {
+  const [addedToCart, setAddedToCart] = useState(false);
+  const [btnLoading, setBtnLoading] = useState(false);
+  function addToCart(e) {
     e.stopPropagation();
+    const url = `http://localhost/tcc/API/POST/cart-item-add?user_id=${1}&product_id=${
+      item.id
+    }&qty=${1}`;
 
-    const btn = e.currentTarget;
+    fetch(url)
+      .then((r) => r.json())
+      .then((data) => {
+        setBtnLoading(true);
 
-    btn.classList.add("clicked");
-    btn.disabled = true;
+        if (data == true) {
+          setBtnLoading(false);
+          setAddedToCart(true); // adiciona a classe
+          setTimeout(() => {
+            setAddedToCart(false); // remove a classe depois de 2s
+          }, 2000);
 
-    setTimeout(() => {
-      btn.classList.remove("clicked");
-      btn.disabled = false;
-    }, 1000);
-
-    let storage = localStorage.getItem("idItem");
-
-    let itensCart;
-
-    if (storage) {
-      itensCart = JSON.parse(storage);
-    } else {
-      itensCart = [];
-    }
-
-    if (!itensCart.some((it) => it.id === item.id)) {
-      itensCart.push({ id: item.id, qnt: 1 });
-      localStorage.setItem("idItem", JSON.stringify(itensCart));
-      window.dispatchEvent(new Event("CarrinhoAtualizado"));
-      window.dispatchEvent(new Event("countUpdate"));
-    } else {
-      const novosItens = itensCart.map((it) => {
-        if (it.id === item.id) {
-          const novaQnt = it.qnt + 1 <= 100 ? it.qnt + 1 : it.qnt;
-          return { ...it, qnt: novaQnt };
+          // shootCartCounter();
         }
-
-        return it;
+      })
+      .catch((error) => {
+        console.log(error);
+        setBtnLoading(false);
       });
-
-      localStorage.setItem("idItem", JSON.stringify(novosItens));
-    }
-
-    setFeedback(<Feedback text={"Produto adicionado!"} emoji={"🥳"} />);
-
-    setTimeout(() => {
-      setFeedback("");
-    }, 1000);
   }
 
   const images = JSON.parse(item.images);
@@ -81,26 +52,38 @@ function Card({ item }) {
       }}
     >
       <button
-        className="likeBtn"
+        className={
+          btnLoading
+            ? "likeBtn loading-card-btn"
+            : addedToCart
+            ? "likeBtn clicked-button"
+            : "likeBtn"
+        }
         onClick={(e) => {
-          addCart(e);
+          addToCart(e);
         }}
+        disabled={btnLoading || addedToCart}
       >
         <ShoppingCart />
       </button>
+
       <img src={images[0]} alt="" />
 
       <div className="arrayColorsLength">{colorsArray.length} Cores</div>
       <div className="text">
         <p>{item.productName}</p>
+
         {item.promotionPrice ? (
           <div>
-            <strong>R${promotionFormat}</strong>
-            <p className="line-through colorGray small">R${priceFormat}</p>
+            <strong>{monetaryFormatting(item.promotionPrice)}</strong>
+            <p className="line-through colorGray small">
+              {monetaryFormatting(item.price)}
+            </p>
           </div>
         ) : (
-          <strong>R${priceFormat}</strong>
+          <strong>{monetaryFormatting(item.price)}</strong>
         )}
+
         <div>
           <p className="colorGray small">
             {item.category} - {item.condition}
@@ -114,16 +97,16 @@ function Card({ item }) {
         </div>
 
         <p>
-          Frete
+          Frete{" "}
           {item.shippingCost === 0 ? (
-            <span className="colorGreen"> Grátis</span>
+            <span className="colorGreen"> Grátis </span>
           ) : (
-            " " + deliveryFormat
+            monetaryFormatting(item.shippingCost)
           )}
         </p>
       </div>
 
-      {feedback}
+      {/* {feedback} */}
     </div>
   );
 }

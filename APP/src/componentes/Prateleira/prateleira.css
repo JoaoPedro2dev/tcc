@@ -39,7 +39,7 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 1);
+  background: rgba(0, 0, 0, 0.7);
   border-radius: 50%;
 
   width: 60px;
@@ -54,7 +54,7 @@
 }
 
 .custom-arrow-prateleira.prev-prateleira {
-  left: -60px;
+  left: -65px;
 }
 
 .custom-arrow-prateleira.next-prateleira {
