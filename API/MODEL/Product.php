@@ -8,8 +8,12 @@
         public int $id;
         public int $sellerId;
         public string $productName;
-        public string $sellerName;
+        public string $username;
+        public string $store_name;
         public string $category;
+        public string $subCategory; 
+        public string $brand; 
+        // public string $rating;
         public string $gender;
         public string $condition;
         public  $availableColors;
@@ -27,7 +31,7 @@
         public float $promotionPrice;
         public int $deliveryTime;            // prazo_entrega em dias
         public  $images;
-        public string $profilePhoto;
+        public string $profile_photo;
         public $relevancia;
         public ?int $quantity; 
 

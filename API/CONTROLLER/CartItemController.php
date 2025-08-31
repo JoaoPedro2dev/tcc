@@ -12,12 +12,12 @@
             return (new CartItem()) -> getByUserId($cartId);
         }
 
-        static function quantityControll(int $productId, string $operation){
-            return (new CartItem()) -> quantityControll($productId, $operation);
+        static function quantityControll(int $cartId, int $productId, string $operation){
+            return (new CartItem()) -> quantityControll($cartId, $productId, $operation);
         }
 
-        static function delete(int $productId){
-            return (new CartItem()) -> delete($productId);
+        static function delete(int $cartId, int $productId){
+            return (new CartItem()) -> delete($cartId, $productId);
         }
     }
 ?>

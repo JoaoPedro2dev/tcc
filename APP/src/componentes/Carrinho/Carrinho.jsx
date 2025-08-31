@@ -4,12 +4,15 @@ import CartCard from "./CartCard/CartCard";
 import { useEffect, useState } from "react";
 import CarrinhoVazil from "./CarrinhoVazil/CarrinhoVazil";
 import ProdutosInfos from "./ProdutosInfos/ProdutosInfos";
+import { useUser } from "../../context/UserContext";
 
 function Carrinho({ funcao }) {
   const [products, setProducts] = useState([]);
 
+  const { user } = useUser();
+
   useEffect(() => {
-    const url = "http://localhost/tcc/API/GET/cartItens?user_id=1";
+    const url = `http://localhost/tcc/API/GET/cartItens?user_id=${user.id}`;
     fetch(url)
       .then((r) => r.json())
       .then((data) => {
@@ -78,9 +81,10 @@ function Carrinho({ funcao }) {
             <p>{`(${products.length})`}</p>
           </div>
 
-          {products.map((item, key) => (
+          {products.map((item) => (
             <CartCard
-              key={item.id + key}
+              userI={user.id}
+              key={item.id}
               item={{ ...item }}
               setProductsArray={setProducts}
             />

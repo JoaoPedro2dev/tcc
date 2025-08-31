@@ -6,7 +6,10 @@
     use Controller\ProductController;
     use Controller\CartController;
     use Controller\CartItemController;
+    use DAO\PessoasDAO;
     use Model\Product;
+    use Controller\PessoaController;
+    use Model\Pessoa;
 
     // use Controller\CartItemController;
 
@@ -43,20 +46,13 @@
             break;
 
         case '/GET':
-            // echo 'Bem vindo a Index ';
-            $id = trim($_GET['id'] ?? '');
+            Functions::verifyVar('id');
+            Functions::verifyId('id');
 
-            if($id === ''){
-                die(json_encode(['status' => 'erro', 'desc' => 'Você precisa de um id'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-            }
-
-            if(!filter_var($id, FILTER_VALIDATE_INT)){
-                die(json_encode(['status' => 'erro', 'desc' => 'Digite um id valido'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-            }
+            $id = $_GET['id'];
 
             echo json_encode(ProductController::selectProduct($id), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-
-            break;
+        break;
 
         case '/POST/cart':
             // echo 'Bem vindo adicionar carrinho';
@@ -74,8 +70,126 @@
             
             break;
 
-        case '/POST/cart-item-add':
+        case '/POST/usuario/cadastro':
+            
+            if($_SERVER['REQUEST_METHOD'] === 'POST'){
+                                    // $_POST['store_name'] = null;
+
+                try{
+                    Functions::verifyVar('nivel_acesso');
+
+                    $isSeller = $_GET['nivel_acesso'] === 'vendedor' ? true : false;
+
+                    $postArray = [
+                        'first_name',
+                        'last_name',
+                        'cpf',
+                        'email',
+                        'date_birth',
+                        'password',
+                    ];
+
+                    $setsArray = [
+                        'setFirstName',
+                        'setLastName',
+                        'setCpf',
+                        'setEmail',
+                        'setDateBirth',
+                        'setPassword',
+                    ];
+
+                    if ($isSeller) {
+                        array_splice($postArray, 2, 0, ['store_name']); 
+                        array_splice($postArray, 4, 0, ['cnpj']); 
+
+                        array_splice($setsArray, 2, 0, ['setStoreName']); 
+                        array_splice($setsArray, 4, 0, ['setCnpj']); 
+                    }
+
+                    $pessoa = new Pessoa();
+
+                    $pessoa->setNivelAcesso($_GET['nivel_acesso']);
+
+                    foreach($postArray as $post){
+                        Functions::verifyPost($post);
+                    }
+                    
+                    foreach($postArray as $i => $post){
+                        $setter = $setsArray[$i];
+                        $pessoa->$setter($_POST[$post]);
+                    }
+
+                    // $pessoa->setNivelAcesso('usuario');
+                    $pessoa->setName();
+                    $pessoa->setUserName($_POST['username'] ?? null);  
+
+                    
+                    if(!$isSeller){
+                        $storeName = $_POST['store_name'] ?? null;
+                        $storeName = $storeName === '' ? null : $storeName;
+                        $pessoa->setStoreName($storeName);
+                    }
+                    
+                    $telefone = $_POST['telefone'] ?? null;
+                    $telefone = $telefone === '' ? null : $telefone;
+                    $pessoa->setTelefone($telefone);
+                    
+                    echo json_encode(PessoaController::insert($pessoa));
+                }catch(Exception $e){
+                    echo $e->getMessage();
+                }
+            }else{
+                 echo json_encode(
+                        ['success' => false, 
+                        'status' => 'Metodo de requisição invalido'],
+                        JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            }
+            
+        break;
+
+        case '/GET/usuario/login':
+            if($_SERVER['REQUEST_METHOD'] === 'POST'){
+                try{
+                    $postArray = [
+                        'email',          // email
+                        'password',       // password
+                    ];
+
+                    foreach($postArray as $post){
+                        Functions::verifyPost($post);
+                    }
+
+                    $user = PessoaController::login($_POST['email'], $_POST['password']);
+                    $pessoa = new Pessoa();
+                        
+                    if($user){
+                        $pessoa->createCookie($user);
+                        echo json_encode(
+                            [
+                                'success' => true,
+                                'userData' => PessoaController::checkAuth(),
+                            ]
+                            ,  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                    }else{
+                        echo json_encode(['success' => false, 'field' => '', 'status' => 'Usuario ou senha incorretos'],  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                    }  
+                         
+                }catch(Exception $e){
+                    echo $e->getMessage();
+                }
+            }else{
+                 echo json_encode(
+                        ['success' => false, 
+                        'status' => 'Metodo de requisição invalido'],
+                        JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            }
+        break;
+            
+        case '/POST/cart/insert':
             // echo 'Bem vindo adicionar itens ao carrinho';
+
+            Functions::verifyId('user_id');
+            Functions::verifyVar('user_id');
             
             $user_id = Functions::verifyId('user_id');
 
@@ -87,7 +201,7 @@
             
             echo json_encode(CartItemController::addItem($cartId, $product_id, $qty), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
             
-            break;
+        break;
 
         case '/GET/cart_item':
             // echo 'Bem vindo selecionar itens do carrinho';
@@ -156,20 +270,59 @@
 
         case '/POST/cart-item-controll':
             $product_id = Functions::verifyId('product_id');
+            
+            Functions::verifyVar('user_id');
+            $userId = Functions::verifyId('user_id');
+            $userId = Functions::verifyId('user_id');
+            
+            $cartId = CartController::getId($userId);
 
             $operation = trim($_GET['operation'] ?? '');
 
-            echo json_encode(CartItemController::quantityControll($product_id, $operation),  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            echo json_encode(CartItemController::quantityControll($cartId, $product_id, $operation),  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
             
-            break;
+        break;
 
         case '/DELETE/cart-item':
             $product_id = Functions::verifyId('product_id');
-
-            echo json_encode(CartItemController::delete($product_id),  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-
-            break;
             
+            Functions::verifyVar('user_id');
+            $userId = Functions::verifyId('user_id');
+            $userId = Functions::verifyId('user_id');
+            
+            $cartId = CartController::getId($userId);
+
+            echo json_encode(CartItemController::delete($cartId, $product_id),  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+        break;
+
+      
+
+        case '/POST/logout':
+            $pessoa = new Pessoa();
+            echo json_encode($pessoa->logout(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            
+            break;
+
+        case '/GET/me':
+            $user = PessoaController::checkAuth();
+
+            if ($user) {
+                echo json_encode([
+                    "success" => true,
+                    "user" => $user // dados do payload JWT    
+                ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            } else {
+                // http_response_code(401);
+                echo json_encode([
+                    "success" => false,
+                    "user" => 'não autenticado'
+                ]);
+            }
+            
+        break;
+
         default: die("not found");
+
     }
 ?>

@@ -4,13 +4,16 @@ import { Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { monetaryFormatting } from "../../../helpers/functions";
+import { useUser } from "../../../context/UserContext";
 // import /*shootCartCounter*/ "../../../helpers/functions";
 
 function CartCard({ item, setProductsArray }) {
+  const { user } = useUser();
+
   const navigate = useNavigate();
 
   function removeFromCart() {
-    const url = `http://localhost/tcc/API/DELETE/cart-item?product_id=${item.id}`;
+    const url = `http://localhost/tcc/API/DELETE/cart-item?user_id=${user.id}&product_id=${item.id}`;
     fetch(url)
       .then((r) => r.json())
       .then((data) => {
@@ -68,6 +71,7 @@ function CartCard({ item, setProductsArray }) {
 
         <Contador
           id={item.id}
+          userId={user.id}
           maxCount={item.stockTotal}
           isCart={true}
           qtyIten={count}

@@ -4,6 +4,7 @@ import { ShoppingCart } from "lucide-react";
 import Feedback from "../Feedback/Feedback";
 import { useState } from "react";
 import { monetaryFormatting } from "../../helpers/functions";
+import { useUser } from "../../context/UserContext";
 // import /*shootCartCounter*/ "../../helpers/functions";
 
 function Card({ item }) {
@@ -15,11 +16,13 @@ function Card({ item }) {
 
   const [addedToCart, setAddedToCart] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
+  const { user } = useUser();
+
   function addToCart(e) {
     e.stopPropagation();
-    const url = `http://localhost/tcc/API/POST/cart-item-add?user_id=${1}&product_id=${
-      item.id
-    }&qty=${1}`;
+    const url = `http://localhost/tcc/API/POST/cart/insert?user_id=${
+      user.id
+    }&product_id=${item.id}&qty=${1}`;
 
     fetch(url)
       .then((r) => r.json())
@@ -37,7 +40,7 @@ function Card({ item }) {
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         setBtnLoading(false);
       });
   }

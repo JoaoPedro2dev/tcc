@@ -7,4 +7,5 @@
     $_ENV['db']['database'] = 'nome do banco de dados'; 
 
     $_ENV['key'] = "chave de acesso para API";
+    $_ENV['JTWkwy'] = "Chave de teste para JWT";
 ?>

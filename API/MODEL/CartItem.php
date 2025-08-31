@@ -28,12 +28,12 @@
             return ((new CartItemDAO())->getByUserId($cartId));
         }
 
-        public function quantityControll(int $productId, string $operation){
-            return ((new CartItemDAO())->quantityControll($productId, $operation));
+        public function quantityControll(int $cartId, int $productId, string $operation){
+            return ((new CartItemDAO())->quantityControll($cartId, $productId, $operation));
         }
 
-        public function delete(int $productId){
-            return ((new CartItemDAO())->delete($productId));
+        public function delete(int $cartId, int $productId){
+            return ((new CartItemDAO())->delete($cartId, $productId));
         }
 
         // Getters e Setters

@@ -30,10 +30,11 @@
         }  
 
         public function getById(int $id) : ?Product {
-            $sql = "SELECT p.*, v.sellerName, v.profilePhoto
-                    FROM produtos p
-                    INNER JOIN vendedores v ON v.id = p.sellerId
-                    WHERE p.id = ?";
+            $sql = "SELECT produto.*, pessoa.profile_photo , pessoa.store_name
+                    FROM produtos produto
+                    INNER JOIN vendedores v ON v.id = produto.sellerId
+                    INNER JOIN pessoas pessoa ON pessoa.id = v.id_pessoa
+                    WHERE produto.id = ?";
 
             $stmt = parent::$conexao->prepare($sql);
             $stmt->bindValue(1, $id);
@@ -53,6 +54,7 @@
                 if(!empty($product->images)){
                     $product->images = json_decode($product->images);
                 }
+                
             }
 
             return $product ?: null ;

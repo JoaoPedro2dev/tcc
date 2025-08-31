@@ -1,93 +1,292 @@
-.dnv-logo {
-  position: absolute;
-  top: 30px;
-  left: 40px;
-  cursor: pointer;
-}
-
+/* Container principal */
 .login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: 100vh;
-  background: #f8f9fa;
-  padding: 20px;
-}
-
-.login-form {
-  background: #fff;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
-}
-
-.input-group {
-  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f5f6fb;
+  padding: 1.25rem;
 }
 
-.input-group label {
-  font-size: 14px;
-  margin-bottom: 6px;
-  color: #555;
-}
-
-.input-group input {
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  outline: none;
-  font-size: 16px;
-  transition: border-color 0.3s ease;
-}
-
-.input-group input:focus {
-  border-color: #007bff;
-}
-
-.btn-login {
+/* Card */
+.login-container > .login-card {
+  background: #fff;
   width: 100%;
-  padding: 12px;
-  background-color: #007bff;
-  color: white;
-  font-size: 16px;
-  font-weight: 500;
+  max-width: 560px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(16, 24, 40, 0.08);
+  padding: 2rem 1.5rem;
+}
+
+/* Header */
+.login-container > .login-card > .login-header {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.login-container > .login-card > .login-header > .login-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #101828;
+  margin: 0 0 0.5rem;
+}
+
+.login-container > .login-card > .login-header > .login-subtitle {
+  color: #667085;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* Form */
+.login-container > .login-card > .login-form {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 460px;
+  /* background: #ff9898; */
+  border-radius: 14px;
+  padding: 1.25rem 1rem 1rem;
+  box-shadow: none;
+}
+
+.login-container > .login-card > .login-form > .input-group {
+  margin-bottom: 1rem;
+}
+
+.login-container > .login-card > .login-form > .input-group > .input-label {
+  display: block;
+  color: #344054;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0 0 0.4rem;
+}
+
+/* Wrapper do input (agora é o "caixote" com borda) */
+.login-container > .login-card > .login-form > .input-group > .input-wrapper {
+  position: relative;
+  border: 1px solid #e4e7ec;
+  background: #f8fafc;
+  border-radius: 10px;
+  /* transition: border-color 0.2s, box-shadow 0.2s, background 0.2s; */
+  /* height: 40px; */
+}
+
+/* Foco no wrapper */
+.login-container
+  > .login-card
+  > .login-form
+  > .input-group
+  > .input-wrapper:focus-within {
+  border-color: #7b61ff;
+  background: #fff;
+}
+
+/* Ícone da esquerda (Mail/Lock) agora absoluto dentro do wrapper */
+.login-container
+  > .login-card
+  > .login-form
+  > .input-group
+  > .input-wrapper
+  > .input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #98a2b3;
+  pointer-events: none;
+}
+
+/* Campo em si */
+.login-container
+  > .login-card
+  > .login-form
+  > .input-group
+  > .input-wrapper
+  > .input-field {
+  width: 100%;
+  height: 100%;
   border: none;
-  border-radius: 8px;
+  outline: none;
+  background: transparent;
+  color: #1f2937;
+  font-size: 0.95rem;
+  /* line-height: 1.2; */
+  padding: 0.85rem 44px 0.85rem 38px; /* espaço p/ ícones */
+}
+
+/* Botão de alternar senha — fixamos o posicionamento dentro do wrapper */
+.login-container
+  > .login-card
+  > .login-form
+  > .input-group
+  > .input-wrapper
+  > .password-toggle {
+  position: absolute; /* fica dentro do wrapper */
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  color: #667085;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 20px;
+  padding: 0;
 }
 
-.btn-login:hover,
-.btn-voltar:hover {
-  background-color: #0056b3;
+/* Se alguma folha global tiver position diferente, garantimos aqui: */
+.login-container
+  > .login-card
+  > .login-form
+  > .input-group
+  > .input-wrapper
+  > .password-toggle {
+  position: absolute;
 }
 
-.pass-link {
-  text-align: left;
-  font-size: 14px;
-  color: #666;
+/* Estado de erro — deixa a borda do wrapper vermelha quando o input tem .input-error */
+.login-container
+  > .login-card
+  > .login-form
+  > .input-group
+  > .input-wrapper:has(.input-field.input-error) {
+  border-color: #e63946;
+  /* box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.15); */
 }
 
-.pass-link a,
-.create-account-paragraph > a {
-  color: #007bff;
+.login-container > .login-card > .login-form > .input-group > .error-message {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.82rem;
+  color: #e63946;
+}
+
+/* Esqueci minha senha */
+.login-container
+  > .login-card
+  > .login-form
+  > .forgot-password-container
+  > .forgot-password-link {
+  display: inline-block;
+  margin: 0.5rem 0 0.2rem;
+  color: #7b61ff;
+  font-size: 0.88rem;
   text-decoration: none;
 }
-
-.pass-link a:hover,
-.create-account-paragraph > a:hover {
+.login-container
+  > .login-card
+  > .login-form
+  > .forgot-password-container
+  > .forgot-password-link:hover {
   text-decoration: underline;
 }
 
-.create-account-paragraph {
-  margin-top: 25px;
+/* Botão principal */
+.login-container > .login-card > .login-form > .login-button {
+  width: 100%;
+  margin-top: 0.6rem;
+  border: none;
+  border-radius: 10px;
+  padding: 0.9rem;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fff;
+  background: #7b61ff;
+  cursor: pointer;
+  transition: filter 0.2s, transform 0.02s;
+}
+.login-container > .login-card > .login-form > .login-button:hover {
+  filter: brightness(0.96);
+}
+.login-container > .login-card > .login-form > .login-button:active {
+  transform: translateY(1px);
+}
+.login-container > .login-card > .login-form > .login-button.loading {
+  background: #a3aed0;
+  cursor: not-allowed;
+}
+
+/* Spinner */
+.login-container
+  > .login-card
+  > .login-form
+  > .login-button
+  > .loading-spinner {
+  border: 3px solid #fff;
+  border-top: 3px solid transparent;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  margin: 0 auto;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Divider */
+.login-container > .login-card > .divider {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.5rem auto 1rem;
+  max-width: 460px;
+}
+.login-container > .login-card > .divider::before,
+.login-container > .login-card > .divider::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: #e4e7ec;
+}
+.login-container > .login-card > .divider > .divider-text {
+  color: #98a2b3;
+  font-size: 0.85rem;
+}
+
+/* Links de cadastro */
+.login-container > .login-card > .signup-links {
+  max-width: 460px;
+  margin: 0 auto;
   text-align: center;
-  gap: 10px;
+}
+.login-container > .login-card > .signup-links > .signup-option {
+  margin-top: 0.85rem;
+  color: #475467;
+  font-size: 0.95rem;
+}
+.login-container > .login-card > .signup-links > .signup-option > .signup-link {
+  margin-left: 0.35rem;
+  color: #7b61ff;
+  font-weight: 700;
+  text-decoration: none;
+}
+.login-container
+  > .login-card
+  > .signup-links
+  > .signup-option
+  > .signup-link:hover {
+  text-decoration: underline;
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 0 !important;
+    background-color: #101828;
+  }
+  .login-container > .login-card {
+    height: 100vh;
+    padding: 1.25rem;
+    border-radius: 0;
+  }
+  .login-container > .login-card > .login-form {
+    box-shadow: none;
+    padding: 1rem 0.75rem 0.75rem;
+  }
 }

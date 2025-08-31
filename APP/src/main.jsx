@@ -17,6 +17,7 @@ import PurchasesStatus from "./pages/MyPurchases/PurchasesStatus/PurchasesStatus
 import Details from "./pages/MyPurchases/Details/Details.jsx";
 import EditSeller from "./pages/PaginaVendedor/EditSeller/EditSeller.jsx";
 import AddProduct from "./pages/PaginaVendedor/AddProduct/AddProduct.jsx";
+import { UserProvider } from "./context/UserContext.jsx";
 
 const router = createBrowserRouter([
   {
@@ -93,6 +94,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <UserProvider>
+      <RouterProvider router={router} />
+    </UserProvider>
   </StrictMode>
 );

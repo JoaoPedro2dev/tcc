@@ -1,6 +1,8 @@
 <?php 
     namespace Help;
 
+use Exception;
+
     abstract class Functions{
         
         public static function formatUrl(){
@@ -23,6 +25,27 @@
 
             return $_GET[$var];
         }
+
+        public static function verifyVar($var){
+            $get = trim($_GET[$var] ?? '');
+
+            if($get  === ''){
+                die(json_encode(['status' => 'erro', 'desc' => 'Preencha o campo '.$var], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+            }
+
+            return $_GET[$var];
+        } 
+
+        
+        public static function verifyPost($var){
+            $post = trim($_POST[$var] ?? '');
+
+            if($post  === ''){
+                throw new Exception(json_encode(['success' => false, 'field' => $var, 'status' => 'Preencha o campo '.$var], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+            }
+
+            return $_POST[$var];
+        } 
         
     }  
 ?>

@@ -9,9 +9,10 @@ import {
 } from "lucide-react";
 import "./menuUser.css";
 import MenuCard from "./MenuCards/MenuCard";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+// import { useUser } from "../../context/UserContext";
 
-function MenuUser({ funcao }) {
+function MenuUser({ funcao, name, access }) {
   useEffect(() => {
     const container = document.querySelector("#menu-user-container");
 
@@ -28,6 +29,8 @@ function MenuUser({ funcao }) {
     };
   }, [funcao]);
 
+  const [openLogout, setOpenLogout] = useState(false);
+
   return (
     <div id="menu-user-container">
       <button>
@@ -35,18 +38,22 @@ function MenuUser({ funcao }) {
       </button>
 
       <div id="menu-user-box">
-        <h2>Olá usuario</h2>
+        <h2>Olá {name}</h2>
 
         <MenuCard
           icon={<CircleUser className="menu-icon" />}
           title={"Minha conta"}
           link={"/minhaConta"}
         />
-        <MenuCard
-          icon={<Layout className="menu-icon" />}
-          title={"Painel"}
-          link={"/paginavendedor"}
-        />
+
+        {access === "vendedor" && (
+          <MenuCard
+            icon={<Layout className="menu-icon" />}
+            title={"Painel"}
+            link={"/paginavendedor"}
+          />
+        )}
+
         <MenuCard
           icon={<ShoppingBasket className="menu-icon" />}
           title={"Minhas compras"}
@@ -65,7 +72,10 @@ function MenuUser({ funcao }) {
         <MenuCard
           icon={<LogOut className="menu-icon" />}
           title={"Sair"}
-          link={"/minhaConta"}
+          funcao={() => {
+            setOpenLogout(true);
+          }}
+          true2={openLogout}
         />
       </div>
     </div>

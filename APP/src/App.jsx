@@ -5,6 +5,7 @@ import Footer from "./componentes/Footer/Footer.jsx";
 import Header from "./componentes/Header/Header.jsx";
 import Prateleira from "./componentes/Prateleira/Prateleira.jsx";
 import Loading from "./componentes/Loading/Loading.jsx";
+import { UserProvider } from "./context/UserContext.jsx";
 
 const categorys = [
   "Camisetas",
@@ -34,12 +35,37 @@ function App() {
           setDataProducts(data);
           console.log(data);
         }
+      })
+      .catch((error) => {
+        console.log("erro API", error);
       });
   }, []);
+
+  // const [user, setUser] = useState();
+
+  // useEffect(() => {
+  //   fetch("http://localhost/tcc/API/GET/me", {
+  //     credentials: "include", // MUITO IMPORTANTE para enviar cookies
+  //   })
+  //     .then((res) => res.json())
+  //     .then((dataUser) => {
+  //       if (dataUser.success === true) {
+  //         console.log("Usuário logado: HEADER", dataUser.user);
+  //         setUser(dataUser.user); // Exemplo: { id: 1, username: "teste" }
+  //       } else {
+  //         console.log("Erro:", dataUser);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, [setUser]);
 
   if (loading) {
     return <Loading />;
   }
+
+  // console.log(user);
 
   return (
     <div>

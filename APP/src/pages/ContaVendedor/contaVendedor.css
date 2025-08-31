@@ -1,93 +1,196 @@
-.dnv-logo {
-  position: absolute;
-  top: 30px;
-  left: 40px;
-  cursor: pointer;
-}
-
-.login-container {
+/* ====== Layout principal ====== */
+.registration-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   min-height: 100vh;
-  background: #f8f9fa;
-  padding: 20px;
+  background: linear-gradient(135deg, #f8f9fa, #e3f2fd);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding: 2rem 1rem;
 }
 
-.login-form {
+/* ====== Logo ====== */
+
+/* ====== Card ====== */
+.registration-card {
   background: #fff;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 500px;
   width: 100%;
-  max-width: 400px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ====== Cabeçalho ====== */
+.card-header {
+  text-align: center;
+}
+.card-header h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #212121;
+}
+.card-header p {
+  margin: 0.5rem 0 1.5rem;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* ====== Formulário ====== */
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-row .input-group {
+  flex: 1;
+  max-width: 50%;
 }
 
 .input-group {
-  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 .input-group label {
-  font-size: 14px;
-  margin-bottom: 6px;
-  color: #555;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 0.4rem;
 }
 
 .input-group input {
-  padding: 12px;
+  padding: 0.7rem 0.9rem;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  outline: none;
-  font-size: 16px;
-  transition: border-color 0.3s ease;
+  border-radius: 0.6rem;
+  font-size: 1rem;
+  transition: all 0.2s ease;
 }
-
 .input-group input:focus {
-  border-color: #007bff;
+  border-color: #1976d2;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2);
 }
 
-.btn-login {
-  width: 100%;
-  padding: 12px;
-  background-color: #007bff;
-  color: white;
-  font-size: 16px;
-  font-weight: 500;
+.optional {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+/* ====== Campo de senha com botão ====== */
+.password-input-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.password-input-container input {
+  flex: 1;
+}
+.password-toggle {
+  background: transparent;
   border: none;
-  border-radius: 8px;
+  position: absolute;
+  right: 10px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 20px;
-}
-
-.btn-login:hover,
-.btn-voltar:hover {
-  background-color: #0056b3;
-}
-
-.pass-link {
-  text-align: left;
-  font-size: 14px;
   color: #666;
+  transition: color 0.3s;
+}
+.password-toggle:hover {
+  color: #1976d2;
 }
 
-.pass-link a,
-.create-account-paragraph > a {
-  color: #007bff;
-  text-decoration: none;
+/* ====== Botão de envio ====== */
+.submit-button {
+  background: #1976d2;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.1s;
+}
+.submit-button:hover {
+  background: #1565c0;
+}
+.submit-button:active {
+  transform: scale(0.97);
+}
+.submit-button:disabled {
+  background: #90caf9;
+  cursor: not-allowed;
 }
 
-.pass-link a:hover,
-.create-account-paragraph > a:hover {
-  text-decoration: underline;
-}
-
-.create-account-paragraph {
-  margin-top: 25px;
+/* ====== Links ====== */
+.form-links {
+  margin-top: 1.5rem;
   display: flex;
   flex-direction: column;
+  gap: 0.8rem;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: #1976d2;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.3s;
+}
+.link-button:hover {
+  color: #0d47a1;
+}
+.seller-link {
+  font-weight: bold;
+}
+
+/* ====== Erros ====== */
+.error {
+  border-color: #e53935 !important;
+}
+.error-message {
+  color: #e53935;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+}
+.general-error {
+  background: #ffebee;
+  color: #c62828;
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
   text-align: center;
-  gap: 10px;
+}
+
+/* ====== Responsividade ====== */
+@media (max-width: 600px) {
+  .form-row {
+    flex-direction: column;
+  }
+  .registration-card {
+    padding: 1.5rem;
+  }
 }

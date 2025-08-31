@@ -33,7 +33,6 @@
 }
 
 #telaVenda > section > #content > #infosProduto > strong {
-  font-weight: 100;
   cursor: default;
 }
 
@@ -45,7 +44,7 @@
   font-size: xx-large;
 }
 
-#telaVenda > section > #content > #infosProduto > .selectBox {
+#telaVenda > section > #content > #infosProduto > div > .selectBox {
   display: flex;
   flex-direction: column;
   width: 80px;

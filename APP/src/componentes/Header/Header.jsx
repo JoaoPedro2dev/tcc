@@ -4,8 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Carrinho from "../Carrinho/Carrinho";
 import MenuUser from "../MenuUser/MenuUser";
+import { useUser } from "../../context/UserContext";
 
 function Header({ value }) {
+  const { user } = useUser();
+
   const navigate = useNavigate();
   const [url, setUrl] = useState(value ?? "");
   function navegarUrl() {
@@ -24,8 +27,7 @@ function Header({ value }) {
     !openMenu ? setOpenMenu(true) : setOpenMenu(false);
   }
 
-  const userLogged = true;
-
+  // console.log(user.cep);
   // const [cartCount, setCartCount] = useState(0);
 
   return (
@@ -38,18 +40,23 @@ function Header({ value }) {
         DNV WEAR
       </strong>
 
-      <p
-        className="cepBtn"
-        onClick={() => {
-          navigate("/cadastrarcep");
-        }}
-      >
-        Meu endereço
-        <span>
-          <MapPin height={"20px"} />
-          CEP
-        </span>
-      </p>
+      {user &&
+        (user.cep ? (
+          <p className="cepBtn">{user.cep}</p>
+        ) : (
+          <p
+            className="cepBtn"
+            onClick={() => {
+              navigate("/cadastrarcep");
+            }}
+          >
+            Meu endereço
+            <span>
+              <MapPin height={"20px"} />
+              CEP
+            </span>
+          </p>
+        ))}
 
       <div className="inputBox">
         <input
@@ -71,12 +78,9 @@ function Header({ value }) {
         </label>
       </div>
 
-      {userLogged ? (
+      {user ? (
         <button className="usser-account-btn" onClick={menu}>
-          <img
-            src="http://localhost/tcc/API/UPLOADS/images/imagem3.png"
-            alt=""
-          />
+          <img src={user.img} alt="" />
         </button>
       ) : (
         <button
@@ -90,7 +94,16 @@ function Header({ value }) {
         </button>
       )}
 
-      <button id="buttonCart" onClick={cart}>
+      <button
+        id="buttonCart"
+        onClick={
+          user
+            ? cart
+            : () => {
+                navigate("/login");
+              }
+        }
+      >
         <div id="cartCount">0</div>
         <ShoppingCart />
       </button>
@@ -100,14 +113,17 @@ function Header({ value }) {
           funcao={() => {
             cart();
           }}
+          userId={user.id}
         />
       )}
 
-      {openMenu && (
+      {openMenu && user && (
         <MenuUser
           funcao={() => {
             menu();
           }}
+          name={user.name}
+          access={user.access}
         />
       )}
     </header>

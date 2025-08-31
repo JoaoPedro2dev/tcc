@@ -17,8 +17,8 @@ import {
 } from "../../helpers/functions.jsx";
 import Loading from "../../componentes/Loading/Loading.jsx";
 import NotFound from "../notFound/NotFound.jsx";
-
 import ImagesCarroussel from "./ImagesCarroussel/ImagesCarroussel.jsx";
+import { useUser } from "../../context/UserContext.jsx";
 
 function Venda() {
   const location = useLocation();
@@ -29,6 +29,7 @@ function Venda() {
   const [data, setData] = useState({});
 
   useEffect(() => {
+    console.log("id do produto " + id);
     const url = `http://localhost/tcc/API/GET?id=${id}`;
 
     fetch(url)
@@ -37,17 +38,20 @@ function Venda() {
         setData(data);
         console.log("DATA API", data);
         setLoading(false);
-      })
-      .catch((error) => console.log(error));
+      });
+    // .catch((error) => console.log(error));
   }, []);
 
   const [qtyIten, setQtyIten] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
+
+  const { user } = useUser();
+
   function addToCart() {
-    const url = `http://localhost/tcc/API/POST/cart-item-add?user_id=${1}&product_id=${
-      data.id
-    }&qty=${qtyIten ?? 1}`;
+    const url = `http://localhost/tcc/API/POST/cart/insert?user_id=${
+      user.id
+    }&product_id=${data.id}&qty=${qtyIten ?? 1}`;
 
     fetch(url)
       .then((r) => r.json())
@@ -88,34 +92,52 @@ function Venda() {
 
           <div id="infosProduto">
             <LinkPerfil
-              img={data.profilePhoto}
-              name={data.sellerName}
+              img={data.profile_photo}
+              name={data.store_name}
               url={"/"}
             />
-            <strong>{data.productName}</strong>
-            <p>{data.description}</p>
-            <strong>R${monetaryFormatting(data.price)}</strong>
 
-            <div className="selectBox">
-              <label htmlFor="sizeSeelct">Tamanho</label>
-              <select id="sizeSeelct">
-                {data.availableSizes.map((size, key) => (
-                  <option key={key} value={size}>
-                    {size}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <p>{data.productName}</p>
 
-            <div className="selectBox">
-              <label htmlFor="colorSelect">Cor</label>
-              <select id="colorSelect">
-                {data.availableColors.map((color, key) => (
-                  <option key={key} value={color}>
-                    {color}
-                  </option>
-                ))}
-              </select>
+            {data.promotionPrice ? (
+              <div>
+                <strong className="xx-large weigth-500">
+                  {monetaryFormatting(data.promotionPrice)}
+                </strong>
+                <p className="line-through colorGray">
+                  {monetaryFormatting(data.price)}
+                </p>
+              </div>
+            ) : (
+              <strong className="weigth-500">
+                {monetaryFormatting(data.price)}
+              </strong>
+            )}
+
+            <p className="small">{data.description}</p>
+
+            <div className="displayRow">
+              <div className="selectBox">
+                <label htmlFor="sizeSeelct">Tamanho</label>
+                <select id="sizeSeelct">
+                  {data.availableSizes.map((size, key) => (
+                    <option key={key} value={size}>
+                      {size}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="selectBox">
+                <label htmlFor="colorSelect">Cor</label>
+                <select id="colorSelect">
+                  {data.availableColors.map((color, key) => (
+                    <option key={key} value={color}>
+                      {color}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
 
@@ -150,6 +172,11 @@ function Venda() {
               qtyIten={qtyIten}
               setQtyIten={setQtyIten}
             />
+
+            <p className="small">
+              <span className="colorGray">Estoque disponível:</span>{" "}
+              {data.stockTotal} unidade{data.stockTotal > 1 && "s"}
+            </p>
 
             <div id="buttonsBox">
               <button>Comprar agora</button>
