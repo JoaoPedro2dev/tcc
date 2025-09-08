@@ -74,8 +74,7 @@ function Card({ item }) {
 
       <div className="arrayColorsLength">{colorsArray.length} Cores</div>
       <div className="text">
-        <p>{item.productName}</p>
-
+        <p>{item.productName}</p> teste
         {item.promotionPrice ? (
           <div>
             <strong>{monetaryFormatting(item.promotionPrice)}</strong>
@@ -86,7 +85,6 @@ function Card({ item }) {
         ) : (
           <strong>{monetaryFormatting(item.price)}</strong>
         )}
-
         <div>
           <p className="colorGray small">
             {item.category} - {item.condition}
@@ -98,7 +96,6 @@ function Card({ item }) {
             {item.stockTotal} em estoque
           </p>
         </div>
-
         <p>
           Frete{" "}
           {item.shippingCost === 0 ? (
