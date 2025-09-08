@@ -15,25 +15,29 @@
         static function insert(Pessoa $pessoa) : bool{
             return ((new Pessoa())->insert($pessoa));
         }
-
-    static function checkAuth() : ?array{
-        if (!isset($_COOKIE["auth"])) {
-            return null; //'$_COOKIE NÃO EXISTE';
+        
+        static function profileUpdate(Pessoa $pessoa) : bool{
+            return ((new Pessoa())->profileUpdate($pessoa));
         }
 
-        try {
-            $decoded = JWT::decode($_COOKIE['auth'], new Key($_ENV['secretKey'], 'HS256'));
-
-            // valida expiração manualmente também (extra segurança)
-            if (isset($decoded->exp) && $decoded->exp < time()) {
-                return null; //"O COOKIE EXPIROU";
+        static function checkAuth() : ?array{
+            if (!isset($_COOKIE["auth"])) {
+                return null; //'$_COOKIE NÃO EXISTE';
             }
 
-            return (array) $decoded;
-        } catch (Exception $e) {
-            return null;
+            try {
+                $decoded = JWT::decode($_COOKIE['auth'], new Key($_ENV['secretKey'], 'HS256'));
+
+                // valida expiração manualmente também (extra segurança)
+                if (isset($decoded->exp) && $decoded->exp < time()) {
+                    return null; //"O COOKIE EXPIROU";
+                }
+
+                return (array) $decoded;
+            } catch (Exception $e) {
+                return null;
+            }
         }
-    }
 
     }
 ?>

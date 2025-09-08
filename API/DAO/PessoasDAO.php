@@ -9,7 +9,7 @@ use Model\Pessoa;
     class PessoasDAO extends DAO{
         
         public function login(string $email, string $password): ?Pessoa{
-            $sql = "SELECT id, email, name, username, profile_photo, cep, nivel_acesso
+            $sql = "SELECT id, email, name, first_name, last_name, username, profile_photo, cep, nivel_acesso
                     FROM pessoas 
                     WHERE email = ? AND `password` = SHA1(?)";
             $stmt = parent::$conexao->prepare($sql);
@@ -84,10 +84,96 @@ use Model\Pessoa;
             ]);            
         }
 
-        public function existsUsername(string $username) : bool{
-            $sql = "SELECT COUNT(*) FROM pessoas WHERE username = ?";
+        public function update(Pessoa $pessoa) : bool{
+             $sql = "UPDATE pessoas SET
+                
+                cpf = ?, 
+                cnpj = ?,
+                email = ?, 
+                telefone = ?, 
+                date_birth = ?, 
+                
+            WHERE id = ?";  
+             
             $stmt = parent::$conexao->prepare($sql);
-            $stmt->execute([$username]);
+
+            return $stmt->execute([
+                  // username
+                $pessoa->getCpf(),     
+                $pessoa->getCnpj(),      // cpf
+                $pessoa->getEmail(),         // email
+                $pessoa->getTelefone(),      // telefone
+                $pessoa->getDateBirth(),     // date_birth
+                
+            ]);            
+        }
+
+        public function profileUpdate(Pessoa $pessoa) : bool{
+            $sql = "UPDATE pessoas SET 
+                    profile_photo = ?, 
+                    name = ?,
+                    first_name = ?, 
+                    last_name = ?, 
+                    username = ?, 
+                    store_name = ?,
+                    url = ?
+                    WHERE id = ?";
+
+            $stmt = parent::$conexao->prepare($sql);
+
+            $stmt->execute([
+                $pessoa->getProfilePhoto(),
+                $pessoa->getName(),          // name
+                $pessoa->getFirstName(),     // first_name
+                $pessoa->getLastName(),      // last_name
+                $pessoa->getUserName(), 
+                $pessoa->getStoreName(), 
+                $pessoa->getUrl(),
+                $pessoa->getId(),
+            ]);
+
+            // if ($stmt->rowCount() > 0) {
+                $stmt = parent::$conexao->prepare("SELECT * FROM pessoas WHERE id = ?");
+                $stmt->execute([$pessoa->getId()]);
+                $pessoaAtualizada = $stmt->fetchObject("Model\Pessoa");
+
+                if($pessoaAtualizada){
+                    $pessoaAtualizada->createCookie($pessoaAtualizada);
+                    return true;
+                }
+            // }
+            return false;
+        }
+
+        public function addressUpdate(Pessoa $pessoa) : bool{
+            $sql = "UPDATE pessoa SET
+                    address = ?, 
+                    rua = ?, 
+                    bairro = ?, 
+                    cidade = ?, 
+                    uf = ?, 
+                    cep = ?, 
+                    num_residencia = ?
+                    WHERE id = ?";
+
+            $stmt = parent::$conexao->prepare($sql);
+
+            return $stmt->execute([
+                $pessoa->getAddress(),       // address
+                $pessoa->getRua(),           // rua
+                $pessoa->getBairro(),        // bairro
+                $pessoa->getCidade(),        // cidade
+                $pessoa->getUf(),            // uf
+                $pessoa->getCep(),           // cep
+                $pessoa->getNumResidencia(),  // num_residencia
+                $pessoa->getId(),
+            ]);
+        }
+
+        public function existsUsername(string $username, int $id) : bool{
+            $sql = "SELECT COUNT(*) FROM pessoas WHERE username = ? AND id != ?";
+            $stmt = parent::$conexao->prepare($sql);
+            $stmt->execute([$username, $id]);
             return $stmt->fetchColumn() > 0;
         }
 

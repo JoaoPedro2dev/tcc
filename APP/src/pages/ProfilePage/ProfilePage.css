@@ -1,0 +1,79 @@
+/* Estilo geral */
+.profile-page {
+  font-family: Arial, sans-serif;
+  background: #f9f9fb;
+  color: #333;
+  min-height: 100vh;
+}
+
+/* Header */
+.profile-header {
+  background: #7ea9f7;
+  color: white;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Main */
+.profile-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 40px 15%;
+}
+
+/* Sections */
+.profile-section {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: relative; /* necessário para fixar o botão dentro */
+}
+
+.profile-section h2 {
+  margin-bottom: 1rem;
+  color: #4a6fa5;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 0.5rem;
+}
+
+/* Informações de perfil */
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.profile-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #7ea9f7;
+}
+
+/* Dados */
+.profile-data p {
+  margin: 0.3rem 0;
+}
+
+/* Botão Editar */
+.edit-btn {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background: #7ea9f7;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s ease;
+}
+
+.edit-btn:hover {
+  background: #5a85d6;
+}

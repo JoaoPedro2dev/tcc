@@ -18,6 +18,8 @@ import Details from "./pages/MyPurchases/Details/Details.jsx";
 import EditSeller from "./pages/PaginaVendedor/EditSeller/EditSeller.jsx";
 import AddProduct from "./pages/PaginaVendedor/AddProduct/AddProduct.jsx";
 import { UserProvider } from "./context/UserContext.jsx";
+import ProfilePage from "./pages/ProfilePage/ProfilePage.jsx";
+import UpdateProfile from "./pages/ProfilePage/UpdateProfile/UpdateProfile.jsx";
 
 const router = createBrowserRouter([
   {
@@ -53,6 +55,16 @@ const router = createBrowserRouter([
   {
     path: "/cadastrarcep",
     element: <CadastrarCep />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/minhaconta",
+    element: <ProfilePage />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/minhaconta/editar-perfil",
+    element: <UpdateProfile />,
     errorElement: <NotFound />,
   },
   {

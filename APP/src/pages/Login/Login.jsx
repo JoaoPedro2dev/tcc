@@ -108,15 +108,15 @@ function Login() {
               login: validateLogin(data.status),
             }));
           }
-        })
-        .catch((error) => {
-          setIsLoading(false);
-          console.log("erro", error);
-          setErrors((prev) => ({
-            ...prev,
-            password: "Erro ao conectar com o servidor",
-          }));
         });
+      // .catch((error) => {
+      //   setIsLoading(false);
+      //   console.log("erro", error);
+      //   setErrors((prev) => ({
+      //     ...prev,
+      //     password: "Erro ao conectar com o servidor",
+      //   }));
+      // });
     }
   }
 

@@ -121,7 +121,8 @@
 
                     // $pessoa->setNivelAcesso('usuario');
                     $pessoa->setName();
-                    $pessoa->setUserName($_POST['username'] ?? null);  
+                    $pessoa->setUserName(($_POST['username'] ?? null), null);  
+                    $pessoa->setProfilePhoto(null, null);
 
                     
                     if(!$isSeller){
@@ -145,6 +146,85 @@
                         JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
             }
             
+        break;
+
+        case '/POST/usuario/profileUpdate':
+            // echo 'profile update';
+
+
+            // $_POST['first_name'] = 'asdsa';
+            // $_POST['last_name'] = 'asdsa';
+            //             $_POST['username'] = 'asdsa';
+            //                         $_FILES['profile_photo']['name'] = 'sdsad';
+
+            try{
+                Functions::verifyVar('nivel_acesso');
+
+                Functions::verifyId('id');
+                Functions::verifyVar('id');
+
+                $isSeller = $_GET['nivel_acesso'] === 'vendedor' ? true : false;
+
+                $_POST['profile_photo'] = 'http://localhost/tcc/API/UPLOADS/profilePhotos/logo.jpg';
+
+                $postArray = [
+                    // 'id',
+                    'first_name',
+                    'last_name',
+                    // 'user_name',
+                    'profile_photo'
+                ];
+
+                $setsArray = [
+                    // 'setId',
+                    'setFirstName',
+                    'setLastName',
+                    // 'setuserName',
+                    'setProfilePhoto',
+                ];
+
+                if ($isSeller) {
+                    array_splice($postArray, 2, 0, ['store_name']); 
+
+                    array_splice($setsArray, 2, 0, ['setStoreName']); 
+                }
+
+                $pessoa = new Pessoa();
+                
+                $pessoa->setId($_GET['id']);
+
+                // $pessoa->setNivelAcesso($_GET['nivel_acesso']);
+
+                foreach($postArray as $post){
+                    Functions::verifyPost($post);
+                }
+                
+                foreach($postArray as $i => $post){
+                    $setter = $setsArray[$i];
+                    $pessoa->$setter($_POST[$post]);
+                }
+
+                // $pessoa->setNivelAcesso('usuario');
+                // $pessoa->setName();
+
+                !$isSeller && $pessoa->setStoreName($_GET['store_name'] ?? null) ;
+
+                Functions::verifyPost('username');
+
+                $pessoa->setUserName($_POST['username'],$_GET['id'] );
+
+                $pessoa->setName(); 
+
+
+                $_FILES['profile_photo']['name'] && $pessoa->uploadProfilePhoto($_FILES['profile_photo'], __DIR__ . '/../UPLOADS/profilePhotos', $_POST['last_photo']);
+
+
+                echo json_encode(PessoaController::profileUpdate($pessoa));
+                
+
+            }catch(Exception $e){
+                echo $e->getMessage();
+            }
         break;
 
         case '/GET/usuario/login':
@@ -184,6 +264,7 @@
                         JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
             }
         break;
+        
             
         case '/POST/cart/insert':
             // echo 'Bem vindo adicionar itens ao carrinho';
@@ -302,7 +383,7 @@
             $pessoa = new Pessoa();
             echo json_encode($pessoa->logout(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
             
-            break;
+        break;
 
         case '/GET/me':
             $user = PessoaController::checkAuth();

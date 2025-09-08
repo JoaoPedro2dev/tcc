@@ -20,7 +20,7 @@
         public ?string $url;
         public string $profile_photo;
         public ?string $cpf;
-        public string $cnpj;
+        public ?string $cnpj;
         public ?string $email;
         public ?string $telefone;
         public string $date_birth;
@@ -33,7 +33,7 @@
         public ?string $uf;
         public ?string $cep;
         public ?string $num_residencia;
-        public bool $active;
+        public ?bool $active;
 
         public function __construct()
         {
@@ -45,7 +45,7 @@
             $this->cep = null;
             $this->num_residencia = null;
             $this->setCriadoEm();
-            $this->setProfilePhoto(null);
+            // $this->setProfilePhoto(null);
         }
 
         public function login(string $email, string $password): ?Pessoa{
@@ -56,15 +56,21 @@
             return ((new PessoasDAO())->insert($pessoa));
         }
 
+        public function profileUpdate(Pessoa $pessoa) : bool{
+            return ((new PessoasDAO())->profileUpdate($pessoa));   
+        }
+
         public function createCookie(Pessoa $pessoa): bool{        
             $token = JWT::encode([
                 'id' => $pessoa->getId(),
                 'access' => $pessoa->getNivelAcesso(),
+                'firstName' => $pessoa->getFirstName(),
+                'lastName' => $pessoa->getLastName(),
                 'name' => $pessoa->getName(),
                 'username' => $pessoa->getUserName(),
                 'email' => $pessoa->getEmail(),
                 'cep' => $pessoa->getCep(),
-                'img' => $pessoa->profile_photo,
+                'img' => $pessoa->getProfilePhoto(),
                 'exp' => time() + 3600 // expira em 1 hora
             ], $_ENV['secretKey'], 'HS256');
 
@@ -128,7 +134,7 @@
         }
 
         public function getUserName(): ?string { return $this->username; }
-        public function setUserName($username): void {
+        public function setUserName(?string $username, ?int $id): void {
                  
             if(empty($username)){
                 $baseUsername = $this->first_name."_".$this->last_name;
@@ -138,14 +144,14 @@
 
                 $dao = new PessoasDAO();
 
-                while ($dao->existsUsername($username)) {
+                while ($dao->existsUsername($username, $id == 0)) {
                     $username = $baseUsername . $i;
                     $i++;
                 }
 
                 $this->username = strtolower($username);
             }else{
-                if((new PessoasDAO())->existsUsername($username)){
+                if((new PessoasDAO())->existsUsername($username, $id)){
                 throw new Exception(
                     json_encode(
                         ['success' => false,
@@ -193,12 +199,94 @@
         }
 
         public function getProfilePhoto(): string { return $this->profile_photo; }
-        public function setProfilePhoto(?string $profile_photo):void{
-            if(empty($profile_photo)){
-                $this->profile_photo = $profile_photo ?? 'http://localhost/tcc/API/UPLOADS/profilePhotos/imgPadrao.png';
+        public function setProfilePhoto(?string $profile_photo, ?string $last_photo = null):void{
+            if(!$profile_photo){
+                $this->profile_photo = 'http://localhost/tcc/API/UPLOADS/profilePhotos/imgPadrao.png';
             }else{
-                $this->profile_photo = $profile_photo ?? $profile_photo;
+                $this->profile_photo = $profile_photo ?? $last_photo;
             }
+        }
+
+        public function uploadProfilePhoto(array $file, string $uploadDir, string $last_photo ): string {
+            // valida se o upload existe e não tem erro
+            if(!empty($file)){
+            if (!isset($file) || $file['error'] !== UPLOAD_ERR_OK) {
+                throw new Exception(
+                    json_encode(
+                        ['success' => false,
+                        'field' => 'profile_photo',
+                        'status' => "Erro no upload do arquivo."],
+                        JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+                    )
+                );
+            }
+
+            // tipos permitidos
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!in_array($file['type'], $allowedTypes)) {
+                throw new Exception(
+                    json_encode(
+                        ['success' => false,
+                        'field' => 'profile_photo',
+                        'status' => "Formato inválido. Apenas JPG, PNG e GIF são permitidos."],
+                        JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+                    )
+                );
+            }
+
+            // limite de tamanho (2MB)
+            $maxSize = 2 * 1024 * 1024;
+            if ($file['size'] > $maxSize) {
+                throw new Exception(
+                    json_encode(
+                        ['success' => false,
+                        'field' => 'profile_photo',
+                        'status' => "Arquivo muito grande. Máximo permitido: 2MB."],
+                        JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+                    )
+                );
+            }
+
+            // garante que o diretório existe
+            if (!is_dir($uploadDir)) {
+                throw new Exception(
+                    json_encode(
+                        ['success' => false,
+                        'field' => 'profile_photo',
+                        'status' => "O diretório informado não existe.",
+                        'upload' => $uploadDir,],
+                        JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+                )
+                );
+            }
+
+            // cria um nome único para o arquivo
+            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $fileName = "profile_" . $this->id . "_" . time() . "." . $ext;
+            $filePath = rtrim($uploadDir, '/') . "/" . $fileName;
+
+            // move o arquivo
+            if (!move_uploaded_file($file['tmp_name'], $filePath)) {
+                throw new Exception(
+                    json_encode(
+                        ['success' => false,
+                        'field' => 'profile_photo',
+                        'status' => "Falha ao mover o arquivo."],
+                        JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+                    )
+                );
+            }
+
+            // monta o caminho que será salvo no banco
+            $url = "http://localhost/tcc/API/UPLOADS/profilePhotos/" . $fileName;
+
+            // já seta no objeto
+            $this->setProfilePhoto($url, $last_photo);
+
+            return $url;
+        }else{
+            return 'valor de foto nulo';
+        }
         }
 
         public function getCpf(): string { return $this->cpf; }
