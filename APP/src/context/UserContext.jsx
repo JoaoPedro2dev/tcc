@@ -18,8 +18,8 @@ export function UserProvider({ children }) {
         } else {
           console.log("Erro usuário:", dataUser);
         }
-      })
-      .catch((err) => console.error("Erro API user:", err));
+      });
+    // .catch((err) => console.error("Erro API user:", err));
   }, []);
 
   return (

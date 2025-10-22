@@ -18,12 +18,14 @@ use DAO\DAO;
                 return $this->quantityControll($item->getCartId(), $item->getProductId(), 'more');
             };
 
-            $sql = "INSERT INTO carrinho_itens (cartId, productId, quantity) VALUES(?, ?, ?)";
+            $sql = "INSERT INTO carrinho_itens (cartId, productId, cor, tamanho, quantity) VALUES(?, ?, ?, ?, ?)";
 
             $stmt = parent::$conexao->prepare($sql);
             $stmt->bindValue(1, $item->getCartId());
             $stmt->bindValue(2, $item->getProductId());
-            $stmt->bindValue(3, $item->getQuantity());
+            $stmt->bindValue(3, $item->getCor());
+            $stmt->bindValue(4, $item->getTamanho());
+            $stmt->bindValue(5, $item->getQuantity());
 
             return $stmt->execute();
         }
@@ -40,7 +42,7 @@ use DAO\DAO;
         }
 
         public function getByUserId(int $cartId) : ?array{            
-            $sql = "SELECT productId, quantity FROM carrinho_itens WHERE cartId = ?";
+            $sql = "SELECT productId, cor, tamanho, quantity FROM carrinho_itens WHERE cartId = ?";
             $stmt = parent::$conexao->prepare($sql);
             $stmt->bindValue(1, $cartId);
             $stmt->execute();

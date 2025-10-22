@@ -4,8 +4,8 @@
     use Model\CartItem;
 
     abstract class CartItemController{
-        static function addItem(int $cartId, int $productId, int $qty): bool{
-            return ((new CartItem())->insert($cartId, $productId, $qty));
+        static function addItem(int $cartId, int $productId, string $cor, string $tamanho, int $qty): bool{
+            return ((new CartItem())->insert($cartId, $productId, $cor, $tamanho, $qty));
         }
 
         static function getUserId(int $cartId){

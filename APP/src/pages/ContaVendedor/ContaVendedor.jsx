@@ -24,6 +24,9 @@ function ContaPessoal() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  const [openHours, setOpenHours] = useState("08:00");
+  const [closeHours, setCloseHours] = useState("16:00");
+
   const cleanName = (value) => {
     // Remove números, caracteres especiais e espaços, mantém apenas letras e capitaliza
     const cleanedValue = value.replace(/[^a-zA-ZÀ-ÿ]/g, "");
@@ -119,6 +122,11 @@ function ContaPessoal() {
 
     if (formData.telefone && !validatePhone(formData.telefone)) {
       newErrors.telefone = "Telefone deve ter 10 ou 11 dígitos";
+    }
+
+    if (!formData.checkAgreement) {
+      newErrors.checkAgreement =
+        "Você precisa concordar com os termos de usuario";
     }
 
     const passwordValidation = validatePassword(formData.password);
@@ -228,16 +236,63 @@ function ContaPessoal() {
   };
 
   const handleLoginNavigation = () => {
-    // Em um projeto real, você usaria:
-    // navigate('/login');
-    alert("Navegaria para a página de login");
+    navigate("/login");
   };
 
   const handleSellerRegistration = () => {
-    // Em um projeto real, você usaria:
-    // navigate("/cadastrovendedor");
-    alert("Navegaria para cadastro de vendedor");
+    navigate("/contavendedor");
   };
+
+  const horarios = [
+    "00:00",
+    "00:30",
+    "01:00",
+    "01:30",
+    "02:00",
+    "02:30",
+    "03:00",
+    "03:30",
+    "04:00",
+    "04:30",
+    "05:00",
+    "05:30",
+    "06:00",
+    "06:30",
+    "07:00",
+    "07:30",
+    "08:00",
+    "08:30",
+    "09:00",
+    "09:30",
+    "10:00",
+    "10:30",
+    "11:00",
+    "11:30",
+    "12:00",
+    "12:30",
+    "13:00",
+    "13:30",
+    "14:00",
+    "14:30",
+    "15:00",
+    "15:30",
+    "16:00",
+    "16:30",
+    "17:00",
+    "17:30",
+    "18:00",
+    "18:30",
+    "19:00",
+    "19:30",
+    "20:00",
+    "20:30",
+    "21:00",
+    "21:30",
+    "22:00",
+    "22:30",
+    "23:00",
+    "23:30",
+  ];
 
   return (
     <div className="registration-container" id="registroPage">
@@ -305,6 +360,48 @@ function ContaPessoal() {
               {errors.store_name && (
                 <span className="error-message">{errors.store_name}</span>
               )}
+            </div>
+
+            <div className="form-row">
+              <div className="input-group">
+                <label htmlFor="open_hour">Horário de abrir</label>
+                <select
+                  name="open_hour"
+                  id="open_hour"
+                  value={openHours}
+                  onChange={(e) => setOpenHours(e.target.value)}
+                  className={errors.open_hour ? "error" : ""}
+                >
+                  {horarios.map((h, key) => (
+                    <option key={key} value={h}>
+                      {h}
+                    </option>
+                  ))}
+                </select>
+                {errors.open_hour && (
+                  <span className="error-message">{errors.open_hour}</span>
+                )}
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="close_hour">Horário de fechar</label>
+                <select
+                  name="close_hour"
+                  id="close_hour"
+                  value={closeHours}
+                  onChange={(e) => setCloseHours(e.target.value)}
+                  className={errors.close_hour ? "error" : ""}
+                >
+                  {horarios.map((h, key) => (
+                    <option key={key} value={h}>
+                      {h}
+                    </option>
+                  ))}
+                </select>
+                {errors.close_hour && (
+                  <span className="error-message">{errors.close_hour}</span>
+                )}
+              </div>
             </div>
 
             <div className="input-group">
@@ -413,6 +510,23 @@ function ContaPessoal() {
                 <span className="error-message">{errors.password}</span>
               )}
             </div>
+
+            <div className="check-agreement">
+              <input
+                type="checkbox"
+                name="checkAgreement"
+                id="checkAgreement"
+                onChange={handleInputChange}
+              />
+              <label htmlFor="checkAgreement">
+                Eu li e aceito os termos de uso do
+              </label>
+              <a href="/contrato-usuario">contrato de usuario</a>
+            </div>
+
+            {errors.checkAgreement && (
+              <span className="error-message">{errors.checkAgreement}</span>
+            )}
 
             <button
               type="submit"

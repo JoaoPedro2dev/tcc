@@ -9,6 +9,11 @@
   /* font-family: Roboto; */
 }
 
+:root {
+  --cor-principal: #a4193d;
+  --cor-secundaria: #ffdf89;
+}
+
 body {
   background-color: #f2f2f2;
 }
@@ -51,6 +56,10 @@ address {
 
 .small {
   font-size: small;
+}
+
+.font-medium {
+  font-size: medium;
 }
 
 .xx-large {

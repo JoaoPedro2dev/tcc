@@ -6,9 +6,10 @@ import Header from "./componentes/Header/Header.jsx";
 import Prateleira from "./componentes/Prateleira/Prateleira.jsx";
 import Loading from "./componentes/Loading/Loading.jsx";
 import { UserProvider } from "./context/UserContext.jsx";
+import SpecialShelf from "./componentes/specialShelf/specialShelf.jsx";
 
 const categorys = [
-  "Camisetas",
+  "Camisas",
   "Calças",
   "Calçados",
   "Acessórios",
@@ -33,7 +34,6 @@ function App() {
         if (data) {
           setLoading(false);
           setDataProducts(data);
-          console.log(data);
         }
       })
       .catch((error) => {
@@ -72,6 +72,7 @@ function App() {
       <Header />
       <Carousel />
       <section>
+        <SpecialShelf />
         {dataProducts.length > 0 &&
           categorys.map((category, index) => (
             <div key={index}>{criarPrateleira(category, dataProducts)}</div>

@@ -8,6 +8,10 @@
     use Firebase\JWT\Key;
 
     abstract class PessoaController{
+        static function getAccountData(int $id) : ?Pessoa{
+            return ((new Pessoa())->getAccountData($id));
+        }
+
         static function login(string $email, string $password){
             return ((new Pessoa())->login($email, $password));
         }
@@ -37,6 +41,10 @@
             } catch (Exception $e) {
                 return null;
             }
+        }
+
+        static function preferenceProducts(int $user_id){
+            return ((new Pessoa())->preferenceProducts($user_id));
         }
 
     }

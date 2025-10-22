@@ -7,45 +7,50 @@ import "./PaymentCard.css";
 // import { Wallet } from "lucide-react";
 
 function PaymentCard({ compra }) {
-  const produtos = [...compra.produtos];
-
-  // function somarTotalArray(array, value) {
-  //   array.reduce((soma) => {
-  //     return soma + value;
-  //   }, 0);
-  // }
+  const produtos = [...compra.itens];
 
   const totalCompra = produtos.reduce((soma, item) => {
-    return soma + item.valor * item.quantidade;
+    return soma + Number(item.preco_unitario) * Number(item.quantidade);
   }, 0);
 
+  console.log("total compra", totalCompra);
+
   const totalPago = produtos.reduce((soma, item) => {
-    return soma + item.valor * item.quantidade + item.frete - item.desconto;
+    return (
+      soma +
+      Number(item.preco_unitario) * Number(item.quantidade) +
+      Number(item.frete) -
+      Number(item.preco_promocao)
+    );
   }, 0);
 
   // const qntItens = somarTotalArray(produtos, produtos.quantidade);
   const qntItens = produtos.reduce((soma, item) => {
-    return soma + item.quantidade;
+    return soma + Number(item.quantidade);
   }, 0);
 
   // const totalFrete = somarTotalArray(produtos, produtos.frete);
 
   const totalFrete = produtos.reduce((soma, item) => {
-    return soma + item.frete;
+    return soma + Number(item.frete);
   }, 0);
 
   const totalDesconto = produtos.reduce((soma, item) => {
-    return soma + item.desconto;
+    return soma + Number(item.preco_promocao);
   }, 0);
 
   const subtotal = produtos.reduce((soma, item) => {
-    return soma + item.valor * item.quantidade + item.frete;
+    return (
+      soma +
+      Number(item.preco_unitario) * Number(item.quantidade) +
+      Number(item.frete)
+    );
   }, 0);
 
   return (
     <section id="pagamentoCardBody" className="boxShadow borderRadius">
       <div>
-        <p className="gray">{formatarData(compra.data)}</p>
+        <p className="gray">{formatarData(compra.data_compra)}</p>
         <p className="gray">{compra.id_string}</p>
       </div>
 
@@ -54,10 +59,10 @@ function PaymentCard({ compra }) {
       <div>
         <p>
           Valor total da compra ({qntItens} ite
-          {qntItens > 1 ? "ns" : "m"}) {formatarMonetario(totalCompra)}
+          {qntItens > 1 ? "ns" : "m"}) {formatarMonetario(Number(totalCompra))}
         </p>
 
-        <p className={totalFrete == 0 && "colorGreen"}>
+        <p className={totalFrete == 0 ? "colorGreen" : ""}>
           Frete {verificarFrete(totalFrete)}
         </p>
 

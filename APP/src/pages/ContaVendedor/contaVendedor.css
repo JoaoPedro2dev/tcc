@@ -10,6 +10,9 @@
   padding: 2rem 1rem;
 }
 
+.registration-container hr {
+}
+
 /* ====== Logo ====== */
 
 /* ====== Card ====== */
@@ -63,13 +66,13 @@
 
 .form-row .input-group {
   flex: 1;
-  max-width: 50%;
 }
 
 .input-group {
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-width: 100%;
 }
 
 .input-group label {
@@ -79,14 +82,17 @@
   margin-bottom: 0.4rem;
 }
 
-.input-group input {
+.input-group input,
+.input-group select {
   padding: 0.7rem 0.9rem;
   border: 1px solid #ccc;
   border-radius: 0.6rem;
   font-size: 1rem;
   transition: all 0.2s ease;
+  width: 100%;
 }
-.input-group input:focus {
+.input-group input:focus,
+.input-group select:focus {
   border-color: #1976d2;
   outline: none;
   box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2);
@@ -183,6 +189,36 @@
   margin-bottom: 1rem;
   font-size: 0.9rem;
   text-align: center;
+}
+
+.check-agreement {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  /* justify-content: center; */
+  align-items: center;
+  gap: 10px;
+}
+
+.check-agreement > label {
+  font-size: small;
+}
+
+.check-agreement > input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.check-agreement > a {
+  color: #0d47a1;
+  font-weight: 550;
+  text-decoration: underline !important;
+  transition: 0.2s;
+}
+
+.check-agreement > a:hover {
+  color: #1976d2;
 }
 
 /* ====== Responsividade ====== */

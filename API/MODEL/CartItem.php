@@ -8,6 +8,8 @@
         public int $itemId;
         public ?int $cartId;
         public int $productId;
+        public string $cor;
+        public string $tamanho;
         public int $quantity;
 
         // public function __construct($cartId = 0, $productId = 0, $quantity = 0) {
@@ -16,9 +18,11 @@
         //     $this->quantity = $quantity;
         // }
 
-        public function insert(int $cartId, int $productId, int $qty):bool{
+        public function insert(int $cartId, int $productId, string $cor, string $tamanho, int $qty):bool{
             $this->setCartId($cartId);
             $this->setProductId($productId);
+            $this->setCor($cor);
+            $this->setTamanho($tamanho);
             $this->setQuantity($qty);
             
             return ((new CartItemDAO())->insert($this));
@@ -63,6 +67,22 @@
 
         public function getQuantity(): int {
             return $this->quantity;
+        }
+
+        public function setCor(string $cor): void {
+            $this->cor = $cor;
+        }
+
+        public function getCor(): string {
+            return $this->cor;
+        }
+
+        public function setTamanho(string $tamanho): void {
+            $this->tamanho = $tamanho;
+        }
+
+        public function getTamanho(): string {
+            return $this->tamanho;
         }
 
         public function setQuantity(int $quantity): void {

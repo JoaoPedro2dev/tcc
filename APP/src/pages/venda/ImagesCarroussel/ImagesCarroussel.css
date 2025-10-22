@@ -70,3 +70,27 @@
   border-color: #007bff;
   opacity: 1 !important;
 }
+
+/* 🔧 Correção principal para slides empilhados */
+.ic-slider .slick-track {
+  display: flex !important;
+  align-items: center;
+}
+
+.ic-slider .slick-slide {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  float: none !important; /* impede empilhamento */
+}
+
+.ic-slider .slick-slide > div {
+  width: 100%;
+}
+
+.ic-container {
+  width: 100%; /* melhor do que max-width: 33.33% aqui */
+  max-width: 400px; /* se quiser limitar, use um valor fixo */
+  margin: 0 auto;
+  position: relative;
+}

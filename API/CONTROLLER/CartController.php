@@ -13,7 +13,11 @@
         }
 
         static function getAll(array $array){
-            return ((new Cart(1))->selectAll($array));
+            return ((new Cart(0))->selectAll($array));
+        }
+
+        static function selectToShelf(int $user_id){
+            return ((new Cart(0))->selectToShelf($user_id));
         }
     }
 ?>

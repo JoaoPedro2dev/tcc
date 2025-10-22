@@ -3,20 +3,25 @@ import "./card.css";
 import { ShoppingCart } from "lucide-react";
 import Feedback from "../Feedback/Feedback";
 import { useState } from "react";
-import { monetaryFormatting } from "../../helpers/functions";
+import { calcStockTotal, monetaryFormatting } from "../../helpers/functions";
 import { useUser } from "../../context/UserContext";
 // import /*shootCartCounter*/ "../../helpers/functions";
 
-function Card({ item }) {
+function Card({ item, showPorcentage = false, isProfile = false }) {
   const navigate = useNavigate();
 
-  const colorsArray = JSON.parse(item.availableColors);
-
-  // const [feedback, setFeedback] = useState("");
+  const colorsArray = item.itenStock?.length ?? 1;
 
   const [addedToCart, setAddedToCart] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
   const { user } = useUser();
+
+  if (showPorcentage) {
+    item.porcentage =
+      item.price > 0
+        ? (((item.price - item.promotionPrice) / item.price) * 100).toFixed(0)
+        : 0;
+  }
 
   function addToCart(e) {
     e.stopPropagation();
@@ -45,7 +50,13 @@ function Card({ item }) {
       });
   }
 
-  const images = JSON.parse(item.images);
+  let images = JSON.parse(item.images);
+
+  if (typeof images === "string") {
+    images = JSON.parse(images);
+  }
+
+  const stockTotal = calcStockTotal(item);
 
   return (
     <div
@@ -54,29 +65,51 @@ function Card({ item }) {
         navigate("/venda?", { state: item.id });
       }}
     >
-      <button
-        className={
-          btnLoading
-            ? "likeBtn loading-card-btn"
-            : addedToCart
-            ? "likeBtn clicked-button"
-            : "likeBtn"
-        }
-        onClick={(e) => {
-          addToCart(e);
-        }}
-        disabled={btnLoading || addedToCart}
-      >
-        <ShoppingCart />
-      </button>
+      {user?.seller_id ? (
+        user.seller_id != item.sellerId && (
+          <button
+            className={
+              btnLoading
+                ? "likeBtn loading-card-btn"
+                : addedToCart
+                ? "likeBtn clicked-button"
+                : "likeBtn"
+            }
+            onClick={(e) => {
+              addToCart(e);
+            }}
+            disabled={btnLoading || addedToCart}
+          >
+            <ShoppingCart />
+          </button>
+        )
+      ) : (
+        <button
+          className={
+            btnLoading
+              ? "likeBtn loading-card-btn"
+              : addedToCart
+              ? "likeBtn clicked-button"
+              : "likeBtn"
+          }
+          onClick={(e) => {
+            addToCart(e);
+          }}
+          disabled={btnLoading || addedToCart}
+        >
+          <ShoppingCart />
+        </button>
+      )}
 
       <img src={images[0]} alt="" />
 
-      <div className="arrayColorsLength">{colorsArray.length} Cores</div>
+      <div className="arrayColorsLength">
+        {colorsArray} {colorsArray > 1 ? "Cores" : "Cor"}
+      </div>
       <div className="text">
-        <p>{item.productName}</p> teste
+        <p>{item.productName}</p>
         {item.promotionPrice ? (
-          <div>
+          <div className="price-content">
             <strong>{monetaryFormatting(item.promotionPrice)}</strong>
             <p className="line-through colorGray small">
               {monetaryFormatting(item.price)}
@@ -85,15 +118,22 @@ function Card({ item }) {
         ) : (
           <strong>{monetaryFormatting(item.price)}</strong>
         )}
+
+        {item.porcentage && (
+          <div>
+            <p className="colorGreen">{item.porcentage}% OFF</p>
+          </div>
+        )}
+
         <div>
           <p className="colorGray small">
-            {item.category} - {item.condition}
+            {item.category} - {item.style} - {item.condition}
           </p>
           <p
             className="colorGray small"
             style={{ color: item.stockTotal === 0 && "red" }}
           >
-            {item.stockTotal} em estoque
+            {stockTotal} em estoque
           </p>
         </div>
         <p>
@@ -105,6 +145,22 @@ function Card({ item }) {
           )}
         </p>
       </div>
+      {isProfile && user?.seller_id === item.sellerId && (
+        <div
+          className="edit-buttons"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
+          <button
+            onClick={() => {
+              navigate("/paginavendedor/editar-produto?", { state: item.id });
+            }}
+          >
+            Editar Produto
+          </button>
+        </div>
+      )}
 
       {/* {feedback} */}
     </div>

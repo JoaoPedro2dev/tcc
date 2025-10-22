@@ -1,21 +1,50 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./ProductImages.css";
 import { v4 as uuidv4 } from "uuid";
-
 import { Upload, X } from "lucide-react";
 
-function ProductImages({ formData, onChange }) {
+function ProductImages({ formData, errors, removeError, onChange }) {
   const [filesArray, setFilesArray] = useState([]);
 
-  // function toBase64(file) {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
+  useEffect(() => {
+    if (!formData?.images) return;
 
-  //     reader.onload = () => resolve(reader.result);
-  //     reader.onerror = (error) => reject(error);
-  //   });
-  // }
+    let imagesData = formData.images;
+
+    if (typeof imagesData === "string") {
+      try {
+        imagesData = JSON.parse(imagesData);
+      } catch (e) {
+        console.warn("Erro ao fazer parse de formData.images:", e);
+        return;
+      }
+    }
+
+    if (!Array.isArray(imagesData)) return;
+
+    const existingImages = imagesData.map((img) => {
+      if (typeof img === "string") {
+        return {
+          file: null,
+          randomName: uuidv4(),
+          preview: img,
+          isFromServer: true,
+        };
+      }
+
+      return {
+        file: img.file || null,
+        randomName: img.randomName || uuidv4(),
+        preview: img.preview || img.url || "",
+        isFromServer: !!img.isFromServer,
+      };
+    });
+
+    setFilesArray((prev) => {
+      if (JSON.stringify(prev) === JSON.stringify(existingImages)) return prev;
+      return existingImages;
+    });
+  }, [formData?.images]);
 
   function itemHandler(element) {
     const originalFiles = Array.from(element.files);
@@ -26,33 +55,29 @@ function ProductImages({ formData, onChange }) {
 
       return {
         file,
-        randomName: randomName,
+        randomName,
         preview: URL.createObjectURL(file),
       };
     });
 
-    onChange("imagens", [...(formData.imagens || []), ...newFiles]);
-
-    setFilesArray((prev) => [...prev, ...newFiles]);
+    const updatedFiles = [...filesArray, ...newFiles];
+    setFilesArray(updatedFiles);
+    onChange("images", updatedFiles);
     element.value = "";
+
+    removeError("images");
   }
 
   function itemRemove(index) {
     const fileToRemove = filesArray[index];
 
-    URL.revokeObjectURL(fileToRemove.preview);
+    if (!fileToRemove.isFromServer) {
+      URL.revokeObjectURL(fileToRemove.preview);
+    }
 
     const newArray = filesArray.filter((_, i) => i !== index);
     setFilesArray(newArray);
-
-    const newFiles = formData.imagens.filter(
-      (file) =>
-        !(
-          file.randomName === fileToRemove.randomName &&
-          file.file.lastModified === fileToRemove.file.lastModified
-        )
-    );
-    onChange("imagens", newFiles);
+    onChange("images", newArray);
   }
 
   return (
@@ -61,22 +86,21 @@ function ProductImages({ formData, onChange }) {
       <hr />
 
       <div>
-        <label htmlFor="inputImages">
+        <label
+          htmlFor="inputImages"
+          className={errors.images ? "errorElement" : ""}
+        >
           <Upload color="#cdcdcd" size={44} />
-
-          <strong>Clique aqui para adicionar suas imagem</strong>
+          <strong>Clique aqui para adicionar suas imagens</strong>
           <p className="colorGray small textCenter">
             PNG, JPG, JPEG até 5MB cada
           </p>
         </label>
         <input
           type="file"
-          name="inputImages"
           multiple
           id="inputImages"
-          onChange={(e) => {
-            itemHandler(e.target);
-          }}
+          onChange={(e) => itemHandler(e.target)}
         />
       </div>
 
@@ -85,15 +109,26 @@ function ProductImages({ formData, onChange }) {
           <div key={index}>
             <span
               onClick={() => {
+                if (errors?.images?.index === index) removeError("images");
                 itemRemove(index);
               }}
             >
               <X size={18} />
             </span>
-            <img src={file.preview} alt="" />
+            <img
+              className={
+                errors?.images?.index === index ? "errorImg" : "noIndex"
+              }
+              src={file.preview}
+              alt={file.file?.name || `image-${index}`}
+            />
           </div>
         ))}
       </div>
+
+      {errors.images && (
+        <span className="errorMsg">{errors.images.status}</span>
+      )}
     </section>
   );
 }

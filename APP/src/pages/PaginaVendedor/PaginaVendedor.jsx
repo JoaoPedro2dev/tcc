@@ -1,94 +1,121 @@
 import Card from "../../componentes/Card/Card.jsx";
 import "./paginaVendedor.css";
 import Header from "../../componentes/Header/Header.jsx";
-import { CirclePlus, PackageSearch, Pencil } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import {
+  CircleFadingPlus,
+  CirclePlus,
+  MapPinPlus,
+  PackageSearch,
+  Pencil,
+} from "lucide-react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useUser } from "../../context/UserContext.jsx";
 
 function PaginaVendedor() {
   const navigate = useNavigate();
 
-  const loja = {
-    nome: "Padaria do Bairro",
-    descricao:
-      "A melhor padaria da vizinhança, com pães fresquinhos todos os dias! Venha experimentar nossas delícias caseiras e atendimento acolhedor.",
-    horarioAbertura: "14:00",
-    horarioFechamento: "15:19",
-    telefone: "(11) 98765-4321",
-    whatsapp: "33610-16234",
-    trabalhaFds: true,
-    imagemFundo: "http://localhost/tcc/API/UPLOADS/images/imagem1.png",
-    logo: "http://localhost/tcc/API/UPLOADS/images/imagem1.png",
-    vendas: 22,
-    produtos: [
-      { id: 1, nome: "Pão Francês", categoria: "Pães", preco: 0.5 },
-      { id: 2, nome: "Bolo de Cenoura", categoria: "Bolos", preco: 12.0 },
-      { id: 3, nome: "Sonho com Creme", categoria: "Doces", preco: 4.0 },
-      { id: 4, nome: "Croissant", categoria: "Pães", preco: 3.5 },
-      { id: 5, nome: "Pão Integral", categoria: "Pães", preco: 5.0 },
-      { id: 6, nome: "Torta de Maçã", categoria: "Tortas", preco: 15.0 },
-      { id: 7, nome: "Café Expresso", categoria: "Bebidas", preco: 3.0 },
-      { id: 8, nome: "Biscoito Caseiro", categoria: "Doces", preco: 1.5 },
-    ],
-    dataInicio: "2025-07-10",
-  };
+  const [searchParams] = useSearchParams();
+  const sellerUrl = searchParams.get("seller");
 
-  const [ano, mes, dia] = loja.dataInicio.split("-");
-  const dataInicioFormat = new Date(ano, mes - 1, dia).toLocaleDateString(
-    "pt-BR",
-    {
-      day: "numeric",
-      month: "numeric",
-      year: "numeric",
-    }
-  );
+  const { user } = useUser();
+  const admin = true;
+
+  const [loja, setLoja] = useState({});
+  const [dataInicioFormat, setDataInicioFormat] = useState("");
+  const [estaAbertaAgora, setEstaAbertaAgora] = useState(false);
+
+  const [produtos, setProdutos] = useState([]);
 
   const hoje = new Date();
   const diaSemana = hoje.getDay();
   const horaAtual = hoje.getHours();
 
-  const abre = parseInt(loja.horarioAbertura.split(":")[0]);
-  const fecha = parseInt(loja.horarioFechamento.split(":")[0]);
+  useEffect(() => {
+    fetch(`http://localhost/tcc/API/GET/vendedor?seller=${sellerUrl}`)
+      .then((r) => r.json())
+      .then((data) => {
+        setLoja(data);
+        // data.seller_id = parseInt(data.seller_id);
 
-  const abertaHoje =
-    (diaSemana >= 1 && diaSemana <= 5) ||
-    (loja.trabalhaFds && (diaSemana === 0 || diaSemana === 6));
+        fetch("http://localhost/tcc/API/GET/seller_products", {
+          method: "POST",
+          body: new URLSearchParams({ seller_id: data.id }),
+        })
+          .then((r) => r.json())
+          .then((data) => {
+            console.log(data);
+            setProdutos(data);
+          });
+      });
+  }, []);
 
-  const estaAbertaAgora = abertaHoje && horaAtual >= abre && horaAtual < fecha;
+  useEffect(() => {
+    if (!loja.criado_em) return;
 
-  const admin = true;
+    const [ano, mes, dia] = loja.criado_em.split(" ")[0].split("-");
+    setDataInicioFormat(
+      new Date(ano, mes - 1, dia).toLocaleDateString("pt-BR", {
+        day: "numeric",
+        month: "numeric",
+        year: "numeric",
+      })
+    );
+
+    const abre = parseInt(loja?.open_hours?.split(":")[0] ?? null);
+    const fecha = parseInt(loja?.close_hours?.split(":")[0] ?? null);
+
+    const abertaHoje =
+      (diaSemana >= 1 && diaSemana <= 5) ||
+      (loja.weekend && (diaSemana === 0 || diaSemana === 6));
+
+    setEstaAbertaAgora(abertaHoje && horaAtual >= abre && horaAtual < fecha);
+  }, [loja]);
 
   function addProductLink() {
     navigate("/paginavendedor/adicionar-produto");
   }
 
+  if (!loja?.id) {
+    return;
+  }
+
+  console.log("usuario", user);
   return (
     <div id="pagina-vendedor">
       <Header />
 
-      <div
-        id="backgroundImage"
-        style={{ backgroundImage: `url(${loja.imagemFundo})` }}
-      ></div>
+      <div id="backgroundImage">
+        <img
+          src={loja.banner ? loja.banner : "/noBackgroundImage.png"}
+          onError={(e) => (e.currentTarget.src = "/noBackgroundImg.png")}
+          alt="banner da loja"
+        />
+      </div>
 
       <section className="cabecalho-loja">
-        <img src={loja.logo} alt="Logo da loja" className="logo" />
+        <img
+          src={loja.profile_photo ? loja.profile_photo : "/noImg.png"}
+          onError={(e) => (e.currentTarget.src = "/noImg.png")}
+          alt="Logo da loja"
+          className="logo"
+        />
         <div>
-          <h1>{loja.nome}</h1>
+          <h1>{loja.store_name}</h1>
 
           <div>
-            {loja.vendas > 5 && <p>Mais de {loja.vendas - 1} vendas</p>}
-            {loja.vendas > 5 && <span>|</span>}
+            {loja.itens_sold > 5 && <p>Mais de {loja.itens_sold - 1} vendas</p>}
+            {loja.itens_sold > 5 && <span>|</span>}
             <p>
-              {loja.produtos.length > 1 &&
-                `${loja.produtos.length} Produtos á venda`}
+              {produtos?.length > 1 && `${produtos.length} Produtos á venda`}
             </p>
           </div>
 
           <p>Iniciou em {dataInicioFormat}</p>
         </div>
-        {admin && (
+        {user?.nivel_acesso === "vendedor" && user.id === loja.id_pessoa && (
           <button
-            className="borderRadius boxShadow"
+            className="borderRadius boxShadow editar-pencil"
             onClick={() => {
               navigate("/paginavendedor/editar-perfil");
             }}
@@ -100,28 +127,36 @@ function PaginaVendedor() {
 
       <main>
         <aside className="borderRadius boxShadow">
-          <p className="descricao">{loja.descricao}</p>
+          <p className="descricao">
+            {loja.seller_description ??
+              `Olá somos ${loja.store_name}, e Convidamos-lhe  para conhecer nossos produtos feitos com carinho para você!`}
+          </p>
+
+          <hr />
+
+          <p
+            className="small"
+            style={{ marginBottom: "15px", textAlign: "center" }}
+          >
+            Funcionamento Presencial
+          </p>
 
           <div>
             <p>
               <strong>Horário de Funcionamento:</strong>{" "}
-              {`${loja.horarioAbertura}
-              às ${loja.horarioFechamento}`}
+              {`${loja.open_hours}
+              às ${loja.close_hours}`}
             </p>
 
-            {loja.whatsapp && (
+            {loja.telefone_contato && (
               <p>
-                <strong>WhatsApp:</strong> {loja.whatsapp}
+                <strong>Telefone:</strong> {loja.telefone}
               </p>
             )}
 
             <p>
-              <strong>Telefone:</strong> {loja.telefone}
-            </p>
-
-            <p>
               <strong>Final de Semana:</strong>{" "}
-              {loja.trabalhaFds ? "Atende" : "Não atende"}
+              {loja.weekend ? "Atende" : "Não atende"}
             </p>
 
             <p>
@@ -131,30 +166,55 @@ function PaginaVendedor() {
               </span>
             </p>
           </div>
+
+          {loja.store_address ? (
+            <>
+              <p className="small" style={{ marginTop: "15px" }}>
+                Endereço: {loja.store_address}
+              </p>
+
+              {user?.nivel_acesso === "vendedor" &&
+                user?.id === loja.id_pessoa && (
+                  <button id="address-add">
+                    Mudar endereço <MapPinPlus />
+                  </button>
+                )}
+            </>
+          ) : (
+            user?.nivel_acesso === "vendedor" &&
+            user?.id === loja.id_pessoa && (
+              <button id="address-add">
+                Adicionar endereço <MapPinPlus />
+              </button>
+            )
+          )}
         </aside>
 
         <section className="borderRadius boxShadow">
-          {loja.produtos.length > 0 ? (
+          {produtos?.length > 0 ? (
             <div>
               <h2>Produtos à venda</h2>
               <div className="lista-cards">
                 {admin && (
                   <div id="addItem" onClick={addProductLink}>
-                    <CirclePlus size={50} />
+                    <CircleFadingPlus size={50} />
+                    {/* <CircleFadingPlus /> */}
                     <p className="bold">Adicionar produto</p>
                   </div>
                 )}
 
-                {loja.produtos.map((produto) => (
+                {produtos.map((produto) => (
                   <Card
                     key={produto.id}
                     item={produto}
                     salesPage={admin && true}
+                    isProfile={true}
                   />
                 ))}
               </div>
             </div>
-          ) : (
+          ) : user?.nivel_acesso === "vendedor" &&
+            user?.id === loja.id_pessoa ? (
             <div className="noItens">
               <h2 className="textCenter">
                 {admin ? "Você ainda" : "Este vendedor"} ainda não possui
@@ -175,6 +235,10 @@ function PaginaVendedor() {
                   <CirclePlus /> Adiconar produto
                 </button>
               )}
+            </div>
+          ) : (
+            <div>
+              <h2>Este vendedor ainda não possui produtos</h2>
             </div>
           )}
         </section>

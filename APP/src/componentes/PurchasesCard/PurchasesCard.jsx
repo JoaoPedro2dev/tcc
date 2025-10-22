@@ -1,184 +1,210 @@
-import { useNavigate } from "react-router-dom";
-import "./PurchasesCard.css";
-
-import { verificarPagamento, formatarData } from "../../helpers/functions.jsx";
+import {
+  Calendar,
+  Package,
+  MapPin,
+  CreditCard,
+  User,
+  Clock,
+  AlertCircle,
+  CheckCircle,
+} from "lucide-react";
+import { formatarData } from "../../helpers/functions";
 import { useState } from "react";
-import CancellationForm from "../../pages/MyPurchases/CancellationForm/CancellationForm.jsx";
+import "./PurchasesCard.css";
+import { useNavigate } from "react-router-dom";
 
-function PurchasesCard({ item }) {
-  function verificarStatus(
-    status,
-    dataEntrega,
-    prazo,
-    novoPrazo,
-    metodoPagamento,
-    reembolso
-  ) {
-    let tag;
+function PurchaseCard({ purchase }) {
+  const navigate = useNavigate();
+  const [expandedItems, setExpandedItems] = useState(new Set());
 
-    switch (status) {
-      case "Entregue":
-      case "Chegou":
-        tag = <h2>Chegou em {formatarData(dataEntrega)}</h2>;
-        break;
+  const toggleExpand = (productId) => {
+    const newExpanded = new Set(expandedItems);
+    if (newExpanded.has(productId)) {
+      newExpanded.delete(productId);
+    } else {
+      newExpanded.add(productId);
+    }
+    setExpandedItems(newExpanded);
+  };
 
-      case "A caminho":
-      case "Em preparação":
-        tag = <h2>Chegara até {formatarData(prazo)}</h2>;
-        break;
-
-      case "Cancelado por você":
-        tag = verificarPagamento(metodoPagamento, reembolso);
-        break;
-
-      case "Cancelado pelo vendedor":
-        tag = verificarPagamento(metodoPagamento, reembolso);
-        break;
-
-      case "Cancelado pela DNV WEAR":
-        tag = (
-          <p className="colorGray">
-            Pedido cancelado. O tempo para efetuar o pagamento esgotou.
-          </p>
-        );
-        break;
-
-      case "Não recebido":
-        if (!novoPrazo) {
-          tag = (
-            <p className="colorGray">
-              Ninguém recebeu seu produto. Estamos esperando o vendedor efetuar
-              um novo prazo.
-            </p>
-          );
-        } else {
-          tag = <h2>Chegara no novo prazo, dia {formatarData(novoPrazo)}</h2>;
-        }
-        break;
-
+  const getStatusInfo = (status) => {
+    switch (status.toLowerCase()) {
+      case "entregue":
+        return {
+          className: "status-delivered",
+          icon: CheckCircle,
+          label: "Entregue",
+        };
+      case "em_transporte":
+      case "a caminho":
+        return {
+          className: "status-shipping",
+          icon: Package,
+          label: "Em transporte",
+        };
+      case "em preparação":
+      case "pendente":
+        return {
+          className: "status-preparing",
+          icon: Clock,
+          label: "Em preparação",
+        };
+      case "chegou":
+        return { className: "status-arrived", icon: MapPin, label: "Chegou" };
+      case "cancelado por você":
+      case "cancelado pelo vendedor":
+      case "cancelado pela dnv wear":
+        return {
+          className: "status-cancelled",
+          icon: AlertCircle,
+          label: "Cancelado",
+        };
+      case "não recebido":
+        return {
+          className: "status-not-received",
+          icon: AlertCircle,
+          label: "Não recebido",
+        };
       default:
-        tag = <p>Status do produto não reconhecido</p>;
+        return { className: "status-default", icon: Package, label: status };
+    }
+  };
+
+  const getStatusMessage = (product) => {
+    const status = product.status.toLowerCase();
+
+    if (status === "entregue" && product.data_entregue) {
+      return `Entregue em ${formatarData(product.data_entregue)}`;
     }
 
-    return tag;
-  }
+    if (
+      (status === "em_transporte" || status === "pendente") &&
+      product.data_previsao
+    ) {
+      return `Previsão de entrega: ${formatarData(product.data_previsao)}`;
+    }
 
-  const navigate = useNavigate();
+    if (status === "não recebido") {
+      if (product.novoPrazo) {
+        return `Nova previsão: ${formatarData(product.novoPrazo)}`;
+      }
+      return "Aguardando novo prazo do vendedor";
+    }
 
-  const arrayStatus = [
-    "Entregue",
-    "Cancelado por você",
-    "Cancelado pelo vendedor",
-    "Cancelado pela DNV WEAR",
-  ];
+    if (status.includes("cancelado")) {
+      return "Reembolso será processado em até 5 dias úteis";
+    }
 
-  const [typeCancellation, setTypeCancellation] = useState("full");
-
-  const [openCancellationForm, setOpenCancellationForm] = useState(false);
-  function cancellationForm() {
-    !openCancellationForm
-      ? setOpenCancellationForm(true)
-      : setOpenCancellationForm(false);
-  }
+    return "";
+  };
 
   return (
-    <article id="purcahsesCardBody">
-      <h1>{formatarData(item.dataCompra)}</h1>
-
-      {item.produtos.map((iten) => (
-        <section key={iten.id}>
-          <img
-            src={iten.imagem}
-            alt={iten.nome}
-            onClick={() => {
-              arrayStatus.includes(iten.status)
-                ? navigate("/minhas-compras/status")
-                : navigate("/minhas-compras/rastrear");
-            }}
-          />
-
-          <div>
-            <strong
-              className={
-                iten.status !== "Entregue" &&
-                iten.status !== "A caminho" &&
-                iten.status !== "Chegou" &&
-                iten.status !== "Em preparação"
-                  ? "red"
-                  : "green"
-              }
-            >
-              {iten.status}
-            </strong>
-
-            <p>{iten.nome}</p>
-
-            {verificarStatus(
-              iten.status,
-              iten.dataEntrega,
-              iten.prazo,
-              iten.novoPrazo,
-              iten.metodoPagamento,
-              iten.reembolso
-            )}
-
-            {iten.recebido && <p>Recebido por {iten.recebido}</p>}
-
-            <p>
-              {iten.qnt} produto{iten.qnt > 1 ? "s" : ""}
-            </p>
-
-            {(iten.status === "A caminho" ||
-              iten.status === "Em preparação" ||
-              iten.status === "Não recebido") && (
-              <button
-                onClick={() => {
-                  cancellationForm();
-                  setTypeCancellation("produto");
-                }}
-              >
-                CANCELAR
-              </button>
-            )}
+    <div className="purchase-card">
+      {/* Header */}
+      <div className="purchase-header">
+        <div className="purchase-date">
+          <Calendar className="date-icon" />
+          <span className="date-text">
+            Pedido de {formatarData(purchase.data_compra)}
+          </span>
+        </div>
+        {purchase.metodoPagamento && (
+          <div className="payment-method">
+            <CreditCard className="payment-icon" />
+            <span className="payment-text">{purchase.metodoPagamento}</span>
           </div>
-        </section>
-      ))}
+        )}
+      </div>
 
-      {item.produtos.some(
-        (p) => p.status === "A caminho" || p.status === "Não recebido"
-      ) && (
-        <section id="deliveryOptions">
-          <button
-            onClick={() => {
-              navigate("/minhas-compras/rastrear");
-            }}
-          >
-            RASTREAR
-          </button>
+      {/* Products */}
+      <div className="products-list">
+        {purchase.itens.map((product, key) => {
+          const statusInfo = getStatusInfo(product.status);
+          const StatusIcon = statusInfo.icon;
 
-          {item.produtos.length > 1 && (
-            <button
-              onClick={() => {
-                cancellationForm();
-                setTypeCancellation("full");
-              }}
-            >
-              CANCELAR
-            </button>
-          )}
-        </section>
-      )}
+          return (
+            <div key={key} className="product-item">
+              <div className="product-content">
+                {/* Product Image */}
+                <div className="product-image-container">
+                  <img
+                    src={
+                      product.produc_image ||
+                      "https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?auto=compress&cs=tinysrgb&w=200&h=150&fit=crop"
+                    }
+                    alt={product.product_name}
+                    className="product-image"
+                    onClick={() => toggleExpand(product.id)}
+                  />
+                </div>
 
-      {openCancellationForm && (
-        <CancellationForm
-          funcao={() => {
-            cancellationForm();
-          }}
-          tipo={typeCancellation}
-        />
-      )}
-    </article>
+                {/* Product Info */}
+                <div className="product-info">
+                  <div className="product-header-info">
+                    <div className="product-details">
+                      <h3 className="product-name">{product.product_name}</h3>
+                      <p className="product-quantity">
+                        {product.quantidade}{" "}
+                        {product.quantidade === 1 ? "unidade" : "unidades"}
+                      </p>
+                    </div>
+
+                    {/* Status Badge */}
+                    <div className={`status-badge ${statusInfo.className}`}>
+                      <StatusIcon className="status-icon" />
+                      {statusInfo.label}
+                    </div>
+                  </div>
+
+                  {/* Status Message */}
+                  <div className="status-message">
+                    <p className="status-text">{getStatusMessage(product)}</p>
+                    {product.recebido_por && (
+                      <div className="received-by">
+                        <User className="received-icon" />
+                        <span className="received-text">
+                          Recebido por {product.recebido_por}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="action-buttons">
+                    {(product.status === "em_transporte" ||
+                      product.status === "Em preparação") && (
+                      <button
+                        className="action-button track-button"
+                        onClick={() => {
+                          navigate("/minhas-compras/rastrear");
+                        }}
+                      >
+                        Rastrear
+                      </button>
+                    )}
+
+                    {(product.status === "em_transporte" ||
+                      product.status === "Em preparação" ||
+                      product.status === "Não recebido") && (
+                      <button className="action-button cancel-button">
+                        Cancelar
+                      </button>
+                    )}
+
+                    {product.status === "Entregue" && (
+                      <button className="action-button review-button">
+                        Avaliar
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 
-export default PurchasesCard;
+export default PurchaseCard;

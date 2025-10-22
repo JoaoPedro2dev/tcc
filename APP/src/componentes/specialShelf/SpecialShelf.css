@@ -1,0 +1,71 @@
+.specialShelf-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+}
+
+.specialShelf-container > div:first-child {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30%;
+  /* min-height: 100%; */
+}
+
+.specialShelf-container > div:last-child {
+  width: 70%;
+}
+
+/* --- Área das imagens do carrinho --- */
+.image-content {
+  width: 100%;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.image-content > img {
+  max-width: 100%;
+  width: 25%;
+  height: 100px;
+  object-fit: contain;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  transition: all 0.3s ease;
+}
+
+/* 1 imagem */
+.image-content.count-1 > img {
+  flex: 1 1 100%;
+}
+
+/* 2 imagens */
+.image-content.count-2 > img {
+  flex: 1 1 calc(50% - 10px);
+}
+
+/* 3 imagens */
+.image-content.count-3 > img:first-child {
+  flex: 1 1 100%;
+}
+.image-content.count-3 > img:nth-child(n + 2) {
+  flex: 1 1 calc(50% - 10px);
+}
+
+/* 4 imagens */
+.image-content.count-4 > img {
+  flex: 1 1 calc(50% - 10px);
+}
+
+.oferta-dia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.oferta-dia > h2 {
+  width: 100%;
+  text-align: left;
+}

@@ -5,21 +5,24 @@ import {
 import "./ItensDetails.css";
 
 function ItensDetails({ item, index }) {
+  const valorPromocao = Number(item.preco_promocao);
+  const frete = Number(item.frete);
+
   return (
     <section id="itensDetailsBody" className="borderRadius boxShadow">
       <h1>Pacote {index}</h1>
 
       <div>
-        <img src={item.imagem} alt={item.nome} />
+        <img src={item.produc_image} alt={item.product_name} />
 
         <aside>
-          <p>{item.nome}</p>
+          <p>{item.product_name}</p>
 
           <div className="colorGray">
-            <p className={item.promocao && "line-through"}>
-              {formatarMonetario(item.valor)}
+            <p className={valorPromocao > 0 ? "line-through" : ""}>
+              {formatarMonetario(item.preco_unitario)}
             </p>
-            {item.promocao && <p>{formatarMonetario(item.promocao)}</p>}
+            {valorPromocao > 0 && <p>{formatarMonetario(valorPromocao)}</p>}
             <span>|</span>
             <p>
               {item.quantidade} unidade{item.quantidade > 1 && "s"}
@@ -29,8 +32,8 @@ function ItensDetails({ item, index }) {
           <div className="colorGray small">
             <p>Frete:</p>
 
-            <p className={item.frete <= 0 && "colorGreen"}>
-              {verificarFrete(item.frete)}
+            <p className={frete <= 0 ? "colorGreen" : ""}>
+              {verificarFrete(frete)}
             </p>
           </div>
 

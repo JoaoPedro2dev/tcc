@@ -3,6 +3,7 @@
 
     use DAO\DAO;
     use Model\Cart;
+use Model\Product;
 
     class CartDAO extends DAO{
         public function __construct()
@@ -24,7 +25,7 @@
             $stmt -> execute();
             
             $result = $stmt->fetchColumn();
-            return $result !== false ? (int) $result : null;
+            return $result ?: false;
         }
 
         public function selectAll(array $array) : ?array{
@@ -49,6 +50,28 @@
             $stmt->execute();
             
             return $stmt->fetchAll(DAO::FETCH_CLASS, "Model\Product");
+        }
+
+        public function selectToShelf(int $user_id) {
+
+            $sql = "SELECT images
+                    FROM produtos p
+                    INNER JOIN carrinho_itens ci ON ci.productId = p.id
+                    INNER JOIN carrinhos c ON c.id = ci.cartId
+                    WHERE c.userId = ? LIMIT 4";
+                    
+            $stmt = parent::$conexao->prepare($sql); 
+            $stmt->execute([$user_id]);
+            $images = $stmt->fetchAll(DAO::FETCH_ASSOC);
+
+            $imagesArray = [];
+            
+            foreach($images as $image){
+                $imagesArray[] = json_decode($image['images'], true)[0];
+            }
+
+            
+            return $imagesArray;
         }
     }
 ?>

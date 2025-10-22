@@ -48,6 +48,25 @@
 
 #productImagesBody > #imagesDisplay > div > img {
   width: 100%;
-  height: auto;
+  height: 150px;
   border-radius: 10px;
+  object-fit: contain;
+  border: 1px solid #ccc;
+}
+
+#productImagesBody .errorElement {
+  border: 2px dashed red !important;
+  color: #d61616;
+}
+
+#productImagesBody .errorElement > p {
+  color: #d61616;
+}
+
+#productImagesBody .errorElement > Upload {
+  color: #d61616;
+}
+
+#productImagesBody img.errorImg {
+  border: 1px solid red !important;
 }

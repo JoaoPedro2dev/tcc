@@ -89,7 +89,7 @@
 }
 
 .animated {
-  background-color: #18ea18;
+  /* background-color: #ea1818;  */
   animation: infinito 1.5s linear infinite;
 }
 

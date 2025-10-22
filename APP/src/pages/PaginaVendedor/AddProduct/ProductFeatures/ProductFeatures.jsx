@@ -1,25 +1,39 @@
+import { useEffect } from "react";
 import "./ProductFeatures.css";
 
-function ProductFeatures({ formData, onChnage }) {
+function ProductFeatures({ formData, errors = false, removeError, onChange }) {
+  useEffect(() => {
+    if (errors && Object.keys(errors).length > 0) {
+      const scrollElement = document.querySelector(".errorElement");
+      scrollElement?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [errors]);
+
   return (
     <section id="productFeaturesBody" className=" borderRadius boxShadow ">
       <h1>Características do produto</h1>
-
       <hr />
-
       <div className="displayRow">
         <div className="displayColumn">
           <strong>Estado do produto</strong>
-          <div className="displayColumn">
+          <div
+            className={
+              errors.condition ? "displayColumn errorElement" : "displayColumn"
+            }
+          >
             <p>
               <input
                 type="radio"
                 name="productStatus"
                 className="productStatus"
-                value={"Novo"}
-                checked={formData.condiction === "Novo"}
+                value={"Novos"}
+                checked={formData.condition === "Novos"}
                 onChange={(e) => {
-                  onChnage("condiction", e.target.value);
+                  onChange("condition", e.target.value);
+                  removeError("condition");
                 }}
               />
               <span>Novo</span>
@@ -30,10 +44,11 @@ function ProductFeatures({ formData, onChnage }) {
                 type="radio"
                 name="productStatus"
                 className="productStatus"
-                value={"Seminovo"}
-                checked={formData.condiction === "Seminovo"}
+                value={"Seminovos"}
+                checked={formData.condition === "Seminovos"}
                 onChange={(e) => {
-                  onChnage("condiction", e.target.value);
+                  onChange("condition", e.target.value);
+                  removeError("condition");
                 }}
               />
               <span>Seminovo</span>
@@ -44,27 +59,38 @@ function ProductFeatures({ formData, onChnage }) {
                 type="radio"
                 name="productStatus"
                 className="productStatus"
-                checked={formData.condiction === "Usado"}
+                value="Usados"
+                checked={formData.condition === "Usados"}
                 onChange={(e) => {
-                  onChnage("condiction", e.target.value);
+                  onChange("condition", e.target.value);
+                  removeError("condition");
                 }}
               />
               <span>Usado</span>
             </p>
           </div>
+          {errors.condition && (
+            <span className="errorMsg">{errors.condition}</span>
+          )}
         </div>
 
         <div className="displayColumn">
           <strong htmlFor="">Gênero do produto</strong>
-          <div className="displayColumn">
+          <div
+            className={
+              errors.gender ? "displayColumn errorElement" : "displayColumn"
+            }
+          >
             <p>
               <input
                 type="radio"
                 name="productGenre"
                 className="productGenre"
-                checked={formData.genre === "Masculino"}
+                value="Masculino"
+                checked={formData.gender === "Masculino"}
                 onChange={(e) => {
-                  onChnage("genre", e.target.value);
+                  onChange("gender", e.target.value);
+                  removeError("gender");
                 }}
               />
               <span>Masculino</span>
@@ -75,9 +101,11 @@ function ProductFeatures({ formData, onChnage }) {
                 type="radio"
                 name="productGenre"
                 className="productGenre"
-                checked={formData.genre === "Feminino"}
+                value="Feminino"
+                checked={formData.gender === "Feminino"}
                 onChange={(e) => {
-                  onChnage("genre", e.target.value);
+                  onChange("gender", e.target.value);
+                  removeError("gender");
                 }}
               />
               <span>Feminino</span>
@@ -88,14 +116,17 @@ function ProductFeatures({ formData, onChnage }) {
                 type="radio"
                 name="productGenre"
                 className="productGenre"
-                checked={formData.genre === "Unissex"}
+                value="Unissex"
+                checked={formData.gender === "Unissex"}
                 onChange={(e) => {
-                  onChnage("genre", e.target.value);
+                  onChange("gender", e.target.value);
+                  removeError("gender");
                 }}
               />
               <span>Unissex</span>
             </p>
           </div>
+          {errors.gender && <span className="errorMsg">{errors.gender}</span>}
         </div>
       </div>
     </section>

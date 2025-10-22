@@ -18,6 +18,8 @@ const NextArrow = ({ onClick }) => (
 );
 
 function ImagesCarroussel({ images }) {
+  images = Array.isArray(images) ? images : images ? [images] : [];
+
   const sliderRef = useRef(null);
   const [slideAtual, setSlideAtual] = useState(0);
 
@@ -28,8 +30,8 @@ function ImagesCarroussel({ images }) {
     speed: 200,
     slidesToShow: 1,
     slidesToScroll: 1,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
+    nextArrow: images.length > 1 ? <NextArrow /> : null,
+    prevArrow: images.length > 1 ? <PrevArrow /> : null,
     beforeChange: (_, next) => setSlideAtual(next),
   };
 
@@ -40,38 +42,45 @@ function ImagesCarroussel({ images }) {
   return (
     <div id="ic-body" className="ic-container">
       <Slider {...settings} ref={sliderRef} className="ic-slider">
-        {images.map((src, index) => (
-          <div key={index} className="ic-img-container ic-radius">
+        {images.length === 0 ? (
+          <div className="ic-img-container ic-radius">
             <img
-              src={src}
-              alt={`Slide ${index}`}
-              style={{
-                width: "100%",
-                height: "340px",
-                objectFit: "contain",
-                outline: "none",
-              }}
+              src="/placeholder.png"
+              alt="Sem imagem"
+              style={{ width: "100%", height: "340px", objectFit: "contain" }}
             />
           </div>
-        ))}
+        ) : (
+          images.map((src, index) => (
+            <div key={index} className="ic-img-container ic-radius">
+              <img
+                src={src}
+                alt={`Slide ${index}`}
+                style={{ width: "100%", height: "340px", objectFit: "contain" }}
+              />
+            </div>
+          ))
+        )}
       </Slider>
 
-      <div className="ic-thumbs">
-        {images.map((src, index) => (
-          <img
-            key={index}
-            src={src}
-            alt={`Miniatura ${index}`}
-            onClick={() => irParaSlide(index)}
-            className={slideAtual === index ? "active" : ""}
-            style={{
-              width: 60,
-              height: 50,
-              objectFit: "cover",
-            }}
-          />
-        ))}
-      </div>
+      {images.length > 1 && (
+        <div className="ic-thumbs">
+          {images.map((src, index) => (
+            <img
+              key={index}
+              src={src}
+              alt={`Miniatura ${index}`}
+              onClick={() => irParaSlide(index)}
+              className={slideAtual === index ? "active" : ""}
+              style={{
+                width: 60,
+                height: 50,
+                objectFit: "cover",
+              }}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

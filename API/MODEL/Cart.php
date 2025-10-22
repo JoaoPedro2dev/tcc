@@ -23,6 +23,10 @@
             return ((new CartDAO())->selectAll($array));
         }
 
+        public function selectToShelf(int $user_id){
+            return ((new CartDAO())->selectToShelf($user_id));
+        }
+
         // Getter e Setter para cartId
         public function getId(): int {
             return $this->id;

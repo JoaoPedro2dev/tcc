@@ -1,6 +1,7 @@
 #productFeaturesBody > div > div > div > p > input[type="radio"] {
   width: 18px;
   height: 18px;
+  cursor: pointer;
 }
 
 #productFeaturesBody > div > div > div > p {
@@ -9,4 +10,16 @@
   align-items: center;
   justify-content: start;
   gap: 10px;
+}
+
+#productFeaturesBody .errorElement {
+  border: none !important;
+}
+
+#productFeaturesBody .errorElement input[type="radio"] {
+  accent-color: red !important;
+}
+
+#productFeaturesBody > div > div > .errorElement > p > span {
+  color: red;
 }

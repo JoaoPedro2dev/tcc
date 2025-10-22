@@ -1,9 +1,8 @@
 .card {
+  position: relative;
+
   display: flex;
   flex-direction: column;
-
-  height: 100%;
-  max-height: 380px;
 
   width: 250px;
   max-width: 250px;
@@ -13,6 +12,8 @@
 
   border: 1px solid #ccc;
   background-color: #fff;
+
+  overflow: hidden;
 }
 
 .card > .arrayColorsLength {
@@ -32,26 +33,22 @@
 }
 
 .card > img {
-  width: 100%;
+  width: auto;
   min-height: 150px;
-  max-height: 150px;
+  height: 200px;
+  max-height: 200px;
 
   object-fit: contain;
-  margin-top: -40px;
-  /* border: 1px solid #ccc; */
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
   border-bottom: 1px solid #ccc;
 }
 
 .card > .likeBtn {
   padding: 8px;
-  border: none;
-  box-shadow: 0px 2px 8px rgba(141, 141, 141, 0.5);
+  border: 1px solid #ccc;
   background-color: #fff;
   width: fit-content;
 
-  position: relative;
+  position: absolute;
   left: 10px;
   top: 10px;
   border-radius: 50%;
@@ -64,12 +61,12 @@
 }
 
 .card > .likeBtn.clicked {
-  background-color: blue;
+  background-color: rebeccapurple;
   color: #fff;
 }
 
 .card > .likeBtn.clicked:hover {
-  background-color: blue;
+  background-color: #541990;
   color: #fff;
 }
 
@@ -82,7 +79,13 @@
   padding: 10px;
   display: flex;
   flex-direction: column;
+  gap: 5px;
+}
+
+.card > .text > .price-content {
+  display: flex;
   gap: 10px;
+  align-items: center;
 }
 
 .clicked-button {
@@ -113,6 +116,28 @@
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
   transform: translate(-50%, -50%);
+}
+
+.edit-buttons {
+  /* display: flex; */
+  /* justify-content: center; */
+  margin-top: -10px;
+  padding: 10px;
+}
+
+.edit-buttons > button {
+  width: 100%;
+  border-radius: 5px;
+  border: none;
+  padding: 8px;
+  color: #fff;
+  background-color: blueviolet;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.edit-buttons > button:hover {
+  background-color: #d606d6;
 }
 
 @keyframes spin {

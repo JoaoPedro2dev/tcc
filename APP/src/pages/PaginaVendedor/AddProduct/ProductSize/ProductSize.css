@@ -60,3 +60,24 @@
 /* #productSizeBody > div > section > div > p > input {
   max-width: 100% !important;
 } */
+
+#productSizeBody .errorElement {
+  border: none !important;
+}
+
+#productSizeBody .errorElement p {
+  color: red;
+}
+
+#productSizeBody .errorElement section {
+  border: 1px solid red !important;
+}
+
+#productSizeBody .errorElement input[type="number"] {
+  border: 1px solid red;
+  color: red;
+}
+
+#productSizeBody .errorElement > section > p {
+  color: red;
+}

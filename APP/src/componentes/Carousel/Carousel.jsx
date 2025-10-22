@@ -5,9 +5,9 @@ import "slick-carousel/slick/slick-theme.css";
 import "./carousel.css";
 
 const imagens = [
-  "http://localhost/tcc/API/UPLOADS/images/imagem1.png",
-  "http://localhost//tcc/API/UPLOADS/images/imagem2.png",
-  "http://localhost//tcc/API/UPLOADS/images/imagem3.png",
+  "http://localhost/tcc/API/UPLOADS/carroussel/card.jpg",
+  "http://localhost/tcc/API/UPLOADS/carroussel/cart.jpg",
+  "http://localhost/tcc/API/UPLOADS/carroussel/shooping.jpg",
 ];
 
 // Removido o className herdado do slick
@@ -46,7 +46,7 @@ const Carousel = () => {
               alt={`Slide ${index}`}
               style={{
                 width: "100%",
-                height: "340px",
+                height: "400px",
                 objectFit: "cover",
                 outline: "none",
               }}

@@ -1,18 +1,92 @@
 import { useState, useEffect } from "react";
 import "./ProductSize.css";
 
-function ProductSize({ formData, onChange }) {
-  // Configuração estática dos tamanhos disponíveis
-  const sizes = [
-    { label: "PP", name: "PP" },
-    { label: "P", name: "P" },
-    { label: "M", name: "M" },
-    { label: "G", name: "G" },
-    { label: "GG", name: "GG" },
-    { label: "XG", name: "XG" },
-  ];
+function ProductSize({
+  formData,
+  errors = false,
+  removeError,
+  onChange,
+  category,
+}) {
+  // Map de classes para tamanhos
+  const sizesByClass = {
+    Camisas: ["PP", "P", "M", "G", "GG"],
+    Casacos: ["PP", "P", "M", "G", "GG"],
+    Calças: ["PP", "P", "M", "G", "GG"],
+    Vestidos: ["PP", "P", "M", "G", "GG"],
+    Conjuntos: ["PP", "P", "M", "G", "GG"],
+    Calçados: [
+      "30",
+      "31",
+      "32",
+      "33",
+      "34",
+      "35",
+      "36",
+      "37",
+      "38",
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44",
+      "45",
+      "46",
+      "47",
+      "48",
+      "49",
+      "50",
+      "51",
+      "52",
+      "53",
+      "54",
+      "55",
+      "56",
+      "57",
+      "58",
+      "59",
+      "60",
+    ],
+    Bolsas: ["Pequeno", "Médio", "Grande", "Único"],
+    Acessórios: ["Pequeno", "Médio", "Grande", "Único"],
+    Infantil: [
+      "30",
+      "31",
+      "32",
+      "33",
+      "34",
+      "35",
+      "36",
+      "37",
+      "38",
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44",
+      "45",
+      "46",
+      "47",
+      "48",
+      "49",
+      "50",
+      "51",
+      "52",
+      "53",
+      "54",
+      "55",
+      "56",
+      "57",
+      "58",
+      "59",
+      "60",
+    ],
+    Shorts: ["PP", "P", "M", "G", "GG", "XG", "XGG"],
+  };
 
-  // Configuração estática das cores disponíveis
+  // Cores disponíveis
   const colors = [
     { label: "Vermelho", name: "Vermelho", color: "red" },
     { label: "Azul", name: "Azul", color: "blue" },
@@ -26,204 +100,165 @@ function ProductSize({ formData, onChange }) {
     { label: "Marrom", name: "Marrom", color: "brown" },
   ];
 
-  // Estado principal do estoque - estrutura única e consistente
-  // Cada item tem: { nameColor: string, sizes: [{ size: string, qty: number }] }
-  const [stock, setStock] = useState(formData?.stock || []);
+  // Tamanhos disponíveis para a classe selecionada
+  const sizes = sizesByClass[category] || [];
 
-  // Estados derivados para controle da UI
-  // Array simples com nomes das cores selecionadas
+  useEffect(() => {
+    setSelectedSizes([]);
+    setStock([]);
+    setSelectedColors([]);
+  }, [category]);
+
+  // Estados principais
+  const [stock, setStock] = useState([]);
   const [selectedColors, setSelectedColors] = useState([]);
-  // Array simples com nomes dos tamanhos selecionados
   const [selectedSizes, setSelectedSizes] = useState([]);
 
-  // Efeito para inicializar os estados derivados baseado no estoque inicial
-  // Executa apenas quando o componente monta ou quando formData.stock muda
   useEffect(() => {
-    // Extrai cores que já existem no estoque
-    const existingColors = stock.map((item) => item.nameColor);
+    setStock(formData?.itenStock);
+    setSelectedColors(formData?.itenStock?.map((item) => item.cor) || []);
+  }, [formData]);
+
+  // Inicializa seleção de cores e tamanhos
+  useEffect(() => {
+    const existingColors = stock.map((item) => item.cor || "");
     setSelectedColors(existingColors);
 
-    // Extrai todos os tamanhos únicos que já existem no estoque
-    // Usa Set para eliminar duplicatas e depois converte para array
     const existingSizes = Array.from(
-      new Set(
-        stock.flatMap((item) => item.sizes.map((sizeItem) => sizeItem.size))
-      )
+      new Set(stock.flatMap((item) => item.tamanhos.map((s) => s.tamanho)))
     );
-    setSelectedSizes(existingSizes);
-  }, [formData?.stock]); // Reexecuta quando formData.stock muda
 
-  // Efeito para notificar mudanças no estoque para o componente pai
-  // Permite que o componente pai seja notificado sempre que o estoque muda
-  useEffect(() => {
-    onChange("stock", stock);
+    // handleColorChange();
+
+    setSelectedSizes(existingSizes);
   }, [stock]);
 
-  /**
-   * Manipula a seleção/deseleção de cores
-   * Quando uma cor é selecionada: adiciona ao selectedColors e cria entrada no stock
-   * Quando uma cor é deselecionada: remove do selectedColors e remove do stock
-   * @param {string} colorName - Nome da cor a ser adicionada/removida
-   */
+  // Notifica mudanças do estoque para o pai
+  useEffect(() => {
+    // Evita loop infinito: só atualiza se for diferente do formData atual
+    const isDifferent =
+      JSON.stringify(stock) !== JSON.stringify(formData?.itenStock || []);
+
+    if (isDifferent) {
+      onChange("itenStock", stock);
+    }
+  }, [stock]);
+
+  useEffect(() => {
+    if (errors && Object.keys(errors).length > 0) {
+      const scrollElement = document.querySelector(".errorElement");
+      scrollElement?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [errors]);
+
+  // Seleção/deseleção de cores
   const handleColorChange = (colorName) => {
     const isSelected = selectedColors.includes(colorName);
-
     if (isSelected) {
-      // Remove a cor da seleção
-      setSelectedColors((prev) => prev.filter((color) => color !== colorName));
-
-      // Remove a cor do estoque (remove toda a entrada da cor)
-      setStock((prev) => prev.filter((item) => item.nameColor !== colorName));
+      setSelectedColors((prev) => prev.filter((c) => c !== colorName));
+      setStock((prev) => prev.filter((item) => item.cor !== colorName));
     } else {
-      // Adiciona a cor à seleção
       setSelectedColors((prev) => [...prev, colorName]);
-
-      // Cria entrada no estoque para a nova cor com todos os tamanhos selecionados
-      // Cada tamanho começa com quantidade 0
-      const newStockItem = {
-        nameColor: colorName,
-        sizes: selectedSizes.map((size) => ({ size, qty: 0 })),
-      };
-
-      setStock((prev) => [...prev, newStockItem]);
+      setStock((prev) => [
+        ...prev,
+        {
+          cor: colorName,
+          tamanhos: selectedSizes.map((tamanho) => ({ tamanho, qnt: 0 })),
+          stockTotalColor: 0,
+        },
+      ]);
     }
+
+    removeError("itenStock");
   };
 
-  /**
-   * Manipula a seleção/deseleção de tamanhos
-   * Quando um tamanho é selecionado: adiciona ao selectedSizes e adiciona a todas as cores
-   * Quando um tamanho é deselecionado: remove do selectedSizes e remove de todas as cores
-   * @param {string} sizeName - Nome do tamanho a ser adicionado/removido
-   */
+  // Seleção/deseleção de tamanhos
   const handleSizeChange = (sizeName) => {
     const isSelected = selectedSizes.includes(sizeName);
-
     if (isSelected) {
-      // Remove o tamanho da seleção
-      setSelectedSizes((prev) => prev.filter((size) => size !== sizeName));
-
-      // Remove o tamanho de todas as cores no estoque
-      // Mantém as cores, mas remove apenas este tamanho específico
+      setSelectedSizes((prev) => prev.filter((s) => s !== sizeName));
       setStock((prev) =>
         prev.map((item) => ({
           ...item,
-          sizes: item.sizes.filter((sizeItem) => sizeItem.size !== sizeName),
+          tamanhos: item.tamanhos.filter((s) => s.tamanho !== sizeName),
         }))
       );
     } else {
-      // Adiciona o tamanho à seleção
       setSelectedSizes((prev) => [...prev, sizeName]);
-
-      // Adiciona o tamanho a todas as cores existentes no estoque
-      // Cada nova entrada de tamanho começa com quantidade 0
       setStock((prev) =>
         prev.map((item) => ({
           ...item,
-          sizes: [...item.sizes, { size: sizeName, qty: 0 }],
+          tamanhos: [...item.tamanhos, { tamanho: sizeName, qnt: 0 }],
         }))
       );
     }
+
+    removeError("itenStock");
   };
 
-  /**
-   * Atualiza a quantidade de estoque para uma cor e tamanho específicos
-   * Encontra a cor no estoque, depois encontra o tamanho dentro dessa cor
-   * e atualiza apenas a quantidade desse item específico
-   * @param {string} colorName - Nome da cor
-   * @param {string} sizeName - Nome do tamanho
-   * @param {string} quantity - Nova quantidade (vem como string do input)
-   */
+  // Atualiza quantidade do estoque
   const handleStockQuantityChange = (colorName, sizeName, quantity) => {
-    // Converte para número, defaulta para 0 se inválido
     const numQuantity = parseInt(quantity) || 0;
 
     setStock((prev) =>
       prev.map((item) => {
-        // Só atualiza o item da cor correspondente
-        if (item.nameColor === colorName) {
+        if (item.cor === colorName) {
+          const updatedTamanhos = item.tamanhos.map((s) =>
+            s.tamanho === sizeName ? { ...s, qnt: numQuantity } : s
+          );
+
+          const stockTotalColor = updatedTamanhos.reduce(
+            (sum, s) => sum + s.qnt,
+            0
+          );
+
           return {
             ...item,
-            sizes: item.sizes.map((sizeItem) =>
-              // Só atualiza o tamanho correspondente
-              sizeItem.size === sizeName
-                ? { ...sizeItem, qty: numQuantity }
-                : sizeItem
-            ),
+            tamanhos: updatedTamanhos,
+            stockTotalColor,
           };
         }
-        // Retorna o item inalterado se não for a cor procurada
         return item;
       })
     );
+
+    removeError("itenStock");
   };
 
-  /**
-   * Calcula o total de estoque para uma cor específica
-   * Soma todas as quantidades de todos os tamanhos dessa cor
-   * @param {string} colorName - Nome da cor
-   * @returns {number} Total de unidades para a cor
-   */
   const getColorTotal = (colorName) => {
-    const colorItem = stock.find((item) => item.nameColor === colorName);
+    const colorItem = stock.find((item) => item.cor === colorName);
     if (!colorItem) return 0;
-
-    return colorItem.sizes.reduce((sum, sizeItem) => sum + sizeItem.qty, 0);
+    return colorItem.tamanhos.reduce((sum, s) => sum + s.qnt, 0);
   };
 
-  /**
-   * Calcula o total geral de estoque
-   * Soma todas as quantidades de todas as cores e tamanhos
-   * @returns {number} Total de unidades no estoque
-   */
-  const getTotalStock = () => {
-    return stock.reduce(
-      (total, item) =>
-        total + item.sizes.reduce((sum, sizeItem) => sum + sizeItem.qty, 0),
+  const getTotalStock = () =>
+    stock.reduce(
+      (total, item) => total + item.tamanhos.reduce((sum, s) => sum + s.qnt, 0),
       0
     );
-  };
 
-  /**
-   * Obtém a quantidade de estoque para uma cor e tamanho específicos
-   * Usado para popular os valores dos inputs de quantidade
-   * @param {string} colorName - Nome da cor
-   * @param {string} sizeName - Nome do tamanho
-   * @returns {number} Quantidade em estoque
-   */
   const getStockQuantity = (colorName, sizeName) => {
-    const colorItem = stock.find((item) => item.nameColor === colorName);
+    const colorItem = stock.find((item) => item.cor === colorName);
     if (!colorItem) return 0;
-
-    const sizeItem = colorItem.sizes.find((size) => size.size === sizeName);
-    return sizeItem ? sizeItem.qty : 0;
+    const sizeItem = colorItem.tamanhos.find((s) => s.tamanho === sizeName);
+    return sizeItem ? sizeItem.qnt : 0;
   };
+
+  if (!category) {
+    return null;
+  }
 
   return (
     <section id="productSizeBody" className="borderRadius">
       <h1>Tamanhos e cores</h1>
       <hr />
-
-      <div className="displayRow">
-        {/* Seção de seleção de tamanhos */}
-        <div className="displayColumn">
-          <strong>Tamanhos disponíveis</strong>
-          <div>
-            {sizes.map((size) => (
-              <p key={size.name}>
-                <input
-                  type="checkbox"
-                  checked={selectedSizes.includes(size.name)}
-                  onChange={() => handleSizeChange(size.name)}
-                  name={size.name}
-                  id={size.name}
-                />
-                <label htmlFor={size.name}>{size.label}</label>
-              </p>
-            ))}
-          </div>
-        </div>
-
-        {/* Seção de seleção de cores */}
+      <div
+        className={errors.itenStock ? "displayRow errorElement" : "displayRow"}
+      >
+        {/* Seleção de cores */}
         <div className="displayColumn">
           <strong>Cores disponíveis</strong>
           <div>
@@ -241,18 +276,36 @@ function ProductSize({ formData, onChange }) {
             ))}
           </div>
         </div>
+
+        {/* Seleção de tamanhos */}
+        {selectedColors.length > 0 && (
+          <div className="displayColumn">
+            <strong>Tamanhos disponíveis</strong>
+            <div>
+              {sizes.map((sizeName) => (
+                <p key={sizeName}>
+                  <input
+                    type="checkbox"
+                    checked={selectedSizes.includes(sizeName)}
+                    onChange={() => handleSizeChange(sizeName)}
+                    name={sizeName}
+                    id={sizeName}
+                  />
+                  <label htmlFor={sizeName}>{sizeName}</label>
+                </p>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Seção de controle de estoque - só aparece se há cores e tamanhos selecionados */}
+      {/* Controle de estoque */}
       {selectedColors.length > 0 && selectedSizes.length > 0 && (
         <div>
           <strong>Controle de estoque</strong>
-
-          {/* Para cada cor selecionada, mostra os inputs de quantidade */}
           {selectedColors.map((colorName) => (
             <section key={colorName} className="borderRadius">
               <p>
-                {/* Indicador visual da cor */}
                 <span
                   style={{
                     display: "inline-block",
@@ -267,10 +320,13 @@ function ProductSize({ formData, onChange }) {
                 {colorName}
               </p>
 
-              <div className="displayRow">
-                {/* Para cada tamanho selecionado, mostra input de quantidade */}
+              <div
+                className={
+                  errors.itenStock ? "displayRow errorElement" : "displayRow "
+                }
+              >
                 {selectedSizes.map((sizeName) => (
-                  <p key={sizeName}>
+                  <p key={sizeName} className="">
                     <label htmlFor={`${colorName}-${sizeName}`}>
                       {sizeName}
                     </label>
@@ -292,19 +348,19 @@ function ProductSize({ formData, onChange }) {
                 ))}
               </div>
 
-              {/* Total para a cor específica */}
               <p>
                 Total para {colorName}: {getColorTotal(colorName)} unidades
               </p>
             </section>
           ))}
 
-          {/* Total geral do estoque */}
           <div id="totalQntDisplay">
             <strong>Estoque total: {getTotalStock()} unidades</strong>
           </div>
         </div>
       )}
+
+      {errors.itenStock && <span className="errorMsg">{errors.itenStock}</span>}
     </section>
   );
 }

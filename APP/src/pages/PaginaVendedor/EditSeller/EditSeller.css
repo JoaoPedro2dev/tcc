@@ -1,169 +1,560 @@
-#editSellerBody {
-  background-color: #f2f2f2;
+#editar-perfil-vendedor {
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding-bottom: 40px;
 }
 
-#editSellerBody > main {
-  padding: 80px 9% 120px;
-}
-
-#editSellerBody > main > div {
+.edit-header {
   background-color: #fff;
-  padding: 40px 2%;
-  /* border-radius: 10px; */
-}
-
-#editSellerBody > main > div > h1 {
+  padding: 20px 10%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 30px;
-}
-
-#editSellerBody > main > div > #backgroundBox {
-  width: 100%;
-  cursor: pointer;
-}
-
-#editSellerBody > main > div > #backgroundBox > img {
-  width: 100%;
-  height: 300px;
-
-  object-fit: cover;
-  transition: 0.2s;
-}
-
-#editSellerBody > main > div > #backgroundBox:hover img {
-  transform: scale(1.01);
-}
-
-#editSellerBody > main > div > section {
-  position: relative;
   display: flex;
-  flex-direction: row;
-  /* align-items: end; */
-  margin-top: -80px;
-  z-index: 1;
+  align-items: center;
+  gap: 20px;
 }
 
-#editSellerBody > main > div > section > #perfilBox {
-  border-radius: 50%;
-  overflow: hidden;
-  width: 200px;
-  height: 200px;
-  border: 4px solid #fff;
+.edit-header h1 {
+  font-size: 1.8rem;
+  color: #222;
+  margin: 0;
+}
+
+.btn-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
-  transition: 0.2s;
-  /* box-shadow: 0px 10px 7px rgba(160, 149, 149, 0.3); */
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #444;
+  transition: all 0.2s;
 }
 
-#editSellerBody > main > div > section > #perfilBox > img {
+.btn-back:hover {
+  background-color: #e0e0e0;
+  transform: translateX(-2px);
+}
+
+#editar-perfil-vendedor form {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Image Sections */
+.image-section {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.image-section h2 {
+  font-size: 1.3rem;
+  color: #222;
+  margin-bottom: 8px;
+}
+
+.section-description {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+.image-upload-container {
+  position: relative;
+}
+
+.banner-container {
+  width: 100%;
+  height: 200px;
+}
+
+.profile-container {
+  width: 215px;
+  height: 215px;
+  margin: 0 auto;
+}
+
+.image-preview {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.profile-preview {
+  border-radius: 50%;
+}
+
+.image-preview img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-#editSellerBody > main > div > section > #perfilBox:hover {
-  transform: scale(1.01);
+.btn-remove-image {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #d32f2f;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-#editSellerBody > main > div > section > p {
+.btn-remove-image:hover {
+  background-color: #d32f2f;
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.upload-placeholder {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  margin-top: 100px;
-}
-
-#editSellerBody > main > div > section > p > input {
-  border: none;
-  /* border-color: #a5a5a5; */
-  /* border-radius: 5px; */
-  /* padding: 10px 20px; */
-  font-size: xx-large;
-  font-weight: bold;
-  width: 350px;
-  outline: none;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 3px dashed #ccc;
+  border-radius: 8px;
   cursor: pointer;
+  transition: all 0.3s;
+  color: #888;
+  background-color: #fafafa;
 }
 
-#editSellerBody > main > div > section:last-child {
-  margin-top: 40px;
-  padding: 0px;
+.profile-placeholder {
+  border-radius: 50%;
 }
 
-#editSellerBody > main > div > section > aside {
-  border: 1px solid rgb(232, 232, 232);
+.upload-placeholder:hover {
+  border-color: #999;
+  background-color: #f0f0f0;
+  color: #555;
+}
+
+.upload-placeholder span {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* Form Sections */
+.form-section {
   background-color: #fff;
-  padding: 25px;
-  width: 30%;
+  padding: 30px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-#editSellerBody > main > div > section > aside > textarea {
-  resize: none;
+.form-section h2 {
+  font-size: 1.3rem;
+  color: #222;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="tel"],
+.form-group input[type="time"],
+.form-group textarea {
   width: 100%;
-  height: 150px;
-  outline: none;
-  border: none;
-  text-align: center;
-  font-size: medium;
-  cursor: pointer;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: Arial, sans-serif;
+  transition: all 0.2s;
+  background-color: #fafafa;
 }
 
-#editSellerBody > main > div > section > aside > div {
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #4a90e2;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.char-count {
+  display: block;
+  text-align: right;
+  font-size: 0.85rem;
+  color: #888;
+  margin-top: 5px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.checkbox-group {
+  margin-top: 15px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #444;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #4a90e2;
+}
+
+.checkbox-label span {
+  user-select: none;
+}
+
+/* Address Input Group with CEP Button */
+.address-input-group {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-#editSellerBody > main > div > section > aside > div > p {
+.address-input-group input {
+  flex: 1;
+}
+
+.btn-search-cep {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background-color: #4a90e2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.btn-search-cep:hover {
+  background-color: #357abd;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-content {
+  background-color: #fff;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 25px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.modal-header h3 {
+  font-size: 1.3rem;
+  color: #222;
+  margin: 0;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #888;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.modal-close-btn:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.modal-body {
+  padding: 25px;
+}
+
+.btn-verify-cep {
+  width: 100%;
+  padding: 12px;
+  background-color: #4a90e2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 10px;
+}
+
+.btn-verify-cep:hover:not(:disabled) {
+  background-color: #357abd;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+}
+
+.btn-verify-cep:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.input-error {
+  border-color: #d32f2f !important;
+  background-color: #fff5f5 !important;
+}
+
+.error-message {
+  color: #d32f2f;
+  font-size: 0.85rem;
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+.divider {
+  border: none;
+  border-top: 2px solid #f0f0f0;
+  margin: 20px 0;
+}
+
+.cep-data-container {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.cep-data-container input[readonly] {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  color: #555;
+}
+
+.btn-confirm-address {
+  width: 100%;
+  padding: 14px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-confirm-address:hover {
+  background-color: #45a049;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+/* Action Buttons */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 30px;
+  padding: 20px 0;
+}
+
+.btn-cancel,
+.btn-save {
+  padding: 14px 30px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
 }
 
-#editSellerBody > main > div > section > aside > div > p > input {
-  border: none;
-  /* border-radius: 5px; */
-  /* padding: 5px 10px; */
-  outline: none;
-  /* width: 130px; */
-  /* text-align: center; */
-
-  font-size: medium;
-  cursor: pointer;
+.btn-cancel {
+  background-color: #f0f0f0;
+  color: #555;
 }
 
-#editSellerBody > main > div > section > aside > div > p > select {
-  /* padding: 0; */
-  /* border-radius: 5px; */
-  outline: none;
-  border: none;
-  cursor: pointer;
-  font-size: medium;
+.btn-cancel:hover:not(:disabled) {
+  background-color: #e0e0e0;
+  transform: translateY(-1px);
 }
 
-#editSellerBody > #btnsNav {
-  position: fixed;
-  right: 11%;
-  bottom: 40px;
-  display: flex;
-  gap: 10px;
-  z-index: 1000;
+.btn-save {
+  background-color: #4a90e2;
+  color: #fff;
 }
 
-#editSellerBody > #btnsNav > button {
-  width: 100px;
-  padding: 10px;
-  border-radius: 5px;
-  border: 2px solid;
-  color: blue;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.2s;
+.btn-save:hover:not(:disabled) {
+  background-color: #357abd;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
 }
 
-#editSellerBody > #btnsNav > button:hover {
-  color: #5a5aff;
+.btn-cancel:disabled,
+.btn-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
-strong {
-  word-break: break-all;
-  /* word-wrap: break-word; */
+/* Responsive */
+@media (max-width: 768px) {
+  .edit-header {
+    padding: 15px 5%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .edit-header h1 {
+    font-size: 1.4rem;
+  }
+
+  #editar-perfil-vendedor form {
+    padding: 0 15px;
+  }
+
+  .image-section,
+  .form-section {
+    padding: 20px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn-cancel,
+  .btn-save {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .banner-container {
+    height: 150px;
+  }
+
+  .profile-container {
+    width: 150px;
+    height: 150px;
+  }
+
+  .modal-content {
+    max-height: 95vh;
+  }
+
+  .modal-header {
+    padding: 15px 20px;
+  }
+
+  .modal-body {
+    padding: 20px;
+  }
+
+  .address-input-group {
+    gap: 8px;
+  }
 }

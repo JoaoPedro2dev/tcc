@@ -34,29 +34,32 @@ function Header({ value }) {
     <header>
       <strong
         onClick={() => {
-          navigate("/");
+          navigate(-1);
         }}
       >
         DNV WEAR
       </strong>
 
-      {user &&
-        (user.cep ? (
-          <p className="cepBtn">{user.cep}</p>
-        ) : (
-          <p
-            className="cepBtn"
-            onClick={() => {
-              navigate("/cadastrarcep");
-            }}
-          >
-            Meu endereço
-            <span>
-              <MapPin height={"20px"} />
-              CEP
-            </span>
-          </p>
-        ))}
+      {user && (
+        <p
+          className="cepBtn"
+          onClick={() => {
+            navigate("/cadastrarcep");
+          }}
+        >
+          {user.cep ? (
+            user.cep
+          ) : (
+            <>
+              Meu endereço
+              <span>
+                <MapPin height={"20px"} />
+                CEP
+              </span>
+            </>
+          )}
+        </p>
+      )}
 
       <div className="inputBox">
         <input
@@ -80,7 +83,7 @@ function Header({ value }) {
 
       {user ? (
         <button className="usser-account-btn" onClick={menu}>
-          <img src={user.img} alt="" />
+          <img src={user.profile_photo} alt="" />
         </button>
       ) : (
         <button
@@ -123,7 +126,8 @@ function Header({ value }) {
             menu();
           }}
           name={user.name}
-          access={user.access}
+          access={user.nivel_acesso}
+          userUrl={user.url}
         />
       )}
     </header>

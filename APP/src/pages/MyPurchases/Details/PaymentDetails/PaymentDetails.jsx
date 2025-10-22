@@ -2,20 +2,8 @@ import { formatarData, formatarMonetario } from "../../../../helpers/functions";
 import "./PaymentDetails.css";
 import { CircleAlert, CreditCard, SquareKanban, Wallet } from "lucide-react";
 
-function PaymentDetails() {
-  const pagamnetoJSON = {
-    id: 1,
-    id_string: "#092103NJDJFSDNCA",
-    data: "2025-01-01",
-    pagamentoAprovado: true,
-    tipo: "Cartão",
-    identificação: "Identificação pix",
-    avista: true,
-    parcelas: 0,
-    valor: 62,
-    juros: 10,
-  };
-
+function PaymentDetails(compra) {
+  console.log("compra detalhes", compra);
   function verificarMetodoPagamento(metodo, identificacao) {
     switch (metodo) {
       case "PIX":
@@ -66,30 +54,23 @@ function PaymentDetails() {
 
   return (
     <div id="paymentDetailsBody" className="borderRadius boxShadow">
-      {verificarMetodoPagamento(
-        pagamnetoJSON.tipo,
-        pagamnetoJSON.identificação
-      )}
+      {verificarMetodoPagamento(compra.forma_pagamento, compra.identificação)}
 
       <aside>
         <p className="colorGray">
-          {formatarData(pagamnetoJSON.data)} | {pagamnetoJSON.id_string}
+          {formatarData(compra.data_compra)} | {compra.id_string}
         </p>
 
         <p>
-          {pagamnetoJSON.avista
-            ? `À vista ${formatarMonetario(pagamnetoJSON.valor)}`
-            : `Parcelado ${pagamnetoJSON.parcelas} x ${formatarMonetario(
-                pagamnetoJSON.valor
+          {compra.avista
+            ? `À vista ${formatarMonetario(compra.valor)}`
+            : `Parcelado ${compra.parcelas} x ${formatarMonetario(
+                compra.valor
               )}`}
         </p>
 
-        <p
-          className={
-            pagamnetoJSON.pagamentoAprovado ? "colorGreen" : "colorRed"
-          }
-        >
-          {pagamnetoJSON.pagamentoAprovado
+        <p className={compra.pagamentoAprovado ? "colorGreen" : "colorRed"}>
+          {compra.pagamentoAprovado
             ? "Pagamento aprovado"
             : "Pagamento não aprovado"}
         </p>

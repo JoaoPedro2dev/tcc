@@ -1,7 +1,39 @@
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../context/UserContext";
+import { useEffect } from "react";
+
 export function formatarData(data) {
-  const [ano, mes, dia] = data.split("-");
-  const dataCorrigida = new Date(Number(ano), Number(mes) - 1, Number(dia));
-  return new Date(dataCorrigida).toLocaleDateString("pt-BR", {
+  if (!data) return ""; // evita erro se vier null/undefined
+
+  let dateObj;
+
+  // Se já for um objeto Date
+  if (data instanceof Date) {
+    dateObj = data;
+  }
+  // Se for string no formato "YYYY-MM-DD HH:mm:ss" ou "YYYY-MM-DD"
+  else if (typeof data === "string" && /^\d{4}-\d{2}-\d{2}/.test(data)) {
+    const soData = data.split(" ")[0]; // pega só "YYYY-MM-DD"
+    const [ano, mes, dia] = soData.split("-");
+    dateObj = new Date(Number(ano), Number(mes) - 1, Number(dia));
+  }
+  // Se for string no formato brasileiro "DD/MM/YYYY"
+  else if (typeof data === "string" && /^\d{2}\/\d{2}\/\d{4}$/.test(data)) {
+    const [dia, mes, ano] = data.split("/");
+    dateObj = new Date(Number(ano), Number(mes) - 1, Number(dia));
+  }
+  // fallback: tenta criar Date direto
+  else {
+    dateObj = new Date(data);
+  }
+
+  // Se a data não for válida
+  if (isNaN(dateObj.getTime())) {
+    console.warn("Data inválida recebida:", data);
+    return "";
+  }
+
+  return dateObj.toLocaleDateString("pt-BR", {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -148,4 +180,51 @@ export function formatCNPJ(value) {
     .replace(/\.(\d{3})(\d)/, ".$1/$2")
     .replace(/(\d{4})(\d)/, "$1-$2")
     .slice(0, 18); // Garante o tamanho máximo
+}
+
+export function formatPaymentCard(value) {
+  let [mes, ano] = value.split("/");
+
+  mes = mes.padStart(2, "0");
+  ano = ano.slice(-2);
+
+  return `${mes}/${ano}`;
+}
+
+export function useSessionVerify() {
+  const { user } = useUser();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user?.id) navigate("/login");
+  }, [user, navigate]);
+}
+
+export function GetMe() {
+  const { setUser } = useUser();
+
+  fetch("http://localhost/tcc/API/GET/me")
+    .then((r) => r.json())
+    .then((data) => {
+      if (data.success) {
+        console.log("getMe", data);
+        setUser(data.user);
+      } else {
+        console.log("getMe", data);
+
+        console.log("error");
+      }
+    })
+    .catch((error) => console.error("erro", error));
+}
+
+export function calcStockTotal(item) {
+  return item.itenStock?.reduce((total, cor) => {
+    const corTotal = cor.tamanhos.reduce(
+      (sum, tamanho) => sum + tamanho.qnt,
+      0
+    );
+    return total + corTotal;
+  }, 0);
 }

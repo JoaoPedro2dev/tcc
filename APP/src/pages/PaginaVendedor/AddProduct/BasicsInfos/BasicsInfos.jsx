@@ -1,28 +1,105 @@
 import { useEffect, useState } from "react";
 
-function BasicsInfos({ formData, onChange }) {
+function BasicsInfos({
+  formData,
+  errors = false,
+  removeError,
+  onChange,
+  setSelectedCategory,
+}) {
+  useEffect(() => {
+    if (errors && Object.keys(errors).length > 0) {
+      const scrollElement = document.querySelector(".errorElement");
+      scrollElement?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [errors]);
+
   const classes = [
-    "Camisa",
-    "Casaco",
-    "Parte Inferior",
-    "Vestido",
-    "Conjunto",
-    "Calçado",
-    "Bolsa",
-    "Acessório",
-    "Joia",
+    "Camisas",
+    "Casacos",
+    "Calças",
+    "Vestidos",
+    "Conjuntos",
+    "Calçados",
+    "Bolsas",
+    "Acessórios",
+    "Infantil",
+    "Shorts",
   ];
 
   const subClasses = [
     ["Camiseta", "Regata", "Camisa Social", "Polo", "Blusa"],
     ["Jaqueta", "Moletom", "Blazer", "Cardigan"],
-    ["Calça", "Short", "Saia", "Legging", "Bermuda"],
+    ["Calça", "Legging", "Bermuda"],
     ["Vestido Longo", "Vestido Curto", "Vestido Midi"],
     ["Conjunto Feminino", "Conjunto Masculino", "Macacão", "Macaquinho"],
     ["Tênis", "Bota", "Chinelo", "Sandália", "Rasteirinha"],
     ["Bolsa de Mão", "Mochila", "Pochete", "Carteira"],
-    ["Boné", "Chapéu", "Óculos de Sol", "Cinto", "Relógio"],
-    ["Brinco", "Colar", "Pulseira", "Anel"],
+    [
+      "Boné",
+      "Chapéu",
+      "Óculos de Sol",
+      "Cinto",
+      "Relógio",
+      "Brinco",
+      "Colar",
+      "Pulseira",
+      "Anel",
+    ],
+    [
+      "Camiseta",
+      "Regata",
+      "Camisa Social",
+      "Polo",
+      "Blusa",
+      "Jaqueta",
+      "Moletom",
+      "Blazer",
+      "Cardigan",
+      "Calça",
+      "Short",
+      "Saia",
+      "Legging",
+      "Bermuda",
+      "Vestido Longo",
+      "Vestido Curto",
+      "Vestido Midi",
+      "Conjunto Feminino",
+      "Conjunto Masculino",
+      "Macacão",
+      "Macaquinho",
+      "Tênis",
+      "Bota",
+      "Chinelo",
+      "Sandália",
+      "Rasteirinha",
+      "Bolsa de Mão",
+      "Mochila",
+      "Pochete",
+    ],
+    [
+      "Short Jeans",
+      "Short Moletom",
+      "Short Sarja",
+      "Short Esportivo",
+      "Short Praia",
+      "Short Alfaiataria",
+      "Short Cintura Alta",
+      "Short Cargo",
+      "Short Fitness",
+      "Short Social",
+      "Bermuda Jeans",
+      "Bermuda Moletom",
+      "Bermuda Sarja",
+      "Bermuda Tática",
+      "Bermuda Praia",
+      "Bermuda Ciclista",
+      "Bermuda Esportiva",
+      "Bermuda Cargo",
+    ],
   ];
 
   const style = [
@@ -43,40 +120,26 @@ function BasicsInfos({ formData, onChange }) {
     "Formal",
   ];
 
-  const [categoryHandler, setCategoryHandler] = useState(classes[0]);
-
-  function verifyClasses() {
-    switch (categoryHandler) {
-      case "Camisa":
-        return subClasses[0];
-      case "Casaco":
-        return subClasses[1];
-      case "Parte Inferior":
-        return subClasses[2];
-      case "Vestido":
-        return subClasses[3];
-      case "Conjunto":
-        return subClasses[4];
-      case "Calçado":
-        return subClasses[5];
-      case "Bolsa":
-        return subClasses[6];
-      case "Acessório":
-        return subClasses[7];
-      case "Joia":
-        return subClasses[8];
-      default:
-        return [];
-    }
-  }
+  const [descQty, setDescQty] = useState(formData.description?.length ?? 0);
 
   const [subClassOptions, setSubClassOptions] = useState(subClasses[0]);
 
   useEffect(() => {
-    setSubClassOptions(verifyClasses());
-  }, [categoryHandler]);
+    let category = formData.category || classes[0]; // usa a primeira categoria se não houver
+    const categoryIndex = classes.indexOf(category);
 
-  const [descQty, setDescQty] = useState(formData.description.length);
+    if (categoryIndex >= 0) {
+      setSubClassOptions(subClasses[categoryIndex]);
+      if (!formData.category) {
+        // define categoria e subcategoria iniciais se não houver
+        onChange("category", classes[0]);
+        onChange("subCategory", subClasses[0][0]);
+      } else {
+        // atualiza apenas subcategoria
+        onChange("subCategory", subClasses[categoryIndex][0]);
+      }
+    }
+  }, [formData?.category]);
 
   return (
     <section className="basicsInfos borderRadius boxShadow ">
@@ -92,9 +155,12 @@ function BasicsInfos({ formData, onChange }) {
           <select
             name="productCategory"
             id="productCategory"
+            className={errors.category ? "errorElement" : ""}
             value={formData.category}
             onChange={(e) => {
               onChange("category", e.target.value);
+              setSelectedCategory(e.target.value);
+              removeError("category");
             }}
           >
             {classes.map((item, key) => (
@@ -103,19 +169,23 @@ function BasicsInfos({ formData, onChange }) {
               </option>
             ))}
           </select>
-          <span className="errorMsg">Houve um erro</span>
+          {errors.category && (
+            <span className="errorMsg">{errors.category}</span>
+          )}
         </p>
 
         <p className="displayColumn">
           <label htmlFor="productSubclass">
-            Selecione a subclasse do produto *
+            Selecione a subcategoria do produto *
           </label>
           <select
             name="productSubclass"
             id="productSubclass"
-            value={formData.subcategory}
+            className={errors.subCategory ? "errorElement" : ""}
+            value={formData.subCategory}
             onChange={(e) => {
-              onChange("subcategory", e.target.value);
+              onChange("subCategory", e.target.value);
+              removeError("subCategory");
             }}
           >
             {subClassOptions.map((value, key) => (
@@ -124,7 +194,9 @@ function BasicsInfos({ formData, onChange }) {
               </option>
             ))}
           </select>
-          <span className="errorMsg">Houve um erro</span>
+          {errors.subCategory && (
+            <span className="errorMsg">{errors.subCategory}</span>
+          )}
         </p>
       </div>
 
@@ -134,13 +206,17 @@ function BasicsInfos({ formData, onChange }) {
           type="text"
           name="productName"
           id="productName"
+          className={errors.productName ? "errorElement" : ""}
           placeholder="Adicione um nome ao seu produto"
-          value={formData.name}
+          value={formData.productName}
           onChange={(e) => {
-            onChange("name", e.target.value);
+            onChange("productName", e.target.value);
+            removeError("productName");
           }}
         />
-        <span className="errorMsg">Houve um erro</span>
+        {errors.productName && (
+          <span className="errorMsg">{errors.productName}</span>
+        )}
       </div>
 
       <div className="displayRow">
@@ -150,13 +226,15 @@ function BasicsInfos({ formData, onChange }) {
             type="text"
             name="productBrand"
             id="productBrand"
+            className={errors.brand ? "errorElement" : ""}
             placeholder="Adicione a marca do seu produto"
             value={formData.brand}
             onChange={(e) => {
               onChange("brand", e.target.value);
+              removeError("brand");
             }}
           />
-          <span className="errorMsg">Houve um erro</span>
+          {errors.brand && <span className="errorMsg">{errors.brand}</span>}
         </p>
 
         <p className="displayColumn">
@@ -167,17 +245,20 @@ function BasicsInfos({ formData, onChange }) {
             name="productStyle"
             id="productStyle"
             value={formData.style}
+            className={errors.style ? "errorElement" : ""}
             onChange={(e) => {
               onChange("style", e.target.value);
+              removeError("style");
             }}
           >
+            <option value="">Selecione um estilo</option>
             {style.map((value, key) => (
               <option key={key} value={value}>
                 {value}
               </option>
             ))}
           </select>
-          <span className="errorMsg">Houve um erro</span>
+          {errors.style && <span className="errorMsg">{errors.style}</span>}
         </p>
       </div>
 
@@ -191,13 +272,17 @@ function BasicsInfos({ formData, onChange }) {
         <textarea
           name="productDescription"
           id="productDescription"
+          className={errors.description ? "errorElement" : ""}
           value={formData.description}
           onChange={(e) => {
             onChange("description", e.target.value);
             setDescQty(e.target.value.length);
+            removeError("description");
           }}
         ></textarea>
-        <span className="errorMsg">Houve um erro</span>
+        {errors.description && (
+          <span className="errorMsg">{errors.description}</span>
+        )}
       </div>
     </section>
   );

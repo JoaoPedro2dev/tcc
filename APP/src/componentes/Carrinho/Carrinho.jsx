@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import CarrinhoVazil from "./CarrinhoVazil/CarrinhoVazil";
 import ProdutosInfos from "./ProdutosInfos/ProdutosInfos";
 import { useUser } from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
+import { useSales } from "../../context/SalesContext";
 
 function Carrinho({ funcao }) {
   const [products, setProducts] = useState([]);
@@ -16,14 +18,9 @@ function Carrinho({ funcao }) {
     fetch(url)
       .then((r) => r.json())
       .then((data) => {
-        console.log(data);
+        console.log("carrinho", data);
         setProducts(data);
       });
-
-    // window.addEventListener("CarrinhoAtualizado", verificarCarrinho);
-    // return () => {
-    //   window.removeEventListener("CarrinhoAtualizado", verificarCarrinho);
-    // };
   }, []);
 
   function close(event) {
@@ -60,6 +57,23 @@ function Carrinho({ funcao }) {
     }
   }, [products]);
 
+  const navigate = useNavigate();
+
+  const { setSales } = useSales();
+
+  function handleBuy() {
+    const array = products.map((item) => ({
+      id_item: item.id,
+      quantidade_item: 1,
+    }));
+
+    setSales(array);
+
+    console.log(array);
+
+    navigate(user && user.id ? "/venda/finalizar-compra" : "/login");
+  }
+
   return (
     <div
       id="cartContainer"
@@ -90,7 +104,12 @@ function Carrinho({ funcao }) {
             />
           ))}
 
-          <ProdutosInfos valorTotal={totalValue} />
+          <ProdutosInfos
+            valorTotal={totalValue}
+            handleBuy={() => {
+              handleBuy();
+            }}
+          />
         </div>
       )}
     </div>

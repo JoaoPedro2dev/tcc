@@ -11,6 +11,7 @@
 
     class Pessoa {
         public int $id;
+        public ?int $seller_id;
         public string $nivel_acesso;
         public string $name;
         public string $first_name;
@@ -18,7 +19,7 @@
         public ?string $username;
         public ?string $store_name;
         public ?string $url;
-        public string $profile_photo;
+        public ?string $profile_photo;
         public ?string $cpf;
         public ?string $cnpj;
         public ?string $email;
@@ -33,19 +34,26 @@
         public ?string $uf;
         public ?string $cep;
         public ?string $num_residencia;
+        public ?string $complemento;
         public ?bool $active;
+        
+        public string $open_hours;
+        public string $close_hours;
+
+        public string $agreement;
 
         public function __construct()
         {
-            $this->address = null;
-            $this->rua = null;
-            $this->bairro = null;
-            $this->cidade = null;
-            $this->uf = null;
-            $this->cep = null;
-            $this->num_residencia = null;
             $this->setCriadoEm();
             // $this->setProfilePhoto(null);
+        }
+
+        public function getAccountData(int $id) : ?Pessoa{
+            return ((new PessoasDAO())->getAccountData($id));
+        }
+
+        public function preferenceProducts(int $user_id){
+            return ((new PessoasDAO())->preferenceProducts($user_id));
         }
 
         public function login(string $email, string $password): ?Pessoa{
@@ -63,14 +71,19 @@
         public function createCookie(Pessoa $pessoa): bool{        
             $token = JWT::encode([
                 'id' => $pessoa->getId(),
-                'access' => $pessoa->getNivelAcesso(),
+                'seller_id'=> $pessoa->getSellerId(),
+                'nivel_acesso' => $pessoa->getNivelAcesso(),
+                'url' => $pessoa->getUrl() ,
                 'firstName' => $pessoa->getFirstName(),
                 'lastName' => $pessoa->getLastName(),
                 'name' => $pessoa->getName(),
+                'cpf' => $pessoa->getCpf(),
                 'username' => $pessoa->getUserName(),
+                'telefone'=> $pessoa->getTelefone(),
                 'email' => $pessoa->getEmail(),
                 'cep' => $pessoa->getCep(),
-                'img' => $pessoa->getProfilePhoto(),
+                'endereco' => $pessoa->getCep() ? ($pessoa->getRua().', '.$pessoa->getNumResidencia().' - '.$pessoa->getBairro().', '.$pessoa->getCidade().' - '.$pessoa->getUf().', '.$pessoa->getCep()) : 'Error 1',
+                'profile_photo' => $pessoa->getProfilePhoto(),
                 'exp' => time() + 3600 // expira em 1 hora
             ], $_ENV['secretKey'], 'HS256');
 
@@ -101,6 +114,9 @@
         // Getters e Setters
         public function getId(): int { return $this->id; }
         public function setId(int $id): void { $this->id = $id; }
+
+         public function getSellerId(): ?int { return $this->seller_id; }
+        public function setSellerId(int $seller_id): void { $this->seller_id = $seller_id; }
 
         public function getNivelAcesso(): string { return $this->nivel_acesso; }
         public function setNivelAcesso(string $nivel_acesso): void {
@@ -152,24 +168,24 @@
                 $this->username = strtolower($username);
             }else{
                 if((new PessoasDAO())->existsUsername($username, $id)){
-                throw new Exception(
-                    json_encode(
-                        ['success' => false,
-                        'field' => 'username',
-                        'status' => 'Este nome de usuario já está em uso'],
-                        JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
-                    ));
+                    throw new Exception(
+                        json_encode(
+                            ['success' => false,
+                            'field' => 'username',
+                            'status' => 'Este nome de usuario já está em uso'],
+                            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+                        ));
                 }
                 $this->username = $username;
             }
         }
 
         public function getStoreName(): ?string { return $this->store_name; }
-        public function setStoreName(?string $store_name): void {
+        public function setStoreName(?string $store_name, int $id = 0): void {
                 if(!empty($store_name)){
                     $dao = new PessoasDAO();
 
-                    if($dao->existsStoreName($store_name)){
+                    if($dao->existsStoreName($store_name, $id)){
                         throw new Exception(
                             json_encode(
                                 ['success' => false,
@@ -198,7 +214,7 @@
 
         }
 
-        public function getProfilePhoto(): string { return $this->profile_photo; }
+        public function getProfilePhoto(): ?string { return $this->profile_photo; }
         public function setProfilePhoto(?string $profile_photo, ?string $last_photo = null):void{
             if(!$profile_photo){
                 $this->profile_photo = 'http://localhost/tcc/API/UPLOADS/profilePhotos/imgPadrao.png';
@@ -284,9 +300,9 @@
             $this->setProfilePhoto($url, $last_photo);
 
             return $url;
-        }else{
-            return 'valor de foto nulo';
-        }
+            }else{
+                return 'valor de foto nulo';
+            }
         }
 
         public function getCpf(): string { return $this->cpf; }
@@ -530,6 +546,35 @@
 
         public function isActive(): bool { return $this->active; }
         public function setActive(bool $active): void { $this->active = $active; }
+
+        public function getOpenHours():string{
+            return $this->open_hours;
+        }
+
+        public function setOpenHours(string $open_hours): void { $this->open_hours = $open_hours; }
+
+        public function getCloseHours():string{
+            return $this->close_hours;
+        }
+
+        public function setCloseHours(string $close_hours): void { $this->close_hours = $close_hours; }
+
+        public function getCheckAgreement() : string {
+            return $this->agreement;
+        }
+
+        public function getComplemento():string{
+            return $this->complemento;
+        }
+        public function setComplemento($complemento) : void {
+            $this->complemento = $complemento;
+        }
+
+        public function setCheckAgreement() : void {
+            $this->agreement = 'concordou';
+        }
+
+        
     }
 
 

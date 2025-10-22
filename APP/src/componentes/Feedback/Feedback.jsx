@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./feedback.css";
+import { useNavigate } from "react-router-dom";
 
-const FeedbackPopup = ({ message, type = "info", onClose }) => {
+const FeedbackPopup = ({ message, type = "info", onClose, link }) => {
+  const navigate = useNavigate();
+
   const [closing, setClosing] = useState(false);
 
   useEffect(() => {
@@ -12,7 +15,7 @@ const FeedbackPopup = ({ message, type = "info", onClose }) => {
   const handleClose = () => {
     setClosing(true);
     setTimeout(() => {
-      onClose();
+      onClose ? onClose() : navigate(link);
     }, 300); // tempo da animação
   };
 
@@ -20,7 +23,7 @@ const FeedbackPopup = ({ message, type = "info", onClose }) => {
     <div className="feedback-overlay">
       <div className={`feedback-popup ${type} ${closing ? "closing" : ""}`}>
         <p>{message}</p>
-        <button onClick={handleClose}>Ok</button>
+        {onClose && <button onClick={handleClose}>Ok</button>}
       </div>
     </div>
   );

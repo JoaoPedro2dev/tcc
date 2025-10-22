@@ -20,11 +20,22 @@ import AddProduct from "./pages/PaginaVendedor/AddProduct/AddProduct.jsx";
 import { UserProvider } from "./context/UserContext.jsx";
 import ProfilePage from "./pages/ProfilePage/ProfilePage.jsx";
 import UpdateProfile from "./pages/ProfilePage/UpdateProfile/UpdateProfile.jsx";
+import CheckoutPage from "./pages/CheckoutPage/CheckoutPage .jsx";
+import SalesManagement from "./pages/SalesManagement/SalesManagement.jsx";
+import MyHistory from "./pages/MyHistory/MyHistory.jsx";
+import { SalesProvider } from "./context/SalesContext.jsx";
+import UserAgreement from "./pages/UserAgreement/UserAgreement.jsx";
+import AdicionarPromocao from "./pages/AdicionarPromocao/AdicionarPromocao.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/contrato-usuario",
+    element: <UserAgreement />,
     errorElement: <NotFound />,
   },
   {
@@ -83,6 +94,21 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
   },
   {
+    path: "/paginavendedor/editar-produto",
+    element: <AddProduct />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/paginavendedor/editar-produto/adicionar-promocao",
+    element: <AdicionarPromocao />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/resumo/vendas",
+    element: <SalesManagement />,
+    errorElement: <NotFound />,
+  },
+  {
     path: "/minhas-compras",
     element: <MyPurchases />,
     errorElement: <NotFound />,
@@ -102,12 +128,24 @@ const router = createBrowserRouter([
     element: <Details />,
     errorElement: <NotFound />,
   },
+  {
+    path: "/venda/finalizar-compra",
+    element: <CheckoutPage />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/historico",
+    element: <MyHistory />,
+    errorElement: <NotFound />,
+  },
 ]);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <UserProvider>
-      <RouterProvider router={router} />
+      <SalesProvider>
+        <RouterProvider router={router} />
+      </SalesProvider>
     </UserProvider>
   </StrictMode>
 );

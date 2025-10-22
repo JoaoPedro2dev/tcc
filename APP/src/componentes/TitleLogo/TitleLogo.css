@@ -1,0 +1,14 @@
+.title-logo {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1976d2;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  transition: color 0.3s;
+  position: absolute;
+  left: 70px;
+  top: 40px;
+}
+.title-logo:hover {
+  color: #0d47a1;
+}

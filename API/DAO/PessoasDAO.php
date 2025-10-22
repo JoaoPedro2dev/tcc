@@ -7,11 +7,23 @@ use Model\Pessoa;
     // use Model\Pessoa;
 
     class PessoasDAO extends DAO{
+
+        public function getAccountData(int $id) : ?Pessoa{
+            $sql = "SELECT p.id, p.email, p.name, p.first_name, p.last_name, p.username, p.cpf, p.telefone, p.profile_photo, v.`url`, p.cep, p.nivel_acesso, p.rua, p.bairro, p.cidade, p.uf, p.cep, p.num_residencia, p.complemento, p.address, v.id AS seller_id
+                    FROM pessoas p
+                    LEFT JOIN vendedores v ON v.id_pessoa = p.id
+                    WHERE p.id = ?";
+
+            $stmt = parent::$conexao->prepare($sql);
+            $stmt->execute([$id]);
+            return $stmt->fetchObject("Model\Pessoa");
+        }
         
         public function login(string $email, string $password): ?Pessoa{
-            $sql = "SELECT id, email, name, first_name, last_name, username, profile_photo, cep, nivel_acesso
-                    FROM pessoas 
-                    WHERE email = ? AND `password` = SHA1(?)";
+            $sql = "SELECT p.*, v.id AS seller_id, v.url
+                    FROM pessoas p
+                    LEFT JOIN vendedores v ON v.id_pessoa = p.id
+                    WHERE p.email = ? AND p.`password` = SHA1(?)";
             $stmt = parent::$conexao->prepare($sql);
             $stmt->bindValue(1, $email);
             $stmt->bindValue(2, $password);
@@ -35,57 +47,50 @@ use Model\Pessoa;
                 first_name, 
                 last_name, 
                 username, 
-                store_name,
-                url,
                 cpf, 
-                cnpj,
                 email, 
                 telefone, 
                 date_birth, 
-                address, 
                 criado_em, 
-                password, 
-                rua, 
-                bairro, 
-                cidade, 
-                uf, 
-                cep, 
-                num_residencia
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, sha1(?), ?, ?, ?, ?, ?, ?)";
-
-            // $sqlUser = "INSERT INTO usuarios () VALUES()";
-
+                `agreement`,
+                password
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, sha1(?))";
              
             $stmt = parent::$conexao->prepare($sql);
 
-            return $stmt->execute([
+            $stmt->execute([
                 $pessoa->getNivelAcesso(),
                 $pessoa->getName(),
                 $pessoa->getProfilePhoto(),          // name
                 $pessoa->getFirstName(),     // first_name
                 $pessoa->getLastName(),      // last_name
                 $pessoa->getUserName(), 
-                $pessoa->getStoreName(), 
-                $pessoa->getUrl(),    // username
                 $pessoa->getCpf(),     
-                $pessoa->getCnpj(),      // cpf
                 $pessoa->getEmail(),         // email
                 $pessoa->getTelefone(),      // telefone
                 $pessoa->getDateBirth(),     // date_birth
-                $pessoa->getAddress(),       // address
-                $pessoa->getCriadoEm(),      // criado_em
+                $pessoa->getCriadoEm(),    
+                $pessoa->getCheckAgreement(),  // criado_em
                 $pessoa->getPassword(), // password
-                $pessoa->getRua(),           // rua
-                $pessoa->getBairro(),        // bairro
-                $pessoa->getCidade(),        // cidade
-                $pessoa->getUf(),            // uf
-                $pessoa->getCep(),           // cep
-                $pessoa->getNumResidencia()  // num_residencia
-            ]);            
+            ]);   
+
+            $lastIdUser = parent::$conexao->lastInsertId();
+            
+            if($pessoa->getNivelAcesso() === 'vendedor'){
+                $sql = "INSERT INTO vendedores (id_pessoa, store_name, cnpj, open_hours, close_hours, `url`) VALUES(?, ?, ?, ?, ?, ?)";
+                $stmt = parent::$conexao->prepare($sql);
+                return $stmt->execute([$lastIdUser, $pessoa->getStoreName(), $pessoa->getCnpj(), $pessoa->getOpenHours(), $pessoa->getCloseHours(), $pessoa->getUrl()]);
+            }else{
+                $sql = "INSERT INTO usuarios (id_pessoa) VALUES(?)";
+                $stmt = parent::$conexao->prepare($sql);
+                return $stmt->execute([$lastIdUser]);
+            }
         }
 
         public function update(Pessoa $pessoa) : bool{
-             $sql = "UPDATE pessoas SET
+            
+
+            $sql = "UPDATE pessoas SET
                 
                 cpf = ?, 
                 cnpj = ?,
@@ -107,6 +112,81 @@ use Model\Pessoa;
                 
             ]);            
         }
+
+        public function preferenceProducts(int $user_id)
+        {
+            // Função auxiliar para gerar placeholders (?,?,?)
+            $placeholders = fn(array $array) => count($array)
+                ? implode(',', array_fill(0, count($array), '?'))
+                : 'NULL';
+
+            // 1️⃣ Buscar IDs de produtos visualizados pelo usuário
+            $sql = "SELECT produto_id FROM historico WHERE user_id = ? LIMIT 25";
+            $stmt = parent::$conexao->prepare($sql);
+            $stmt->execute([$user_id]);
+
+            $idsAssoc = $stmt->fetchAll(DAO::FETCH_ASSOC);
+            $ids = array_column($idsAssoc, 'produto_id');
+
+            if (empty($ids)) {
+                return [];
+            }
+
+            // 2️⃣ Buscar categorias e subcategorias dos produtos históricos
+            $sql = "SELECT 
+                        GROUP_CONCAT(DISTINCT category) AS categories,
+                        GROUP_CONCAT(DISTINCT subCategory) AS subCategories
+                    FROM produtos 
+                    WHERE id IN (" . $placeholders($ids) . ")";
+            $stmt = parent::$conexao->prepare($sql);
+            $stmt->execute($ids);
+            $data = $stmt->fetch(DAO::FETCH_ASSOC);
+
+            $categories = array_filter(array_unique(explode(',', $data['categories'] ?? '')));
+            $subCategories = array_filter(array_unique(explode(',', $data['subCategories'] ?? '')));
+
+            if (empty($categories) && empty($subCategories)) {
+                return [];
+            }
+
+            // 3️⃣ Buscar até 15 produtos por categoria correspondente
+            // usando ROW_NUMBER() (MySQL 8+)
+            $sql = "
+                SELECT * FROM (
+                    SELECT 
+                        p.id, p.images, p.availableColors, p.productName, p.price, 
+                        p.promotionPrice, p.shippingCost, p.category, p.subCategory, `condition`, p.stockTotal,
+                        (
+                            (p.category IN (" . $placeholders($categories) . ")) +
+                            (p.subCategory IN (" . $placeholders($subCategories) . "))
+                        ) AS compatibility,
+                        ROW_NUMBER() OVER (PARTITION BY p.category ORDER BY 
+                            ((p.category IN (" . $placeholders($categories) . ")) +
+                            (p.subCategory IN (" . $placeholders($subCategories) . "))
+                            ) DESC
+                        ) AS row_num
+                    FROM produtos p
+                    WHERE 
+                        (p.category IN (" . $placeholders($categories) . "))
+                        OR (p.subCategory IN (" . $placeholders($subCategories) . "))
+                ) ranked
+                WHERE ranked.row_num <= 10
+                ORDER BY ranked.compatibility DESC, ranked.category
+            ";
+
+            // Montar parâmetros
+            $params = array_merge(
+                $categories, $subCategories, // para compatibilidade
+                $categories, $subCategories, // para ORDER BY
+                $categories, $subCategories  // para WHERE
+            );
+
+            $stmt = parent::$conexao->prepare($sql);
+            $stmt->execute($params);
+
+            return $stmt->fetchAll(DAO::FETCH_CLASS, 'Model\Product');
+        }
+
 
         public function profileUpdate(Pessoa $pessoa) : bool{
             $sql = "UPDATE pessoas SET 
@@ -146,7 +226,7 @@ use Model\Pessoa;
         }
 
         public function addressUpdate(Pessoa $pessoa) : bool{
-            $sql = "UPDATE pessoa SET
+            $sql = "UPDATE pessoas SET
                     address = ?, 
                     rua = ?, 
                     bairro = ?, 
@@ -177,10 +257,10 @@ use Model\Pessoa;
             return $stmt->fetchColumn() > 0;
         }
 
-        public function existsStoreName(string $store_name) : bool{
-            $sql = "SELECT COUNT(*) FROM pessoas WHERE store_name = ?";
+        public function existsStoreName(string $store_name, int $id = 0) : bool{
+            $sql = "SELECT COUNT(*) FROM vendedores WHERE store_name = ? AND id_pessoa != ?";
             $stmt = parent::$conexao->prepare($sql);
-            $stmt->execute([$store_name]);
+            $stmt->execute([$store_name, $id]);
             return $stmt->fetchColumn() > 0;
         }
 
@@ -192,7 +272,7 @@ use Model\Pessoa;
         }
 
         public function existsCnpj(string $cnpj) : bool{
-            $sql = "SELECT COUNT(*) FROM pessoas WHERE cnpj = ?";
+            $sql = "SELECT COUNT(*) FROM vendedores WHERE cnpj = ?";
             $stmt = parent::$conexao->prepare($sql);
             $stmt->execute([$cnpj]);
             return $stmt->fetchColumn() > 0;

@@ -1,13 +1,13 @@
 import "./produtosInfos.css";
 
-function ProdutosInfos({ valorTotal }) {
+function ProdutosInfos({ valorTotal, handleBuy }) {
   return (
     <div id="produtosInfos">
       <div>
         <p>Total</p>
         <strong>{valorTotal}</strong>
       </div>
-      <button>Comprar tudo</button>
+      <button onClick={handleBuy}>Comprar tudo</button>
     </div>
   );
 }

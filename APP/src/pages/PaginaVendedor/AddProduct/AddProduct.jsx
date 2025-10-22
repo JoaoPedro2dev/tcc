@@ -4,73 +4,258 @@ import BasicsInfos from "./BasicsInfos/BasicsInfos.jsx";
 import PriceLogistics from "./PriceLogistics/PriceLogistics.jsx";
 import ProductFeatures from "./ProductFeatures/ProductFeatures.jsx";
 import ProductImages from "./ProductImages/ProductImages.jsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useUser } from "../../../context/UserContext.jsx";
+import FeedBack from "../../../componentes/Feedback/Feedback.jsx";
+import TitleLogo from "../../../componentes/TitleLogo/TitleLogo.jsx";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function AddProduct() {
-  const id = 0;
+  const navigate = useNavigate();
+
+  const location = useLocation();
+  const id = location.state ?? false;
+  const { user } = useUser();
 
   const [formData, setFormData] = useState({
-    id: 1,
-    name: "Teste",
-    category: "Casaco",
-    subcategory: "",
-    brand: "Marca de teste",
-    style: "Social",
-    description: "Descrição de teste",
-    condiction: "Seminovo",
-    genre: "Unissex",
-    stock: [
-      {
-        nameColor: "Vermelho",
-        sizes: [
-          { size: "GG", qty: 1 },
-          { size: "PP", qty: 1 },
-        ],
-      },
-      {
-        nameColor: "Azul",
-        sizes: [{ size: "GG", qty: 1 }],
-      },
-      {
-        nameColor: "Rosa",
-        sizes: [{ size: "P", qty: 1 }],
-      },
-    ],
-    price: 1,
-    shipping: 2,
-    deliveryTime: 3,
-    imagens: [],
+    id: null,
+    seller_id: 1,
+    productName: "",
+    category: "",
+    subCategory: "",
+    style: "",
+    brand: "",
+    description: "",
+    condition: "",
+    gender: "",
+    itenStock: [],
+    price: "",
+    shippingCost: "",
+    deliveryTime: "",
+    images: [],
   });
+
+  useEffect(() => {
+    if (id) {
+      fetch(`http://localhost/tcc/API/GET?id=${id}`)
+        .then((r) => r.json())
+        .then((data) => {
+          console.log("editar", data);
+          setFormData(data);
+        });
+    }
+  }, []);
+
+  const [errors, setErrors] = useState({});
+
+  const [selectedCategory, setSelectedCategory] = useState("Camisas");
+
+  const [successAlert, setSuccessAlert] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleFormChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = () => {
+  function cadastrarProduto() {
+    setIsLoading(true);
+
     console.clear();
     console.log("Dados enviados:", formData);
-  };
+
+    let form = new FormData();
+    for (const key in formData) {
+      if (key === "images") {
+        formData.images.forEach((fileObj) => {
+          form.append("images[]", fileObj.file);
+        });
+        continue;
+      }
+
+      if (key === "itenStock") {
+        // se for um array ou objeto, converte para string JSON
+        form.append(key, JSON.stringify(formData[key]));
+      } else {
+        form.append(key, formData[key]);
+      }
+    }
+
+    form.append("seller_id", user.seller_id);
+
+    fetch("http://localhost/tcc/API/POST/produto", {
+      method: "POST",
+      body: form,
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        console.log(data);
+        if (data.success === false) {
+          if (data.field === "images") {
+            setErrors((prev) => ({
+              ...prev,
+              [data.field]: { status: data.status, index: data.index },
+            }));
+          } else {
+            setErrors((prev) => ({
+              ...prev,
+              [data.field]: data.status,
+            }));
+          }
+
+          setIsLoading(false);
+          return;
+        }
+
+        if (data === true) {
+          console.log("cadastrado");
+          setSuccessAlert(true);
+          setIsLoading(true);
+        }
+      });
+  }
+
+  function editarProduto() {
+    setIsLoading(true);
+
+    console.clear();
+    console.log("Dados novos:", formData);
+
+    let form = new FormData();
+    for (const key in formData) {
+      if (key === "images") {
+        if (typeof formData.images === "string") {
+          formData.images = JSON.parse(formData.images);
+        }
+
+        formData.images.forEach((fileObj) => {
+          form.append("images[]", fileObj.file);
+        });
+
+        continue;
+      }
+
+      if (key === "itenStock") {
+        // se for um array ou objeto, converte para string JSON
+        form.append(key, JSON.stringify(formData[key]));
+      } else {
+        form.append(key, formData[key]);
+      }
+    }
+
+    // form.append("seller_id", user.seller_id);
+
+    fetch("http://localhost/tcc/API/POST/update/produto", {
+      method: "POST",
+      body: form,
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        console.log("update", data);
+        if (data.success === false) {
+          if (data.field === "images") {
+            setErrors((prev) => ({
+              ...prev,
+              [data.field]: { status: data.status, index: data.index },
+            }));
+          } else {
+            setErrors((prev) => ({
+              ...prev,
+              [data.field]: data.status,
+            }));
+          }
+
+          setIsLoading(false);
+          return;
+        }
+
+        if (data === true) {
+          console.log("alterado");
+          setSuccessAlert(true);
+          setIsLoading(true);
+        }
+      });
+  }
+
+  function removeError(field) {
+    setErrors((prev) => {
+      const newErrors = { ...prev };
+      delete newErrors[field];
+      return newErrors;
+    });
+  }
 
   return (
     <div id="addProductBody">
-      <BasicsInfos formData={formData} onChange={handleFormChange} />
+      <TitleLogo />
+      <h2>{id ? "Editar Produto" : "Adicionar produto"}</h2>
+      {successAlert && (
+        <FeedBack
+          message={
+            id
+              ? "Alterações salvas com sucesso!"
+              : "Produto cadastrado com sucesso!"
+          }
+          type={"success"}
+          link={`/paginaVendedor?seller=${user.url}`}
+        />
+      )}
 
-      <ProductFeatures formData={formData} onChange={handleFormChange} />
+      <BasicsInfos
+        formData={formData}
+        onChange={handleFormChange}
+        setSelectedCategory={setSelectedCategory}
+        errors={errors}
+        removeError={removeError}
+      />
 
-      <ProductSize formData={formData} onChange={handleFormChange} />
+      <ProductSize
+        formData={formData}
+        onChange={handleFormChange}
+        category={selectedCategory}
+        errors={errors}
+        removeError={removeError}
+      />
 
-      <PriceLogistics formData={formData} onChange={handleFormChange} />
+      <ProductFeatures
+        formData={formData}
+        onChange={handleFormChange}
+        errors={errors}
+        removeError={removeError}
+      />
 
-      <ProductImages formData={formData} onChange={handleFormChange} />
+      <PriceLogistics
+        formData={formData}
+        onChange={handleFormChange}
+        errors={errors}
+        removeError={removeError}
+      />
 
-      <div>
+      <ProductImages
+        formData={formData}
+        onChange={handleFormChange}
+        errors={errors}
+        removeError={removeError}
+      />
+
+      <div id="btnsBox">
         {id ? (
-          <button>SALVAR ALTERAÇÕES</button>
+          <button onClick={editarProduto} disabled={isLoading}>
+            {" "}
+            {isLoading ? "PROCESSANDO..." : "SALVAR ALTERAÇÕES"}
+          </button>
         ) : (
-          <button onClick={handleSubmit}>CADASTRAR PRODUTOS</button>
+          <button onClick={cadastrarProduto} disabled={isLoading}>
+            {isLoading ? "PROCESSANDO" : "CADASTRAR PRODUTOS"}
+          </button>
         )}
 
-        <button>CANCELAR</button>
+        <button
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
+          CANCELAR
+        </button>
       </div>
     </div>
   );

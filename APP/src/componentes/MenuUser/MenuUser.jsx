@@ -10,9 +10,10 @@ import {
 import "./menuUser.css";
 import MenuCard from "./MenuCards/MenuCard";
 import { useEffect, useState } from "react";
+import { useUser } from "../../context/UserContext";
 // import { useUser } from "../../context/UserContext";
 
-function MenuUser({ funcao, name, access }) {
+function MenuUser({ funcao, name, access, userUrl }) {
   useEffect(() => {
     const container = document.querySelector("#menu-user-container");
 
@@ -30,6 +31,10 @@ function MenuUser({ funcao, name, access }) {
   }, [funcao]);
 
   const [openLogout, setOpenLogout] = useState(false);
+
+  const { user } = useUser();
+
+  if (!user?.id) return;
 
   return (
     <div id="menu-user-container">
@@ -50,7 +55,7 @@ function MenuUser({ funcao, name, access }) {
           <MenuCard
             icon={<Layout className="menu-icon" />}
             title={"Painel"}
-            link={"/paginavendedor"}
+            link={`/paginavendedor?seller=${userUrl}`}
           />
         )}
 

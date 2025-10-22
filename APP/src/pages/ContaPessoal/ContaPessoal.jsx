@@ -105,6 +105,11 @@ function ContaPessoal() {
       newErrors.telefone = "Telefone deve ter 10 ou 11 dígitos";
     }
 
+    if (!formData.checkAgreement) {
+      newErrors.checkAgreement =
+        "Você precisa concordar com os termos de usuario";
+    }
+
     const passwordValidation = validatePassword(formData.password);
     if (!formData.password.trim()) {
       newErrors.password = "Senha é obrigatória";
@@ -361,6 +366,23 @@ function ContaPessoal() {
                 <span className="error-message">{errors.password}</span>
               )}
             </div>
+
+            <div className="check-agreement">
+              <input
+                type="checkbox"
+                name="checkAgreement"
+                id="checkAgreement"
+                onChange={handleInputChange}
+              />
+              <label htmlFor="checkAgreement">
+                Eu li e aceito os termos de uso do
+              </label>
+              <a href="/contrato-usuario">contrato de usuario</a>
+            </div>
+
+            {errors.checkAgreement && (
+              <span className="error-message">{errors.checkAgreement}</span>
+            )}
 
             <button
               type="submit"

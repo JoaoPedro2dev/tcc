@@ -1,5 +1,5 @@
 .dnv-logo {
-  position: absolute;
+  position: fixed;
   top: 30px;
   left: 40px;
   cursor: pointer;
@@ -10,6 +10,7 @@
   align-items: center;
   min-height: 100vh;
   background: #f8f9fa;
+  padding: 80px;
 }
 
 .endereco-form {
@@ -32,6 +33,10 @@
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
+}
+
+hr {
+  margin: 20px 0px;
 }
 
 .input-group label {
@@ -78,6 +83,10 @@
 .btn-verificar-cep:hover,
 .btn-cadastrar-endereco:hover {
   background-color: #0056b3;
+}
+
+.erro {
+  border: 1px solid #e53935 !important;
 }
 
 .input-error {
