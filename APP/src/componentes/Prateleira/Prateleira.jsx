@@ -1,18 +1,18 @@
 import "./prateleira.css";
 import Card from "../Card/Card";
 import Slider from "react-slick";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 
 // Botão personalizado anterior
 const PrevArrow = ({ onClick }) => (
   <div className="custom-arrow-prateleira prev-prateleira" onClick={onClick}>
-    <ChevronLeft size={32} color="#fff" />
+    <ArrowLeft size={20} strokeWidth={1.5} />
   </div>
 );
 
 const NextArrow = ({ onClick }) => (
   <div className="custom-arrow-prateleira next-prateleira" onClick={onClick}>
-    <ChevronRight size={32} color="#fff" />
+    <ArrowRight size={20} strokeWidth={1.5} />
   </div>
 );
 
@@ -21,10 +21,14 @@ function Prateleira({ title, itens }) {
     dots: false,
     infinite: false,
     speed: 250,
+    slidesToShow: 3.5,
     slidesToScroll: 2,
+    initialSlide: 0, // 🔹 garante que sempre comece do início
     arrows: true,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
+    draggable: true, // 👈 permite arrastar com o mouse (desktop)
+    swipeToSlide: true, // 👈 permite parar em qualquer slide (mobile ou desktop)
     // cancelable: false,
     responsive: [
       {
@@ -59,13 +63,16 @@ function Prateleira({ title, itens }) {
   };
 
   return (
-    <div className="prateleira boxShadow">
-      <h2>{title}</h2>
+    <div className="prateleira" id={title}>
+      <h1>{title}</h1>
       <Slider {...settings} className="carroussel">
         {itens.map((item) => (
           <Card key={item.id} item={item} />
         ))}
       </Slider>
+      {/* <div className="divisa"> */}
+      {/* </div> */}
+      {itens.length > 3 && <hr className="divisa" />}
     </div>
   );
 }

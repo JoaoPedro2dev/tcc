@@ -51,20 +51,31 @@ use DAO\DAO;
             return $stmt->fetchAll(DAO::FETCH_CLASS, "Model\CartItem") ?: null;
         }
 
-        public function quantityControll(int $cartId, int $productId, string $operation){
-
-            if($operation === 'more'){
+       public function quantityControll(int $cartId, int $productId, string $operation) {
+            if ($operation === 'more') {
+                // Aumentar quantidade: verificar se tem estoque disponível
                 $sql = "UPDATE carrinho_itens ci
-                        INNER JOIN produtos p ON ci.productId = p.id
+                        INNER JOIN produtos_itens pi ON pi.id = ci.id_item
+                        INNER JOIN produtos_variacoes pv ON pv.id = ci.id_variacao
                         SET ci.quantity = ci.quantity + 1
                         WHERE ci.productId = ?
-                            AND ci.quantity < p.stockTotal  AND cartId = ?";
-            }else{
-                $sql = "UPDATE carrinho_itens SET quantity = quantity - 1 WHERE productId = ? AND quantity > 1 AND cartId = ?";
+                        AND ci.cartId = ?
+                        AND (ci.quantity + 1) <= pv.quantity";
+            } else if ($operation === 'less') {
+                // Diminuir quantidade: garantir que não fica negativo
+                $sql = "UPDATE carrinho_itens 
+                        SET quantity = quantity - 1 
+                        WHERE id_produto = ? 
+                        AND cartId = ?
+                        AND quantity > 1";
+            } else {
+                return false; // Operação inválida
             }
+            
             $stmt = parent::$conexao->prepare($sql);
             $stmt->bindValue(1, $productId);
             $stmt->bindValue(2, $cartId);
+            
             return $stmt->execute();
         }
 

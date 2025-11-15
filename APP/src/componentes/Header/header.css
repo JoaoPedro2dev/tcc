@@ -1,8 +1,10 @@
-header {
+#principal-header {
   position: sticky;
   top: 0;
-  background-color: #ccac8c;
-  padding: 25px 11%;
+  background-color: #fff;
+  padding: 0px 8%;
+
+  height: 85px;
 
   display: flex;
   justify-content: space-between;
@@ -10,10 +12,46 @@ header {
   z-index: 1000;
 }
 
+#principal-header #appBar {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  gap: 30px;
+  cursor: default;
+}
+
+#principal-header #appBar > hr {
+  width: 1.5px;
+  height: 40px;
+  border: none;
+  background-color: black;
+}
+
+#principal-header #appBar > p {
+  font-size: large;
+  font-weight: 500;
+}
+
+#principal-header button {
+  border: none;
+  background-color: transparent;
+
+  transition: 0.2s;
+
+  cursor: pointer;
+}
+
+#principal-header > button:hover {
+  color: #7e7d7d;
+}
+
 #cartCount {
   position: absolute;
-  right: 9.9%;
-  top: 16px;
+  right: calc(8% - 15px);
+
+  border: 1px solid;
+
+  top: 20px;
 
   width: 25px;
   height: 25px;
@@ -22,26 +60,51 @@ header {
   align-items: center;
   justify-content: center;
 
-  background-color: red;
-  color: #fff;
+  color: black;
   font-weight: bold;
   border-radius: 50%;
+
+  background-color: #f2f2f2;
 }
 
-header > strong {
-  color: #fff;
-  font-size: large;
+#principal-header strong {
+  color: black;
+  font-size: x-large;
   cursor: pointer;
+  font-family: "Anton" !important;
+}
+
+header > ul {
+  /* width: 50%; */
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  list-style: none;
+  gap: 50px;
+}
+
+header > ul > li > a {
+  color: black;
+  text-transform: uppercase;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+header > ul > li > a:hover {
+  color: #7e7d7d;
 }
 
 header .inputBox {
   background-color: #fff;
   display: flex;
-  gap: 10px;
-  padding: 10px 20px;
-  width: 60%;
+  align-items: center;
+  padding: 11px 15px;
+  gap: 20px;
+  width: 90%;
+  border: 1px solid black;
   border-radius: 5px;
-  box-shadow: 0px 4px 5px rgba(136, 136, 136, 0.4);
 }
 
 header .inputBox > input {
@@ -49,19 +112,43 @@ header .inputBox > input {
   border: none;
   outline: none;
   cursor: pointer;
+  background-color: transparent;
+  /* border-bottom: 1px solid black; */
 }
 
-header .inputBox > label {
+header .inputBox > div {
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: 0.2s;
+}
+
+header .inputBox > div:hover {
+  color: #7e7d7d;
+}
+
+/* .searchBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #7e7d7d;
+} */
+
+header .infosUser {
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  gap: 35px;
 }
 
 header #buttonCart,
 header #buttonLogin {
-  padding: 10px;
+  /* padding: 0px 5px; */
   border-radius: 5px;
   border: none;
-  box-shadow: 0px 4px 5px rgba(136, 136, 136, 0.4);
-  background-color: #fff;
+  /* box-shadow: 0px 4px 5px rgba(136, 136, 136, 0.4); */
+  background-color: transparent;
   cursor: pointer;
 }
 
@@ -79,9 +166,9 @@ header #buttonLogin > p {
 
 header .usser-account-btn {
   border-radius: 50%;
-  border: none;
-  width: 48px;
-  height: 48px;
+  border: 1px solid black !important;
+  width: 42px;
+  height: 42px;
   cursor: pointer;
   overflow: hidden;
 }
@@ -96,7 +183,8 @@ header .usser-account-btn > img {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  color: #fff;
+  color: black;
+  font-weight: 500;
 }
 
 .cepBtn > span {

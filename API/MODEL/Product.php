@@ -8,6 +8,7 @@ use Exception;
     class Product
     {
         public int $id;
+        public string $public_id;
         public int $sellerId;
         public string $seller_url;
         public string $productName;
@@ -57,8 +58,8 @@ use Exception;
             return ((new ProductDAO())->getById($id));
         }
 
-        public function getBeLike($search, $colors, $sizes, $genders, $conditions): ?array{
-            return ((new ProductDAO())->getBeLike($search, $colors, $sizes, $genders, $conditions));
+        public function getBeLike($search, $colors, $sizes, $genders, $conditions, $categorias, $estilo): ?array{
+            return ((new ProductDAO())->getBeLike($search, $colors, $sizes, $genders, $conditions, $categorias, $estilo));
         }
 
         public function addPromotion(float $promotion_price, string $start_date, string $end_date, int $product_id):bool{
@@ -74,12 +75,35 @@ use Exception;
         }
 
         // Getters e Setters
+
+        public function getId(): int
+        {
+            return $this->id;
+        }
+        public function setId(int $id): void
+        {
+            $this->id = $id;
+        }
+
+        public function getPublicId(): string
+        {
+            return $this->public_id;
+        }
+        public function setPublicId(string $public_id): void
+        {
+            $this->public_id = $public_id;
+        }
+
         public function getPromotionDay(){
             return ((new ProductDAO())->getPromotionDay());
         }
 
-        public function getBySellerId(int $seller_id){
+        public function getBySellerId( $seller_id){
             return ((new ProductDAO())->getBySellerId($seller_id));
+        }
+
+        public function delete(int $id){
+            return ((new ProductDAO())->delete($id));
         }
 
         public function getSellerUrl(): string
@@ -91,14 +115,7 @@ use Exception;
             $this->seller_url = $seller_url;
         }
 
-        public function getId(): int
-        {
-            return $this->id;
-        }
-        public function setId(int $id): void
-        {
-            $this->id = $id;
-        }
+        
 
         public function getSellerId(): int
         {
@@ -280,12 +297,12 @@ use Exception;
                         ));
             }
 
-            if(strlen($description) > 300){
+            if(strlen($description) > 1000){
                 throw new Exception(
                         json_encode(
                             ['success' => false,
                             'field' => 'description',
-                            'status' => 'A descrição de um produto deve ter no máximo 300 caracteres'],
+                            'status' => 'A descrição de um produto deve ter no máximo 1000 caracteres'],
                             JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
                         ));
             }

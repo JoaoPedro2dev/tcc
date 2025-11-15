@@ -525,10 +525,6 @@ const CardPayment = ({
                     ))}
                   </div>
 
-                  <div id="card-add-alert">
-                    Aviso não cadastre um cartão real!
-                  </div>
-
                   <button
                     className="add-card-button"
                     onClick={() => setIsAddingCard(true)}

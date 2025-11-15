@@ -1,7 +1,7 @@
 import "./SpecialShelf.css";
 import Card from "../Card/Card";
 import Slider from "react-slick";
-import { Car, ChevronLeft, ChevronRight, ImageMinus } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useUser } from "../../context/UserContext";
 import Carrinho from "../Carrinho/Carrinho.jsx";
@@ -9,13 +9,13 @@ import Carrinho from "../Carrinho/Carrinho.jsx";
 // Botão personalizado anterior
 const PrevArrow = ({ onClick }) => (
   <div className="custom-arrow-prateleira prev-prateleira" onClick={onClick}>
-    <ChevronLeft size={32} color="#fff" />
+    <ArrowLeft size={20} strokeWidth={1.5} />
   </div>
 );
 
 const NextArrow = ({ onClick }) => (
   <div className="custom-arrow-prateleira next-prateleira" onClick={onClick}>
-    <ChevronRight size={32} color="#fff" />
+    <ArrowRight size={20} strokeWidth={1.5} />
   </div>
 );
 
@@ -69,16 +69,20 @@ function SpecialShelf() {
   function getPromotions() {
     fetch("http://localhost/tcc/API/GET/promotions")
       .then((r) => r.json())
-      .then((data) => {
-        if (data.length > 0) {
-          setItens(data);
+      .then((dataPromotion) => {
+        console.log("promoções", dataPromotion);
+        if (dataPromotion.length > 0) {
+          setItens(dataPromotion);
         }
       });
   }
 
   useEffect(() => {
+    getPromotions();
+  }, []);
+
+  useEffect(() => {
     if (!user?.id) {
-      getPromotions();
       return;
     }
 
@@ -88,7 +92,7 @@ function SpecialShelf() {
     })
       .then((r) => r.json())
       .then((data) => {
-        console.log("prateleira", data);
+        console.log("prateleira especial", data);
         if (data.length > 0) {
           setItens(data);
           setTitle("Inspirado nos últimos vistos");
@@ -102,9 +106,9 @@ function SpecialShelf() {
       body: new URLSearchParams({ user_id: user.id }),
     })
       .then((r) => r.json())
-      .then((data) => {
-        if (data.length > 0) {
-          setImages(data);
+      .then((dataCart) => {
+        if (dataCart.length > 0) {
+          setImages(dataCart);
         }
       });
   }, [user?.id]);
@@ -117,10 +121,14 @@ function SpecialShelf() {
     return;
   }
 
+  const promotionDayIten = itens.find(
+    (iten) => iten.promotionPrice !== null && iten.promotionPrice > 0
+  );
+
   return (
     <div className="specialShelf-container">
       {images.length > 0 ? (
-        <div className="prateleira boxShadow">
+        <div className="prateleira">
           {openCart && (
             <Carrinho
               funcao={() => {
@@ -129,7 +137,7 @@ function SpecialShelf() {
             />
           )}
 
-          <h2>Seu carrinho</h2>
+          <h1>Seu carrinho</h1>
           <div
             className={`image-content count-${images.length}`}
             onClick={handlerCart}
@@ -143,19 +151,24 @@ function SpecialShelf() {
           </p>
         </div>
       ) : (
-        <div className="prateleira boxShadow oferta-dia">
-          <h2>Oferta do dia</h2>
-          <Card item={itens[0]} showPorcentage={true} />
-        </div>
+        promotionDayIten && (
+          <div className="prateleira oferta-dia">
+            <h1>Oferta do dia</h1>
+            {<Card item={promotionDayIten} showPorcentage={true} />}
+          </div>
+        )
       )}
 
-      <div className="prateleira boxShadow">
-        <h2>{title}</h2>
+      <div className="prateleira">
+        <h1>{title}</h1>
         <Slider {...settings} className="carroussel">
-          {itens.map((item, key) => (
-            <Card key={key} item={item} showPorcentage={true} />
-          ))}
+          {itens.map((item) => {
+            if (item.id === promotionDayIten?.id) return null;
+
+            return <Card key={item.id} item={item} />;
+          })}
         </Slider>
+        {itens.length > 2 && <hr className="divisa" />}
       </div>
     </div>
   );

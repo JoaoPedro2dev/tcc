@@ -108,15 +108,15 @@ function Login() {
               login: validateLogin(data.status),
             }));
           }
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          console.log("erro", error);
+          setErrors((prev) => ({
+            ...prev,
+            password: "Algo deu errado",
+          }));
         });
-      // .catch((error) => {
-      //   setIsLoading(false);
-      //   console.log("erro", error);
-      //   setErrors((prev) => ({
-      //     ...prev,
-      //     password: "Erro ao conectar com o servidor",
-      //   }));
-      // });
     }
   }
 
@@ -126,19 +126,12 @@ function Login() {
 
   return (
     <div className="login-container">
-      <h1
-        className="logo"
-        onClick={() => {
-          navigate("/");
-        }}
-      >
-        MarketPlace
-      </h1>
-
       <div className="login-card">
         <div className="login-header">
-          <h1 className="login-title">Bem-vindo</h1>
-          <p className="login-subtitle">Acesse sua conta para continuar</p>
+          <h1 className="login-title" onClick={() => navigate("/")}>
+            DNV WEAR
+          </h1>
+          <p className="login-subtitle">Faça login em sua conta ou crie uma!</p>
         </div>
 
         <form onSubmit={logar} className="login-form">
@@ -147,7 +140,7 @@ function Login() {
               Email
             </label>
             <div className="input-wrapper">
-              <Mail className="input-icon" size={20} />
+              <Mail className="input-icon" size={18} color="black" />
               <input
                 type="email"
                 id="email"
@@ -170,7 +163,7 @@ function Login() {
               Senha
             </label>
             <div className="input-wrapper">
-              <Lock className="input-icon" size={20} />
+              <Lock className="input-icon" size={18} color="black" />
               <input
                 type={showPassword ? "text" : "password"}
                 id="password"
@@ -215,7 +208,9 @@ function Login() {
         </form>
 
         <div className="divider">
+          <hr />
           <span className="divider-text">ou</span>
+          <hr />
         </div>
 
         <div className="signup-links">

@@ -28,6 +28,7 @@ import {
 import PixPayment from "../../componentes/PixPayment/PixPayment.jsx";
 import CardPayment from "../../componentes/CardPayment/CardPayment.jsx";
 import { useSales } from "../../context/SalesContext.jsx";
+import Header from "../../componentes/Header/Header.jsx";
 
 function CheckoutPage() {
   // useSessionVerify();
@@ -47,7 +48,6 @@ function CheckoutPage() {
     fetch(`http://localhost/tcc/API/GET?id=${query}`)
       .then((r) => r.json())
       .then((data) => {
-        // console.clear();
         console.log("itens da API", data);
         if (data) {
           const newProdutos = data.map((item) => {
@@ -56,6 +56,8 @@ function CheckoutPage() {
             return {
               ...item,
               quantidade: saleItem ? saleItem.quantidade_item : 0,
+              cor: saleItem?.cor_item,
+              tamanho: saleItem?.tamanho_item,
             };
           });
 
@@ -118,7 +120,7 @@ function CheckoutPage() {
     form.append("cpf_cliente", user.cpf);
     form.append("id_loja", JSON.stringify(idLojas));
     form.append("id_cartao", idCartao ?? null);
-    form.append("endereco_entrega", user.address);
+    form.append("endereco_entrega", user.address ?? null);
     form.append("forma_pagamento", payment);
     form.append("parcelas", parcelas);
     form.append("valor_parcelas", idCartao ? total / parcelas : null);
@@ -131,7 +133,9 @@ function CheckoutPage() {
     })
       .then((r) => r.json())
       .then((data) => {
-        console.clear();
+        // console.clear();
+        console.log("Formulario", produtos);
+
         console.log("Compra finalizada", data);
 
         if (data.success === true) {
@@ -163,7 +167,7 @@ function CheckoutPage() {
     },
   ];
 
-  if (!user) {
+  if (!user?.id) {
     return <Loading />;
   }
 
@@ -198,12 +202,9 @@ function CheckoutPage() {
       )}
 
       <div className="container">
-        <BackButton />
+        {/* <BackButton /> */}
 
-        <div className="header">
-          <h1>Finalizar Compra</h1>
-          <p>Confirme seus dados e finalize seu pedido</p>
-        </div>
+        <Header title={"Finalizar Compra"} />
 
         <div className="checkout-grid">
           {/* Produtos - Ocupa 2 colunas no desktop */}
@@ -211,7 +212,7 @@ function CheckoutPage() {
             <div className="card">
               <div className="card-header">
                 <div className="card-header-content">
-                  <div className="card-icon blue">
+                  <div className="card-icon">
                     <ShoppingCart />
                   </div>
                   <h2 className="card-title">
@@ -238,6 +239,11 @@ function CheckoutPage() {
 
                       <div className="cart-item-info">
                         <h3 className="cart-item-name">{item.productName}</h3>
+
+                        <div className="cart-item-detail">
+                          <span>Cor: {item.cor}</span>
+                          <span>Tamanho: {item.tamanho}</span>
+                        </div>
 
                         <div className="cart-item-details">
                           <div className="cart-item-detail">
@@ -325,14 +331,14 @@ function CheckoutPage() {
             <div className="card">
               <div className="card-header">
                 <div className="card-header-content">
-                  <div className="card-icon green">
+                  <div className="card-icon">
                     <MapPin />
                   </div>
                   <h2 className="card-title">Endereço de Entrega</h2>
                 </div>
               </div>
 
-              {user.cep ? (
+              {user?.cep ? (
                 <div className="card-content">
                   <div className="address-info">
                     <div className="address-name">{user?.name}</div>
@@ -381,7 +387,7 @@ function CheckoutPage() {
             <div className="card">
               <div className="card-header">
                 <div className="card-header-content">
-                  <div className="card-icon purple">
+                  <div className="card-icon">
                     <CreditCard />
                   </div>
                   <h2 className="card-title">Forma de Pagamento</h2>
@@ -436,9 +442,7 @@ function CheckoutPage() {
 
                 <button
                   onClick={() => {
-                    user?.endereco ?? user?.address
-                      ? handleSubmit()
-                      : navigate("/cadastrarcep");
+                    user?.cep ? handleSubmit() : navigate("/cadastrarcep");
                   }}
                   disabled={isProcessing}
                   className="btn-checkout"

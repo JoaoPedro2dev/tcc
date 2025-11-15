@@ -5,9 +5,9 @@ import "slick-carousel/slick/slick-theme.css";
 import "./carousel.css";
 
 const imagens = [
-  "http://localhost/tcc/API/UPLOADS/carroussel/card.jpg",
-  "http://localhost/tcc/API/UPLOADS/carroussel/cart.jpg",
-  "http://localhost/tcc/API/UPLOADS/carroussel/shooping.jpg",
+  "http://localhost/tcc/API/UPLOADS/carroussel/anuncio-dnv-wear-1",
+  "http://localhost/tcc/API/UPLOADS/carroussel/anuncio-dnv-wear-2",
+  "http://localhost/tcc/API/UPLOADS/carroussel/anuncio-dnv-wear-3",
 ];
 
 // Removido o className herdado do slick

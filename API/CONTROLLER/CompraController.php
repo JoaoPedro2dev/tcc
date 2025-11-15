@@ -16,7 +16,6 @@
         static function getById($id_compra){
             return ((new Compra())->getById($id_compra));
         }
-
     }
 
 ?>

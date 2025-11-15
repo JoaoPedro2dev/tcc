@@ -4,7 +4,6 @@ import Header from "../../componentes/Header/Header.jsx";
 import {
   CircleFadingPlus,
   CirclePlus,
-  MapPinPlus,
   PackageSearch,
   Pencil,
 } from "lucide-react";
@@ -14,29 +13,32 @@ import { useUser } from "../../context/UserContext.jsx";
 
 function PaginaVendedor() {
   const navigate = useNavigate();
-
   const [searchParams] = useSearchParams();
   const sellerUrl = searchParams.get("seller");
 
   const { user } = useUser();
-  const admin = true;
+  // const admin = user?.id_vendedor = produtos;
 
   const [loja, setLoja] = useState({});
   const [dataInicioFormat, setDataInicioFormat] = useState("");
   const [estaAbertaAgora, setEstaAbertaAgora] = useState(false);
 
   const [produtos, setProdutos] = useState([]);
+  const [todosProdutos, setTodosProdutos] = useState([]);
+
+  // novo estado de filtro
+  const [filtroAtivo, setFiltroAtivo] = useState("todos");
 
   const hoje = new Date();
   const diaSemana = hoje.getDay();
   const horaAtual = hoje.getHours();
+  const [admin, setAdmin] = useState(false);
 
   useEffect(() => {
     fetch(`http://localhost/tcc/API/GET/vendedor?seller=${sellerUrl}`)
       .then((r) => r.json())
       .then((data) => {
         setLoja(data);
-        // data.seller_id = parseInt(data.seller_id);
 
         fetch("http://localhost/tcc/API/GET/seller_products", {
           method: "POST",
@@ -46,6 +48,7 @@ function PaginaVendedor() {
           .then((data) => {
             console.log(data);
             setProdutos(data);
+            setTodosProdutos(data);
           });
       });
   }, []);
@@ -72,15 +75,36 @@ function PaginaVendedor() {
     setEstaAbertaAgora(abertaHoje && horaAtual >= abre && horaAtual < fecha);
   }, [loja]);
 
+  useEffect(() => {
+    setAdmin(user?.seller_id === loja.id ? true : false);
+  }, [user, loja]);
+
   function addProductLink() {
     navigate("/paginavendedor/adicionar-produto");
   }
 
   if (!loja?.id) {
-    return;
+    return null;
   }
 
-  console.log("usuario", user);
+  // Deriva produtos filtrados (sem alterar o array original)
+  const produtosFiltrados = todosProdutos?.filter((p) => {
+    if (filtroAtivo === "sem_stock") {
+      return (
+        p.itenStock?.reduce(
+          (total, item) => total + Number(item.qnt || 0),
+          0
+        ) || 0
+      );
+    }
+
+    if (filtroAtivo === "todos") return true;
+    if (filtroAtivo === "em_promocao") return p.promotionPrice > 0;
+    if (filtroAtivo === "frete_gratis") return p.shippingCost === 0;
+    // comparação direta, mantendo acentos e letras maiúsculas
+    return p.category === filtroAtivo;
+  });
+
   return (
     <div id="pagina-vendedor">
       <Header />
@@ -107,7 +131,7 @@ function PaginaVendedor() {
             {loja.itens_sold > 5 && <p>Mais de {loja.itens_sold - 1} vendas</p>}
             {loja.itens_sold > 5 && <span>|</span>}
             <p>
-              {produtos?.length > 1 && `${produtos.length} Produtos á venda`}
+              {produtos?.length > 1 && `${produtos.length} Produtos à venda`}
             </p>
           </div>
 
@@ -115,7 +139,7 @@ function PaginaVendedor() {
         </div>
         {user?.nivel_acesso === "vendedor" && user.id === loja.id_pessoa && (
           <button
-            className="borderRadius boxShadow editar-pencil"
+            className="borderRadius editar-pencil"
             onClick={() => {
               navigate("/paginavendedor/editar-perfil");
             }}
@@ -126,10 +150,10 @@ function PaginaVendedor() {
       </section>
 
       <main>
-        <aside className="borderRadius boxShadow">
+        <aside className="borderRadius">
           <p className="descricao">
             {loja.seller_description ??
-              `Olá somos ${loja.store_name}, e Convidamos-lhe  para conhecer nossos produtos feitos com carinho para você!`}
+              `Olá, somos ${loja.store_name}, e convidamos você a conhecer nossos produtos feitos com carinho!`}
           </p>
 
           <hr />
@@ -144,8 +168,7 @@ function PaginaVendedor() {
           <div>
             <p>
               <strong>Horário de Funcionamento:</strong>{" "}
-              {`${loja.open_hours}
-              às ${loja.close_hours}`}
+              {`${loja.open_hours} às ${loja.close_hours}`}
             </p>
 
             {loja.telefone_contato && (
@@ -175,42 +198,102 @@ function PaginaVendedor() {
 
               {user?.nivel_acesso === "vendedor" &&
                 user?.id === loja.id_pessoa && (
-                  <button id="address-add">
-                    Mudar endereço <MapPinPlus />
+                  <button
+                    id="address-add"
+                    onClick={() => {
+                      navigate("/paginavendedor/editar-perfil");
+                    }}
+                  >
+                    Editar Perfil <Pencil />
                   </button>
                 )}
             </>
           ) : (
             user?.nivel_acesso === "vendedor" &&
             user?.id === loja.id_pessoa && (
-              <button id="address-add">
-                Adicionar endereço <MapPinPlus />
+              <button
+                id="address-add"
+                onClick={() => {
+                  navigate("/paginavendedor/editar-perfil");
+                }}
+              >
+                Editar perfil <Pencil />
               </button>
             )
           )}
         </aside>
 
-        <section className="borderRadius boxShadow">
-          {produtos?.length > 0 ? (
+        <section className="borderRadius">
+          {todosProdutos?.length > 0 ? (
             <div>
               <h2>Produtos à venda</h2>
+
+              {/* --- MENU DE FILTRO MODERNO --- */}
+              <div className="menu-filtro">
+                {[
+                  { label: "Todos", value: "todos" },
+                  { label: "Sem stock", value: "sem_stock" },
+                  { label: "Camisas", value: "Camisas" },
+                  { label: "Calças", value: "Calças" },
+                  { label: "Calçados", value: "Calçados" },
+                  { label: "Acessórios", value: "Acessórios" },
+                  { label: "Shorts", value: "Shorts" },
+                  { label: "Infantil", value: "Infantil" },
+                  { label: "Em promoção", value: "em_promocao" },
+                  { label: "Frete grátis", value: "frete_gratis" },
+                ].map((filtro) =>
+                  filtro.value === "sem_stock" ? (
+                    admin && (
+                      <button
+                        key={filtro.value}
+                        className={`filtro-botao stock ${
+                          filtroAtivo === filtro.value ? "ativo" : ""
+                        }`}
+                        onClick={() => setFiltroAtivo(filtro.value)}
+                      >
+                        {filtro.label}
+                      </button>
+                    )
+                  ) : (
+                    <button
+                      key={filtro.value}
+                      className={`filtro-botao ${
+                        filtroAtivo === filtro.value ? "ativo" : ""
+                      }`}
+                      onClick={() => setFiltroAtivo(filtro.value)}
+                    >
+                      {filtro.label}
+                    </button>
+                  )
+                )}
+              </div>
+              {/* --- FIM MENU DE FILTRO --- */}
+
               <div className="lista-cards">
                 {admin && (
                   <div id="addItem" onClick={addProductLink}>
                     <CircleFadingPlus size={50} />
-                    {/* <CircleFadingPlus /> */}
                     <p className="bold">Adicionar produto</p>
                   </div>
                 )}
 
-                {produtos.map((produto) => (
-                  <Card
-                    key={produto.id}
-                    item={produto}
-                    salesPage={admin && true}
-                    isProfile={true}
-                  />
-                ))}
+                {produtosFiltrados.length > 0 ? (
+                  produtosFiltrados.map((produto) => (
+                    <Card
+                      key={produto.id}
+                      item={produto}
+                      salesPage={admin && true}
+                      isProfile={true}
+                      showPorcentage={true}
+                    />
+                  ))
+                ) : (
+                  <p>
+                    {filtroAtivo === "sem_stock"
+                      ? "Não encontramos produtos sem stock"
+                      : "Não encontramos produtos para este filtro"}
+                  </p>
+                )}
               </div>
             </div>
           ) : user?.nivel_acesso === "vendedor" &&
@@ -218,12 +301,12 @@ function PaginaVendedor() {
             <div className="noItens">
               <h2 className="textCenter">
                 {admin ? "Você ainda" : "Este vendedor"} ainda não possui
-                produtos á venda
+                produtos à venda
               </h2>
 
               {admin && (
                 <p className="colorGray textCenter">
-                  Comece a vender conosco e desfrute de nossa tecnologia. sera
+                  Comece a vender conosco e desfrute de nossa tecnologia. Será
                   um prazer trabalhar com você.
                 </p>
               )}
@@ -232,13 +315,15 @@ function PaginaVendedor() {
 
               {admin && (
                 <button className="borderRadius" onClick={addProductLink}>
-                  <CirclePlus /> Adiconar produto
+                  <CirclePlus /> Adicionar produto
                 </button>
               )}
             </div>
           ) : (
-            <div>
-              <h2>Este vendedor ainda não possui produtos</h2>
+            <div id="no_seller-itens-container">
+              <div id="no-seller-itens">
+                <p>Este vendedor ainda não possui produtos à venda</p>
+              </div>
             </div>
           )}
         </section>

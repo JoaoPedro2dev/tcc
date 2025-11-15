@@ -5,7 +5,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -23,68 +23,70 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   text-align: center;
   animation: fadeInScale 0.3s ease;
-}
 
-/* Botão fechar (X) */
-.popup-close {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-/* Mensagem */
-.popup-message {
-  margin: 20px 0;
-  font-size: 16px;
-  color: #333;
-}
-
-/* Ações */
-.popup-actions {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-}
-
-.popup-btn {
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 15px;
-  cursor: pointer;
-  border: none;
-  transition: 0.2s;
-}
-
-.popup-btn.confirm {
-  background-color: #28a745;
-  color: white;
-}
-
-.popup-btn.confirm:hover {
-  background-color: #218838;
-}
-
-.popup-btn.cancel {
-  background-color: #dc3545;
-  color: white;
-}
-
-.popup-btn.cancel:hover {
-  background-color: #c82333;
-}
-
-/* Animação */
-@keyframes fadeInScale {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
+  /* Botão fechar (X) */
+  .popup-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
   }
-  to {
-    opacity: 1;
-    transform: scale(1);
+
+  /* Mensagem */
+  .popup-message {
+    margin: 20px 0;
+    font-size: 16px;
+    color: #333;
+  }
+
+  /* Ações */
+  .popup-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+  }
+
+  button {
+    width: 50%;
+    text-align: center;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s;
+  }
+
+  .btn-confirm {
+    background-color: #28a745 !important;
+    color: white;
+  }
+
+  .popup-btn.confirm:hover {
+    background-color: #218838;
+  }
+
+  .btn-cancel {
+    background-color: #dc3545 !important;
+    color: white;
+  }
+
+  .popup-btn.cancel:hover {
+    background-color: #c82333;
+  }
+
+  /* Animação */
+  @keyframes fadeInScale {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 }

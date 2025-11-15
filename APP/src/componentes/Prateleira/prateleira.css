@@ -1,5 +1,39 @@
+/* .prateleira .carroussel .slick-list {
+  overflow-x: auto !important;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 🔹 Esconde a barra de rolagem, mas mantém o scroll funcional */
+.prateleira .carroussel .slick-list::-webkit-scrollbar {
+  display: none; /* Chrome, Safari e Edge */
+}
+
 .prateleira .carroussel .slick-list {
-  padding: 0;
+  -ms-overflow-style: none; /* IE e Edge antigo */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Garante que o carrossel comece sempre do lado esquerdo */
+.prateleira .carroussel .slick-track {
+  /* min-width: 100% !important; */
+  width: 100%;
+
+  display: flex !important;
+  justify-content: flex-start !important;
+  /* background-color: blue; */
+
+  gap: 0 !important ;
+}
+
+/* Remove centralização automática de slides únicos */
+.prateleira .carroussel .slick-slide {
+  /* min-width: 100% !important; */
+  width: 100%;
+  display: flex !important;
+  gap: 0 !important;
+  justify-content: flex-start !important;
+  /* background-color: red; */
 }
 
 /* .carroussel {
@@ -10,17 +44,36 @@
 
 .prateleira {
   position: relative;
-  border-radius: 10px;
   background-color: #fff;
   padding: 25px 30px;
+  /* border: 1px solid #ccc; */
+  border-radius: 10px;
+}
+
+.prateleira hr {
+  margin-top: 40px !important;
+  height: 1.8px;
+  background-color: #c2c2c2cc;
+  border-radius: 10px;
+  border: none;
+  transition: 0.2s;
+}
+
+/* hr.total-divisa {
+  width: 100%;
+} */
+
+hr.divisa {
+  width: 87%;
 }
 
 .carroussel {
   min-width: 100%;
 }
 
-.prateleira > h2 {
-  margin-bottom: 15px;
+.prateleira > h1 {
+  margin-bottom: 30px;
+  text-transform: uppercase;
 }
 
 /* .carroussel {
@@ -37,13 +90,16 @@
 
 .custom-arrow-prateleira {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.7);
+  /* top: 50%; */
+  bottom: -18%;
+  /* transform: translateY(-50%); */
+  /* background: rgba(0, 0, 0, 0.7); */
   border-radius: 50%;
+  color: #c2c2c2cc;
+  border: 2px solid;
 
-  width: 60px;
-  height: 60px;
+  width: 55px;
+  height: 55px;
 
   display: flex;
   align-items: center;
@@ -51,14 +107,23 @@
 
   cursor: pointer;
   z-index: 2;
+  transition: 0.2s;
+}
+
+.custom-arrow-prateleira:hover {
+  color: black;
+}
+
+body:has(.custom-arrow-prateleira:hover) hr.divisa {
+  background-color: black;
 }
 
 .custom-arrow-prateleira.prev-prateleira {
-  left: -65px;
+  left: 89%;
 }
 
 .custom-arrow-prateleira.next-prateleira {
-  right: -60px;
+  right: 0;
 }
 
 @media screen and (max-width: 768px) {

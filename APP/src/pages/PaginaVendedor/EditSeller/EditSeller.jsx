@@ -5,12 +5,15 @@ import { Save, Upload, X, ArrowLeft, Search, MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./EditSeller.css";
 import { useUser } from "../../../context/UserContext";
+import Header from "../../../componentes/Header/Header";
+import Loading from "../../../componentes/Loading/Loading";
+import { formatPhone } from "../../../helpers/functions";
+import FeedbackPopup from "../../../componentes/Feedback/Feedback";
 
 function EditarPerfilVendedor() {
   const navigate = useNavigate();
 
   const { user } = useUser();
-
   const [formData, setFormData] = useState({
     store_name: "",
     seller_description: "",
@@ -29,6 +32,7 @@ function EditarPerfilVendedor() {
     complemento: null,
     uf: "",
   });
+  const [errors, setErrors] = useState();
 
   const [previewProfilePhoto, setPreviewProfilePhoto] = useState("");
   const [previewBanner, setPreviewBanner] = useState("");
@@ -42,24 +46,49 @@ function EditarPerfilVendedor() {
   const [numeroResidencia, setNumeroResidencia] = useState("");
   const [numeroError, setNumeroError] = useState("");
 
+  const [success, setSuccess] = useState(false);
+
   useEffect(() => {
-    fetch("http://localhost/tcc/API/GET/vendedor?seller=dnvwear_teste_para_e")
+    if (!user?.url) return;
+
+    fetch(`http://localhost/tcc/API/GET/vendedor?seller=${user?.url}`)
       .then((r) => r.json())
       .then((data) => {
-        console.log(data);
+        console.log("dados user", data);
         setFormData(data);
         setPreviewProfilePhoto(data.profile_photo);
         setPreviewBanner(data.banner);
       });
     // .catch((error) => console.error(error));
-  }, []);
+  }, [user]);
+
+  useEffect(() => {
+    if (errors && Object.keys(errors).length > 0) {
+      const scrollElement = document.querySelector(".error-border");
+      if (scrollElement) {
+        setTimeout(() => {
+          const offset = 200; // pixels acima do elemento
+          const elementPosition =
+            scrollElement.getBoundingClientRect().top + window.scrollY;
+          window.scrollTo({
+            top: elementPosition - offset,
+            behavior: "smooth",
+          });
+        }, 100); // pequena pausa pra estabilizar o layout
+      }
+    }
+  }, [errors]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === "checkbox" ? (checked ? "sim" : "nao") : value,
     }));
+
+    if (errors?.[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   const handleImageChange = (e, type) => {
@@ -188,7 +217,7 @@ function EditarPerfilVendedor() {
 
     form.append("id", user.id);
 
-    console.log("dados front", formData);
+    // console.log("dados front", formData);
 
     fetch("http://localhost/tcc/API/POST/update/vendedor", {
       method: "POST",
@@ -197,7 +226,18 @@ function EditarPerfilVendedor() {
       .then((r) => r.json())
       .then((data) => {
         console.log("data", data);
+
+        if (data.success == false) {
+          const newError = {};
+          newError[data.field] = data.status;
+          setErrors(newError);
+          setIsSaving(false);
+
+          return;
+        }
+
         setIsSaving(false);
+        setSuccess(true);
       });
     // .catch((error) => {
     //   console.error(error);
@@ -210,8 +250,13 @@ function EditarPerfilVendedor() {
     }
   };
 
-  if (!user?.id) {
-    return <></>;
+  // if (!user?.id) {
+  //   window.location.href = "/login";
+  //   // return;
+  // }
+
+  if (!formData?.id) {
+    return <Loading />;
   }
 
   return (
@@ -316,13 +361,17 @@ function EditarPerfilVendedor() {
         </div>
       )}
 
-      <div className="edit-header">
-        <button className="btn-back" onClick={handleCancel}>
-          <ArrowLeft size={20} />
-          Voltar
-        </button>
-        <h1>Editar Perfil da Loja</h1>
-      </div>
+      {success && (
+        <FeedbackPopup
+          message={"Suas alterações foram salvas com sucesso"}
+          type="success"
+          onClose={() => {
+            setSuccess(false);
+          }}
+        />
+      )}
+
+      <Header title={"Editar Perfil"} />
 
       <form onSubmit={handleSubmit}>
         {/* Banner Section */}
@@ -410,16 +459,21 @@ function EditarPerfilVendedor() {
               id="store_name"
               name="store_name"
               value={formData.store_name}
+              className={errors?.store_name ? "error-border" : ""}
               onChange={handleInputChange}
               required
               placeholder="Digite o nome da sua loja"
             />
+            {errors?.store_name && (
+              <span className="error-message">{errors?.store_name}</span>
+            )}
           </div>
 
           <div className="form-group">
             <label htmlFor="seller_description">Descrição da Loja</label>
             <textarea
               id="seller_description"
+              className={errors?.seller_description ? "error-border" : ""}
               name="seller_description"
               value={formData.seller_description ?? ""}
               onChange={handleInputChange}
@@ -429,6 +483,11 @@ function EditarPerfilVendedor() {
             <span className="char-count">
               {formData.seller_description?.length || 0} caracteres
             </span>
+            {errors?.seller_description && (
+              <span className="error-message">
+                {errors?.seller_description}
+              </span>
+            )}
           </div>
         </section>
 
@@ -441,11 +500,19 @@ function EditarPerfilVendedor() {
             <input
               type="tel"
               id="telefone_contato"
+              className={errors?.telefone_contato ? "error-border" : ""}
               name="telefone_contato"
-              value={formData.telefone_contato ?? ""}
+              value={
+                formData?.telefone_contato
+                  ? formatPhone(formData?.telefone_contato)
+                  : ""
+              }
               onChange={handleInputChange}
               placeholder="(00) 00000-0000"
             />
+            {errors?.telefone_contato && (
+              <span className="error-message">{errors?.telefone_contato}</span>
+            )}
           </div>
 
           <div className="form-group">
@@ -454,12 +521,16 @@ function EditarPerfilVendedor() {
               <input
                 type="text"
                 id="store_address"
+                className={errors?.store_address ? "error-border" : ""}
                 name="store_address"
                 value={formData.store_address ?? ""}
                 onChange={handleInputChange}
                 placeholder="Rua, Número - Bairro, Cidade - UF, CEP"
                 readOnly
               />
+              {errors?.store_address && (
+                <span className="error-message">{errors?.store_address}</span>
+              )}
               <button
                 type="button"
                 className="btn-search-cep"
@@ -478,33 +549,42 @@ function EditarPerfilVendedor() {
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="open_hours">Horário de Abertura *</label>
+              <label htmlFor="open_hours">Horário de abrir *</label>
               <input
                 type="time"
                 id="open_hours"
+                className={errors?.open_hours ? "error-border" : ""}
                 name="open_hours"
                 value={formData.open_hours}
                 onChange={handleInputChange}
                 required
               />
+              {errors?.open_hours && (
+                <span className="error-message">{errors?.open_hours}</span>
+              )}
             </div>
 
             <div className="form-group">
-              <label htmlFor="close_hours">Horário de Fechamento *</label>
+              <label htmlFor="close_hours">Horário de fechar *</label>
               <input
                 type="time"
                 id="close_hours"
+                className={errors?.close_hours ? "error-border" : ""}
                 name="close_hours"
                 value={formData.close_hours}
                 onChange={handleInputChange}
                 required
               />
+              {errors?.close_hours && (
+                <span className="error-message">{errors?.close_hours}</span>
+              )}
             </div>
           </div>
 
           <div className="form-group checkbox-group">
             <label className="checkbox-label">
               <input
+                className={errors?.weekend ? "error-border" : ""}
                 type="checkbox"
                 name="weekend"
                 checked={formData.weekend === "sim"}
@@ -512,6 +592,9 @@ function EditarPerfilVendedor() {
               />
               <span>Atende nos finais de semana</span>
             </label>
+            {errors?.weekend && (
+              <span className="error-message">{errors?.weekend}</span>
+            )}
           </div>
         </section>
 
@@ -523,6 +606,7 @@ function EditarPerfilVendedor() {
             onClick={handleCancel}
             disabled={isSaving}
           >
+            <X size={20} />
             Cancelar
           </button>
           <button type="submit" className="btn-save" disabled={isSaving}>

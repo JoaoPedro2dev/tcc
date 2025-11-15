@@ -16,10 +16,7 @@ function PriceLogistics({ formData, errors = false, removeError, onChange }) {
   }, [errors]);
 
   return (
-    <section
-      id="priceLogisticsBody"
-      className="basicsInfos borderRadius boxShadow"
-    >
+    <section id="priceLogisticsBody" className="basicsInfos borderRadius">
       <h1>Preço e logística</h1>
       <hr />
 

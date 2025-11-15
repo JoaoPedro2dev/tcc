@@ -11,6 +11,7 @@ import { ArrowLeft, Tag, Calendar, DollarSign, Save } from "lucide-react";
 import "./adicionarPromocao.css";
 import { calcStockTotal, monetaryFormatting } from "../../helpers/functions";
 import FeedbackPopup from "../../componentes/Feedback/Feedback";
+import Header from "../../componentes/Header/Header";
 
 const AdicionarPromocao = () => {
   const navigate = useNavigate();
@@ -230,16 +231,7 @@ const AdicionarPromocao = () => {
         />
       )}
 
-      <div className="promocao-header">
-        <button onClick={() => navigate(-1)} className="btn-voltar">
-          <ArrowLeft size={20} />
-          Voltar
-        </button>
-        <h1>
-          <Tag size={28} />
-          Adicionar Promoção
-        </h1>
-      </div>
+      <Header title={"Adicioanar Promoção"} />
 
       <div className="promocao-content">
         {/* Card do Produto */}

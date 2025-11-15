@@ -10,8 +10,56 @@
   gap: 10px;
 }
 
+#productSizeBody .colors-container {
+  max-height: 200px;
+  min-width: 50%;
+  /* max-width: fit-content; */
+  overflow-y: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+#productSizeBody .sizes-container {
+  max-height: 200px;
+  width: 50%;
+  max-width: 50%;
+  overflow-y: auto;
+}
+
+#productSizeBody .stocks-container {
+  width: 100%;
+  /* display: flex; */
+  /* flex-direction: row !important; */
+  /* flex-wrap: wrap; */
+}
+
+#productSizeBody .stocks-container .stocks-cards {
+  width: 100%;
+  gap: 20px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#productSizeBody .stocks-container .stocks-cards > section {
+  width: calc(50% - 10px);
+  max-width: 50%;
+  border: 1px solid black;
+  /* background-color: antiquewhite; */
+  padding: 15px;
+  gap: 20px;
+}
+
+#productSizeBody > div > div {
+  /* background-color: antiquewhite; */
+  min-width: 50%;
+  width: 50%;
+}
+
 #productSizeBody > div > div > div {
   display: flex;
+  /* max-height: fit-content; */
+  min-width: 100%;
   flex-wrap: wrap;
 }
 
@@ -22,33 +70,33 @@
   gap: 10px;
 }
 
-#productSizeBody > div > section {
-  border: 1px solid #ccc;
-  padding: 15px;
-}
-
-#productSizeBody > div > section > p {
+#productSizeBody .stocks-container .stocks-cards > section > p {
+  width: 100%;
   display: flex;
-  gap: 10px;
+  gap: 0px;
   justify-content: start;
   align-items: center;
 }
 
-#productSizeBody > div > section > p > span {
+#productSizeBody .stocks-container .stocks-cards > section > p > span {
   min-width: 18px;
   height: 18px;
-  border: 1px solid gray;
+  border: 1px solid black !important;
   border-radius: 50%;
 }
 
-#productSizeBody > div > section > div {
+#productSizeBody .stocks-container .stocks-cards > section > div {
   display: flex;
+  flex-direction: row;
+  width: 100%;
   gap: 10px;
   flex-wrap: wrap;
+  margin: 0 !important;
+
   /* background-color: rgb(8, 87, 61); */
 }
 
-#productSizeBody > div > section > div > p {
+#productSizeBody .stocks-container .stocks-cards > section > div > p {
   display: flex;
   flex-direction: column;
   width: calc(calc(100% / 3) - 6.7px);

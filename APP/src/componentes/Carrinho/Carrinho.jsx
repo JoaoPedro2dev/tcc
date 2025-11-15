@@ -55,6 +55,8 @@ function Carrinho({ funcao }) {
         }).format(soma)
       );
     }
+
+    // console.log("qnt maxima", maxCount());
   }, [products]);
 
   const navigate = useNavigate();
@@ -64,7 +66,9 @@ function Carrinho({ funcao }) {
   function handleBuy() {
     const array = products.map((item) => ({
       id_item: item.id,
-      quantidade_item: 1,
+      cor_item: item.cor,
+      tamanho_item: item.tamanho,
+      quantidade_item: item.quantidade_item ?? 1,
     }));
 
     setSales(array);

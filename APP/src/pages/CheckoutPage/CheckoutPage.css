@@ -2,10 +2,11 @@
 .checkout-page {
   /* max-width: 100vw; */
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  /* background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); */
 }
 
-.checkout-grid > div {
+.checkout-grid {
+  padding: 40px 8%;
 }
 
 .checkout-grid > div:first-child {
@@ -14,7 +15,7 @@
 }
 
 .checkout-grid > div:first-child > .card {
-  top: 10px;
+  top: 100px;
   position: sticky;
 }
 
@@ -26,25 +27,7 @@
 .container {
   max-width: 100vw;
   /* margin: 0 auto; */
-  padding: 4rem 10rem;
-}
-
-/* Header */
-.header {
-  margin-bottom: 3rem;
-  text-align: center;
-}
-
-.header h1 {
-  font-size: 2.25rem;
-  font-weight: 700;
-  color: #111827;
-  margin-bottom: 0.5rem;
-}
-
-.header p {
-  color: #6b7280;
-  font-size: 1rem;
+  /* padding: 0 8%; */
 }
 
 /* Grid layout */
@@ -68,8 +51,8 @@
 
   background: white;
   border-radius: 1rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  border: 1px solid #f3f4f6;
+  /* box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); */
+  /* border: 1px solid #f3f4f6; */
   overflow: hidden;
 
   min-height: fit-content;
@@ -93,9 +76,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  background-color: #111827;
+  color: #fff;
 }
 
-.card-icon.blue {
+/* .card-icon.blue {
   background-color: #dbeafe;
 }
 
@@ -105,23 +91,11 @@
 
 .card-icon.purple {
   background-color: #e9d5ff;
-}
+} */
 
 .card-icon svg {
   width: 1.25rem;
   height: 1.25rem;
-}
-
-.card-icon.blue svg {
-  color: #2563eb;
-}
-
-.card-icon.green svg {
-  color: #059669;
-}
-
-.card-icon.purple svg {
-  color: #7c3aed;
 }
 
 .card-title {
@@ -190,14 +164,13 @@
 .cart-item-name {
   font-weight: 600;
   color: #111827;
-  margin-bottom: 0.5rem;
   font-size: 1.125rem;
 }
 
 .cart-item-details {
-  display: flex;
+  /* display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0px !important; */
 }
 
 .cart-item-detail {
@@ -206,6 +179,8 @@
   gap: 0.5rem;
   font-size: 0.875rem;
   color: #6b7280;
+  margin-top: 3px;
+  margin-bottom: 0.5rem;
 }
 
 .cart-item-detail svg {
@@ -219,7 +194,7 @@
 
 .cart-item-total {
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 500;
   color: #111827;
 }
 
@@ -237,7 +212,7 @@
 .cart-summary {
   border-top: 1px solid #f3f4f6;
   padding: 1.5rem;
-  background-color: #f9fafb;
+  background-color: #fff;
 }
 
 .summary-items {
@@ -531,10 +506,6 @@
 @media (max-width: 768px) {
   .container {
     padding: 1rem;
-  }
-
-  .header h1 {
-    font-size: 1.875rem;
   }
 
   .cart-item {

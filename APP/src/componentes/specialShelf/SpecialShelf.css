@@ -17,6 +17,35 @@
   width: 70%;
 }
 
+.specialShelf-container hr {
+  margin-top: 40px !important;
+  height: 1.8px;
+  background-color: #c2c2c2cc;
+  border-radius: 10px;
+  border: none;
+  transition: 0.2s;
+}
+
+.specialShelf-container hr.divisa {
+  width: 82%;
+}
+
+.specialShelf-container .custom-arrow-prateleira:hover {
+  color: black;
+}
+
+body:has(.custom-arrow-prateleira:hover) hr.divisa {
+  background-color: black;
+}
+
+.specialShelf-container .custom-arrow-prateleira.prev-prateleira {
+  left: 85%;
+}
+
+.specialShelf-container .custom-arrow-prateleira.next-prateleira {
+  right: 0;
+}
+
 /* --- Área das imagens do carrinho --- */
 .image-content {
   width: 100%;
@@ -60,12 +89,13 @@
 }
 
 .oferta-dia {
-  display: flex;
+  display: flex !important;
   flex-direction: column;
   align-items: center;
+  justify-content: start !important;
 }
 
-.oferta-dia > h2 {
+.oferta-dia > h1 {
   width: 100%;
-  text-align: left;
+  text-align: center;
 }

@@ -1,6 +1,8 @@
 <?php 
 
 namespace Model;
+
+use DAO\PessoasDAO;
 use DAO\VendedorDAO;
 use Exception;
 
@@ -81,26 +83,26 @@ class Vendedor extends Pessoa{
         $this->id_pessoa = $id_pessoa;
     }
 
-    public function setTelefone(?string $telefone): void {
-         if(!empty($telefone)){
+    public function setTelefoneContato(?string $telefone, ?int $id = 0): void {
+        if(!empty($telefone)){
             $telefone = preg_replace('/\D/', '', $telefone);;
             
-            // if((new ())->existsTelefone($telefone)){
-            //     throw new Exception(
-            //         json_encode(
-            //             ['success' => false,
-            //             'field' => 'telefone',
-            //             'status' => 'Este telefone já está em uso'],
-            //             JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
-            //         )
-            //     );
-            // }
+            if((new VendedorDAO())->existsTelefone($telefone, $id)){
+                throw new Exception(
+                    json_encode(
+                        ['success' => false,
+                        'field' => 'telefone_contato',
+                        'status' => 'Este telefone já está em uso'],
+                        JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+                    )
+                );
+            }
 
             if(strlen($telefone) < 11 || strlen($telefone) > 11){
                 throw new Exception(
                     json_encode(
                         ['success' => false,
-                        'field' => 'telefone',
+                        'field' => 'telefone_contato',
                         'status' => 'O telefone deve ter no minimo 11 digitos e no máximo 11'],
                         JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
                     ));

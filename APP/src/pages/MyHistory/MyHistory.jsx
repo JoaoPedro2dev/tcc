@@ -29,12 +29,13 @@ function MyHistory() {
         })
           .then((r) => r.json())
           .then((data) => {
+            console.log(data);
             if (data.length > 0) {
               setHistory(data);
-              console.log(data);
+              // console.log(data);
             }
-          })
-          .catch(() => setError("Erro ao buscar histórico."));
+          });
+        // .catch(() => setError("Erro ao buscar histórico."));
 
         setError(null);
       } catch (err) {
@@ -69,8 +70,9 @@ function MyHistory() {
 
   if (loading) {
     return (
-      <div className="page-container">
-        <Header />
+      <div className="histico-container">
+        <Header title={"Meu histórico"} />
+
         <div className="main-content">
           <div className="loading-container">
             <LoadingSpinner size="lg" />
@@ -84,7 +86,8 @@ function MyHistory() {
   if (error) {
     return (
       <div className="page-container">
-        <Header />
+        <Header title={"Meu histórico"} />
+
         <div className="main-content">
           <div className="error-container">
             <p className="error-message">{error}</p>
@@ -105,16 +108,16 @@ function MyHistory() {
   }
 
   return (
-    <div className="page-container">
-      <Header />
+    <div className="historico-container">
+      <Header title={"Meu histórico"} />
 
       <div className="main-content">
         {/* Page Header */}
         <div className="page-header">
-          <div className="page-title">
+          {/* <div className="page-title">
             <History className="title-icon" />
             <h1 className="title-text">Meu Histórico</h1>
-          </div>
+          </div> */}
 
           {/* Search */}
           <div className="filters-container">
@@ -170,11 +173,23 @@ function MyHistory() {
                   alt={item.productName}
                   className="history-img"
                 />
+
                 <div className="history-info">
                   <h3>{item.productName}</h3>
-                  <p className="history-price">
-                    {formatarMonetario(item.price)}
-                  </p>
+
+                  {item.promotionPrice ? (
+                    <>
+                      <p className="history-price">
+                        {formatarMonetario(item.price)}
+                      </p>
+                      <p>{formatarMonetario(item.promotionPrice)}</p>
+                    </>
+                  ) : (
+                    <p className="history-price">
+                      {formatarMonetario(item.price)}
+                    </p>
+                  )}
+
                   <button
                     onClick={(e) => {
                       e.stopPropagation();

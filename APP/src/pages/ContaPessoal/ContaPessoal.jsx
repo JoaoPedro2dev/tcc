@@ -170,6 +170,10 @@ function ContaPessoal() {
     e.preventDefault();
     setGeneralError("");
 
+    // setIsSubmitting(true);
+
+    // return;
+
     if (!validateForm()) {
       return;
     }
@@ -212,35 +216,16 @@ function ContaPessoal() {
     }
   };
 
-  const handleLoginNavigation = () => {
-    // Em um projeto real, você usaria:
-    // navigate('/login');
-    alert("Navegaria para a página de login");
-  };
-
-  const handleSellerRegistration = () => {
-    // Em um projeto real, você usaria:
-    // navigate('/seller-registration');
-    alert("Navegaria para cadastro de vendedor");
-  };
-
   return (
     <div className="registration-container" id="registroPage">
-      <h1
-        className="logo"
-        onClick={() => {
-          navigate("/");
-        }}
-      >
-        MarketPlace
-      </h1>
-
       <main className="main-content">
         <div className="registration-card">
           <div className="card-header">
-            <h2>Criar Conta</h2>
+            <h1 onClick={() => navigate("/login")}>DNV WEAR</h1>
             <p>Junte-se ao nosso marketplace</p>
           </div>
+
+          <hr />
 
           {generalError && <div className="general-error">{generalError}</div>}
 
@@ -389,25 +374,17 @@ function ContaPessoal() {
               className="submit-button"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Cadastrando..." : "Criar Conta"}
+              {isSubmitting ? (
+                <span className="spinner"></span>
+              ) : (
+                "Criar conta de usuario"
+              )}
             </button>
           </form>
 
           <div className="form-links">
-            <button
-              type="button"
-              className="link-button"
-              onClick={handleLoginNavigation}
-            >
-              Já tem uma conta? Faça login
-            </button>
-            <button
-              type="button"
-              className="link-button seller-link"
-              onClick={handleSellerRegistration}
-            >
-              Quer ser um vendedor? Registre-se
-            </button>
+            <a href="/login">Já tem uma conta? Faça login</a>
+            <a href="/contavendedor">Quer ser um vendedor? Registre-se</a>
           </div>
         </div>
       </main>

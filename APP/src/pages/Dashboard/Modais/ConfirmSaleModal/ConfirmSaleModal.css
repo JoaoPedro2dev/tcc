@@ -1,0 +1,89 @@
+#dashboard-container {
+  /* Estilos específicos do modal de confirmação */
+  .confirm-sale-info {
+    font-size: 0.875rem;
+    color: var(--color-gray-500);
+    margin-bottom: var(--spacing-4);
+  }
+
+  .confirm-sale-info-value {
+    font-weight: 500;
+    color: var(--color-gray-900);
+  }
+
+  .confirm-sale-form-group {
+    margin-bottom: var(--spacing-4);
+  }
+
+  .confirm-sale-address {
+    margin: 15px 0 20px 0;
+  }
+
+  .confirm-sale-address > span {
+    font-size: small;
+  }
+
+  .confirm-sale-address > p {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #555555;
+    margin-top: 5px;
+  }
+
+  .confirm-sale-form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-gray-900);
+    margin-bottom: var(--spacing-2);
+  }
+
+  .confirm-sale-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+
+  .confirm-sale-radio-label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    cursor: pointer;
+  }
+
+  .confirm-sale-radio-input {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--color-black);
+    cursor: pointer;
+  }
+
+  .confirm-sale-radio-text {
+    font-size: 0.875rem;
+    color: var(--color-gray-900);
+  }
+
+  .confirm-sale-text-input,
+  .confirm-sale-select {
+    width: 100%;
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: 0.875rem;
+    color: var(--color-gray-900);
+    background-color: var(--color-white);
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--border-radius);
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .confirm-sale-text-input::placeholder {
+    color: var(--color-gray-400);
+  }
+
+  .confirm-sale-text-input:focus,
+  .confirm-sale-select:focus {
+    border-color: var(--color-gray-900);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+  }
+}

@@ -14,6 +14,10 @@ use Model\Product;
             return ((new Product())->update($model));
         }
 
+        static function delete(int $id){
+            return ((new Product())->delete($id));
+        }
+
         public static function index(){
             return ((new Product())->selectAll());
         }
@@ -22,15 +26,15 @@ use Model\Product;
             return ((new Product())->getById($id));
         }
         
-        public static function selectSearch($search, $colors, $sizes, $genders, $conditions){
-            return ((new Product())->getBeLike($search, $colors, $sizes, $genders, $conditions));
+        public static function selectSearch($search, $colors, $sizes, $genders, $conditions, $categorias, $estilo){
+            return ((new Product())->getBeLike($search, $colors, $sizes, $genders, $conditions, $categorias, $estilo));
         }
 
         public static function getPromotionDay(){
             return ((new Product())->getPromotionDay());
         }
 
-        public static function getBySellerId(int $seller_id){
+        public static function getBySellerId($seller_id){
             return ((new Product())->getBySellerId($seller_id));
         }
 

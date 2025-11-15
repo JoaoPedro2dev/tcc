@@ -54,6 +54,13 @@ class VendedorDAO extends DAO{
         $stmt = parent::$conexao->prepare($sql);
         $stmt->execute([$caminhoFinal, $id]);
     }
+
+     public function existsTelefone(string $telefone, int $id = 0) : bool{
+        $sql = "SELECT COUNT(*) FROM vendedores WHERE telefone_contato = ? AND id != ?";
+        $stmt = parent::$conexao->prepare($sql);
+        $stmt->execute([$telefone, $id]);
+        return $stmt->fetchColumn() > 0;
+    }
 }
 
 ?>

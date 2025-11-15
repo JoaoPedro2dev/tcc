@@ -27,10 +27,11 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
+
     fetch("http://localhost/tcc/API/")
       .then((r) => r.json())
       .then((data) => {
-        setLoading(true);
         if (data) {
           setLoading(false);
           setDataProducts(data);

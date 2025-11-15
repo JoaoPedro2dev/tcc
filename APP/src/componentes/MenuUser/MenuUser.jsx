@@ -6,6 +6,7 @@ import {
   X,
   Headset,
   LogOut,
+  ThumbsUp,
 } from "lucide-react";
 import "./menuUser.css";
 import MenuCard from "./MenuCards/MenuCard";
@@ -47,21 +48,29 @@ function MenuUser({ funcao, name, access, userUrl }) {
 
         <MenuCard
           icon={<CircleUser className="menu-icon" />}
-          title={"Minha conta"}
+          title={"Minha Conta"}
           link={"/minhaConta"}
         />
 
         {access === "vendedor" && (
-          <MenuCard
-            icon={<Layout className="menu-icon" />}
-            title={"Painel"}
-            link={`/paginavendedor?seller=${userUrl}`}
-          />
+          <>
+            <MenuCard
+              icon={<ThumbsUp className="menu-icon" />}
+              title={"Meu Perfil"}
+              link={`/paginavendedor?seller=${userUrl}`}
+            />
+
+            <MenuCard
+              icon={<Layout className="menu-icon" />}
+              title={"Painel Administrativo"}
+              link={`/perfil-vendedor/dashboard`}
+            />
+          </>
         )}
 
         <MenuCard
           icon={<ShoppingBasket className="menu-icon" />}
-          title={"Minhas compras"}
+          title={"Minhas Compras"}
           link={"/minhas-compras"}
         />
         <MenuCard

@@ -1,7 +1,16 @@
 .ic-container {
-  max-width: 33.33%;
+  /* position: sticky; */
+  /* top: 40px; */
+
+  min-width: 100%;
   height: fit-content;
-  background-color: #fff;
+  /* background-color: #dd2222; */
+}
+
+.ic-container img {
+  background-color: #f2f2f2;
+  min-height: 100%;
+  border-radius: 10px;
 }
 
 .ic-container:hover .ic-arrow {
@@ -9,17 +18,23 @@
 }
 
 .ic-img-container {
+  overflow: hidden;
   outline: none;
-  border: 1px solid #ccc;
+  /* background-color: #007bff; */
+  height: 450px;
   border-radius: 10px;
+  border: 1px solid #ccc;
 }
 
 .ic-arrow {
+  color: black;
+
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: rgba(0, 123, 255, 0.7);
+  /* background-color: rgba(0, 123, 255, 0.7); */
   border-radius: 50%;
+  border: 1.8px solid;
   cursor: pointer;
   z-index: 10;
   transition: background-color 0.3s ease;
@@ -28,18 +43,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  transition: 0.2s;
 }
 
 .ic-arrow:hover {
-  background-color: rgba(0, 123, 255, 1);
+  color: #555555;
 }
 
 .ic-prev {
-  left: 6px;
+  left: 20px;
 }
 
 .ic-next {
-  right: 6px;
+  right: 20px;
 }
 
 #ic-body .slick-dots {
@@ -63,11 +80,11 @@
 
 .ic-thumbs img:hover {
   opacity: 1;
-  border-color: #007bff;
+  border-color: #888888;
 }
 
 .ic-thumbs img.active {
-  border-color: #007bff;
+  border-color: black;
   opacity: 1 !important;
 }
 

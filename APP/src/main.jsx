@@ -21,11 +21,12 @@ import { UserProvider } from "./context/UserContext.jsx";
 import ProfilePage from "./pages/ProfilePage/ProfilePage.jsx";
 import UpdateProfile from "./pages/ProfilePage/UpdateProfile/UpdateProfile.jsx";
 import CheckoutPage from "./pages/CheckoutPage/CheckoutPage .jsx";
-import SalesManagement from "./pages/SalesManagement/SalesManagement.jsx";
 import MyHistory from "./pages/MyHistory/MyHistory.jsx";
 import { SalesProvider } from "./context/SalesContext.jsx";
 import UserAgreement from "./pages/UserAgreement/UserAgreement.jsx";
 import AdicionarPromocao from "./pages/AdicionarPromocao/AdicionarPromocao.jsx";
+import DashboardContent from "./pages/Dashboard/Dashboard.jsx";
+import UpdatePersonalInfo from "./pages/ProfilePage/UpdatePersonalInfo/UpdatePersonalInfo.jsx";
 
 const router = createBrowserRouter([
   {
@@ -79,6 +80,11 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
   },
   {
+    path: "/minhaconta/editar-informacoes",
+    element: <UpdatePersonalInfo />,
+    errorElement: <NotFound />,
+  },
+  {
     path: "/paginavendedor",
     element: <PaginaVendedor />,
     errorElement: <NotFound />,
@@ -104,8 +110,8 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
   },
   {
-    path: "/resumo/vendas",
-    element: <SalesManagement />,
+    path: "/perfil-vendedor/dashboard",
+    element: <DashboardContent />,
     errorElement: <NotFound />,
   },
   {

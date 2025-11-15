@@ -3,11 +3,9 @@ import {} from "react";
 
 function Contador({ id, userId, maxCount, isCart, qtyIten, setQtyIten }) {
   function qtyControll(controll) {
-    console.log("Id do produto ", id);
+    // console.log("Id do produto ", id);
     const url = `http://localhost/tcc/API/POST/cart-item-controll?user_id=${userId}&product_id=${id}&operation=${controll}`;
-
-    console.log("URL", url);
-
+    // console.log("URL", url);
     fetch(url)
       .then((r) => r.json())
       .then((data) => {
@@ -17,10 +15,10 @@ function Contador({ id, userId, maxCount, isCart, qtyIten, setQtyIten }) {
         } else {
           alert("algo deu errado");
         }
-      })
-      // .catch((error) => {
-      //   console.error("erro", error);
-      // });
+      });
+    // .catch((error) => {
+    //   console.error("erro", error);
+    // });
   }
 
   function more() {

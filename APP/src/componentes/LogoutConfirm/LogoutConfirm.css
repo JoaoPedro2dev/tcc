@@ -8,74 +8,70 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
 
-/* Overlay escuro */
-.popup-overlay {
-  /* position: fixed; */
+  /* Overlay escuro */
+  .popup-overlay {
+    /* position: fixed; */
 
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Caixa do pop-up */
-.popup {
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 0.3s ease-in-out;
-  max-width: 400px;
-  width: 90%;
-}
-
-/* Botões */
-.popup-actions {
-  margin-top: 20px;
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
-
-.btn-confirm,
-.btn-cancel {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  color: white;
-  transition: background 0.3s;
-}
-
-.btn-confirm {
-  background-color: #d9534f;
-}
-
-.btn-confirm:hover {
-  background-color: #c9302c;
-}
-
-.btn-cancel {
-  background-color: #5bc0de;
-}
-
-.btn-cancel:hover {
-  background-color: #31b0d5;
-}
-
-/* Animação suave */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
-  to {
-    opacity: 1;
-    transform: scale(1);
+
+  /* Caixa do pop-up */
+  .popup {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    background: white;
+    padding: 30px 50px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-in-out;
+    max-width: 500px;
+    width: 90%;
+  }
+
+  /* Botões */
+  .popup-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .btn-confirm,
+  .btn-cancel {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #fff !important;
+    transition: background 0.3s;
+    font-weight: 500 !important;
+    font-size: medium;
+    background-color: black !important;
+  }
+
+  .btn-confirm:hover,
+  .btn-cancel:hover {
+    background-color: #3a3a3a !important;
+  }
+
+  /* Animação suave */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 }

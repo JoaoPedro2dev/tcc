@@ -1,25 +1,28 @@
-.dnv-logo {
-  position: fixed;
-  top: 30px;
-  left: 40px;
-  cursor: pointer;
-}
 .endereco-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  /* justify-content: center; */
+  /* align-items: center; */
   min-height: 100vh;
-  background: #f8f9fa;
-  padding: 80px;
+  /* background: #f8f9fa; */
+  /* padding: 80px; */
 }
 
 .endereco-form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
   background: #fff;
   padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
   width: 100%;
   max-width: 400px;
+}
+
+.endereco-form.full {
+  margin-top: 250px;
 }
 
 .endereco-form h2 {
@@ -69,7 +72,7 @@ hr {
 .btn-cadastrar-endereco {
   width: 100%;
   padding: 12px;
-  background-color: #007bff;
+  background-color: black;
   color: white;
   font-size: 16px;
   font-weight: 500;
@@ -82,7 +85,7 @@ hr {
 
 .btn-verificar-cep:hover,
 .btn-cadastrar-endereco:hover {
-  background-color: #0056b3;
+  background-color: #3b3b3b;
 }
 
 .erro {

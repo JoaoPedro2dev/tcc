@@ -1,0 +1,368 @@
+/* Modal Overlay e Container */
+.atc-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: atc-fadeIn 0.3s ease-out;
+}
+
+@keyframes atc-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.atc-modal-container {
+  background: white;
+  border-radius: 8px;
+  width: 600px;
+  height: 650px;
+  /* max-width: 500px; */
+  overflow-y: auto;
+  animation: atc-slideUp 0.3s ease-out;
+}
+
+@keyframes atc-slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Header */
+.atc-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  background: white;
+}
+
+.atc-modal-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.atc-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  transition: color 0.2s ease;
+}
+
+.atc-close-btn:hover {
+  color: #000;
+}
+
+/* Conteúdo */
+.atc-modal-content {
+  padding: 20px;
+}
+
+.atc-modal-content > .atc-row-container {
+  display: flex;
+  gap: 15px;
+}
+
+/* Added product image section styling */
+.atc-product-image-section {
+  margin-bottom: 16px;
+  border-radius: 8px;
+  width: 200px;
+  height: 150px;
+  overflow: hidden;
+  /* background: #fff; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #ccc;
+}
+
+.atc-product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain !important;
+  display: block;
+}
+
+/* Informações do produto */
+.atc-product-info {
+  margin-bottom: 24px;
+}
+
+.atc-product-info h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  overflow-wrap: break-word;
+}
+
+.atc-product-price {
+  /* margin: 0 0 12px 0; */
+  font-size: large;
+  font-weight: 500;
+  color: #000;
+}
+
+.atc-product-promotion-price {
+  font-size: medium;
+  /* font-weight: 300; */
+  color: #555555;
+  text-decoration: line-through;
+}
+
+/* Added shipping info styling */
+.atc-shipping-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: medium;
+  color: #666;
+  padding: 8px 0;
+}
+
+/* .atc-shipping-info svg {
+  color: #999;
+  flex-shrink: 0;
+} */
+
+/* Seções */
+.atc-section {
+  margin-bottom: 20px;
+}
+
+.atc-section label {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* Grid de cores */
+.atc-colors-grid {
+  display: flex;
+  flex-wrap: wrap;
+  /* grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); */
+  gap: 12px;
+}
+
+.atc-color-item {
+  display: flex;
+  /* flex-direction: column; */
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 12px;
+  color: #666;
+  width: fit-content;
+}
+
+.atc-color-item:hover {
+  border-color: #999;
+}
+
+.atc-color-item.ativo {
+  border-color: #000;
+  background: #f5f5f5;
+  color: #000;
+  /* font-weight: 500; */
+}
+
+.atc-color-circle {
+  min-width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+}
+
+/* Grid de tamanhos */
+.atc-sizes-grid {
+  display: flex;
+  flex-wrap: wrap;
+  /* grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); */
+  gap: 12px;
+}
+
+.atc-size-item {
+  padding: 10px 15px;
+  color: #666;
+  border: 1px solid;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.atc-size-item:hover {
+  color: #999;
+}
+
+.atc-size-item.ativo {
+  /* background: #000; */
+  color: black;
+  font-weight: 600;
+}
+
+/* Informações de stock */
+.atc-stock-info {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
+}
+
+/* Mensagem de erro */
+.atc-error-message {
+  padding: 12px;
+  margin-bottom: 16px;
+  background: #fee;
+  border: 1px solid #f99;
+  border-radius: 6px;
+  color: #c33;
+  font-size: 13px;
+  animation: atc-shake 0.3s ease-out;
+}
+
+.displayNone {
+  display: none;
+}
+
+@keyframes atc-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+/* Botões de ação */
+.atc-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.atc-btn-cancel,
+.atc-btn-add {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.atc-btn-cancel {
+  background: #f5f5f5;
+  color: #1a1a1a;
+  border: 1px solid #e0e0e0;
+}
+
+.atc-btn-cancel:hover:not(:disabled) {
+  background: #e8e8e8;
+}
+
+.atc-btn-cancel:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.atc-btn-add {
+  background: #000;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.atc-btn-add:hover:not(:disabled) {
+  background: #1a1a1a;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.atc-btn-add:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.atc-btn-add.loading {
+  pointer-events: none;
+}
+
+/* Loading spinner */
+.atc-loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: atc-spin 0.8s linear infinite;
+}
+
+@keyframes atc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+  .atc-modal-container {
+    width: 95%;
+    max-height: 95vh;
+  }
+
+  .atc-modal-header h2 {
+    font-size: 16px;
+  }
+
+  .atc-colors-grid,
+  .atc-sizes-grid {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  }
+
+  .atc-actions {
+    flex-direction: column-reverse;
+  }
+}

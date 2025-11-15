@@ -4,28 +4,32 @@
 
 .countBox {
   display: flex;
-  gap: 15px;
+  gap: 20px;
   align-items: center;
+  border: 1px solid #ccc;
+  width: fit-content;
+  padding: 6px 25px;
+  border-radius: 30px;
 }
 
 .countBox > button {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 5px;
+  /* border-radius: 5px;
 
   width: 30px;
-  height: 30px;
+  height: 30px; */
 
-  font-size: large;
+  font-size: x-large;
   cursor: pointer;
   border: none;
-  background-color: blue;
-  color: #fff;
+  background-color: transparent;
+  color: #706f6f;
 
   transition: 0.2s;
 }
 
 .countBox > button:hover {
-  background-color: #6c6cff;
+  color: black;
 }

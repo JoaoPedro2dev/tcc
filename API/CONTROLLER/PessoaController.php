@@ -24,6 +24,18 @@
             return ((new Pessoa())->profileUpdate($pessoa));
         }
 
+        static function personalInfoUpdate(Pessoa $pessoa):bool{
+            return ((new Pessoa())->personalInfoUpdate($pessoa));
+        }
+
+        static function updatePassword(string $password, int $id): bool{
+            return ((new Pessoa())->updatePassword($password, $id));
+        }
+
+        static function updateCnpj(string $cnpj, int $id): bool{
+            return ((new Pessoa())->updateCnpj($cnpj, $id));
+        }
+
         static function checkAuth() : ?array{
             if (!isset($_COOKIE["auth"])) {
                 return null; //'$_COOKIE NÃO EXISTE';

@@ -1,0 +1,523 @@
+/* Removendo Tailwind e criando CSS puro com variáveis de cores neutras */
+
+/* Variáveis de cores - Paleta neutra (preto, branco, cinza) */
+:root {
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-gray-50: #fafafa;
+  --color-gray-100: #f5f5f5;
+  --color-gray-200: #e5e5e5;
+  --color-gray-300: #d4d4d4;
+  --color-gray-400: #a3a3a3;
+  --color-gray-500: #737373;
+  --color-gray-600: #525252;
+  --color-gray-700: #404040;
+  --color-gray-800: #262626;
+  --color-gray-900: #171717;
+
+  /* Cores de status */
+  --color-success: #22c55e;
+  --color-success-light: #dcfce7;
+  --color-error: #ef4444;
+  --color-error-light: #fee2e2;
+  --color-warning: #eab308;
+  --color-warning-light: #fef9c3;
+  --color-info: #3b82f6;
+  --color-info-light: #dbeafe;
+
+  /* Espaçamentos */
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-12: 3rem;
+
+  /* Bordas */
+  --border-radius: 0.5rem;
+  --border-radius-lg: 0.75rem;
+  --border-radius-full: 9999px;
+
+  /* Sombras */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.439 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+}
+
+/* Estilos base */
+body {
+  /* background-color: var(--color-gray-50); */
+  color: var(--color-gray-900);
+  min-height: 100vh;
+}
+
+/* Utilitários de texto */
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.text-base {
+  font-size: 1rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+/* ========================================
+   ESTILOS CONSOLIDADOS DO DASHBOARD
+   Inclui: Header, Summary Cards, Filters e Table
+   ======================================== */
+
+/* ========================================
+   CARDS DE RESUMO FINANCEIRO
+   ======================================== */
+
+#dashboard-container {
+  .summary-cards-grid {
+    display: grid;
+    gap: var(--spacing-4);
+    margin-bottom: var(--spacing-8);
+  }
+
+  .summary-card {
+    background-color: var(--color-white);
+    /* border: 1px solid var(--color-gray-200); */
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-6);
+    transition: box-shadow 0.2s ease;
+  }
+
+  .summary-card-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .summary-card-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-gray-500);
+    margin-bottom: var(--spacing-2);
+  }
+
+  .summary-card-value {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--color-gray-900);
+    margin-top: var(--spacing-2);
+  }
+
+  .summary-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--border-radius-full);
+  }
+  .summary-card-icon svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .summary-card-icon.success {
+    background-color: var(--color-success-light);
+  }
+
+  .summary-card-icon.success svg {
+    color: var(--color-success);
+  }
+
+  .summary-card-icon.error {
+    background-color: var(--color-error-light);
+  }
+
+  .summary-card-icon.error svg {
+    color: var(--color-error);
+  }
+
+  .summary-card-icon.info {
+    background-color: var(--color-info-light);
+  }
+
+  .summary-card-icon.info svg {
+    color: var(--color-info);
+  }
+
+  /* ========================================
+   FILTROS DE VENDAS
+   ======================================== */
+  .sales-filters {
+    background-color: var(--color-white);
+    /* border: 1px solid var(--color-gray-200); */
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-6);
+    margin-bottom: var(--spacing-6);
+  }
+
+  .sales-filters-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    margin-bottom: var(--spacing-4);
+  }
+
+  .sales-filters-header svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--color-gray-500);
+  }
+
+  .sales-filters-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-gray-900);
+    margin: 0;
+  }
+
+  .sales-filters-grid {
+    display: grid;
+    gap: var(--spacing-4);
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .filter-group.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .filter-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-gray-900);
+    margin-bottom: var(--spacing-2);
+  }
+
+  .filter-input-wrapper {
+    position: relative;
+  }
+
+  .filter-input-icon {
+    position: absolute;
+    left: var(--spacing-3);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1rem;
+    height: 1rem;
+    color: var(--color-gray-500);
+  }
+
+  .filter-input,
+  .filter-select {
+    width: 100%;
+    padding: var(--spacing-2) var(--spacing-4);
+    font-size: 0.875rem;
+    color: var(--color-gray-900);
+    background-color: var(--color-white);
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--border-radius);
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .filter-input {
+    padding-left: 2.5rem;
+  }
+
+  .filter-input::placeholder {
+    color: var(--color-gray-400);
+  }
+
+  .filter-input:focus,
+  .filter-select:focus {
+    border-color: var(--color-gray-900);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+  }
+
+  /* ========================================
+   TABELA DE VENDAS
+   ======================================== */
+  .sales-table-container {
+    background-color: var(--color-white);
+    /* border: 1px solid var(--color-gray-200); */
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+  }
+
+  .sales-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .sales-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .sales-table thead {
+    background-color: var(--color-gray-100);
+    border-bottom: 1px solid var(--color-gray-200);
+  }
+
+  .sales-table th {
+    padding: 15px;
+    text-align: center;
+    font-size: small;
+    font-weight: 600;
+    color: var(--color-gray-900);
+
+    /* border: 1px solid black; */
+  }
+
+  .sales-table th.center {
+    text-align: center;
+  }
+
+  .sales-table tbody tr {
+    border-bottom: 1px solid var(--color-gray-200);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .sales-table tbody tr:hover {
+    background-color: var(--color-gray-50);
+  }
+
+  .sales-table td {
+    padding: var(--spacing-4) var(--spacing-6);
+    font-size: 0.875rem;
+  }
+
+  .sales-table td.id {
+    font-weight: 500;
+    color: var(--color-gray-900);
+  }
+
+  .sales-table td.product,
+  .sales-table td.client {
+    color: var(--color-gray-900);
+  }
+
+  .sales-table td.date {
+    color: var(--color-gray-500);
+  }
+
+  .sales-table td.value {
+    font-weight: 500;
+    color: var(--color-gray-900);
+  }
+
+  .sales-table-empty {
+    padding: var(--spacing-12) var(--spacing-6);
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--color-gray-500);
+  }
+
+  .status-badge {
+    /* display: inline-flex; */
+    /* align-items: center; */
+    /* text-align: center; */
+    width: fit-content;
+    text-align: center;
+    padding: var(--spacing-1) var(--spacing-3);
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: var(--border-radius-full);
+    background-color: #5d5dd7;
+    /* width: 100%; */
+    color: #fff;
+
+    white-space: nowrap;
+  }
+
+  .status-badge.confirmed {
+    background-color: var(--color-success-light);
+    color: var(--color-success);
+  }
+
+  .status-badge.cancelled {
+    background-color: var(--color-error-light);
+    color: var(--color-error);
+  }
+
+  .status-badge.pending {
+    background-color: orange;
+    color: #fff;
+  }
+
+  .sales-table-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+  }
+
+  .action-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-2);
+    background: none;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .action-button svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .action-button.view {
+    color: var(--color-gray-500);
+  }
+
+  .action-button.view:hover {
+    background-color: var(--color-gray-100);
+    color: var(--color-gray-900);
+  }
+
+  .action-button.confirm {
+    color: var(--color-success);
+  }
+
+  .action-button.confirm:hover {
+    background-color: var(--color-success-light);
+  }
+
+  .action-button.cancel {
+    color: var(--color-error);
+  }
+
+  .action-button.cancel:hover {
+    background-color: var(--color-error-light);
+  }
+
+  .action-button.update {
+    color: var(--color-black);
+  }
+
+  .action-button.update:hover {
+    background-color: var(--color-gray-100);
+  }
+
+  /* ========================================
+   RESPONSIVIDADE
+   ======================================== */
+  @media (min-width: 640px) {
+    .summary-cards-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .sales-filters-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .filter-group.period {
+      grid-column: span 2;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .summary-cards-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+}

@@ -12,12 +12,6 @@
         public string $tamanho;
         public int $quantity;
 
-        // public function __construct($cartId = 0, $productId = 0, $quantity = 0) {
-        //     $this->cartId = $cartId;
-        //     $this->productId = $productId;
-        //     $this->quantity = $quantity;
-        // }
-
         public function insert(int $cartId, int $productId, string $cor, string $tamanho, int $qty):bool{
             $this->setCartId($cartId);
             $this->setProductId($productId);

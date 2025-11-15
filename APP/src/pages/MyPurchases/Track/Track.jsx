@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../../../componentes/Header/Header";
 import TrackCard from "../../../componentes/TrackCard/TrackCard";
 import "./Track.css";
@@ -6,11 +6,22 @@ import "./Track.css";
 function Track() {
   const navigate = useNavigate();
 
+  const location = useLocation();
+  const compraId = location.state;
+
+  console.log(compraId);
+
+  // return;
+
+  if (!compraId) {
+    return <></>;
+  }
+
   return (
     <div id="trackBody">
-      <Header />
+      <Header title={"Acompanhar pedido"} />
       <main>
-        <TrackCard />
+        <TrackCard compraId={compraId} />
       </main>
 
       <button

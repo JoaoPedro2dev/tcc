@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
 import "./cadastrarCep.css";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import Feedback from "../../componentes/Feedback/Feedback.jsx";
 import Loading from "../../componentes/Loading/Loading.jsx";
-import { GetMe } from "../../helpers/functions.jsx";
+import Header from "../../componentes/Header/Header.jsx";
 
 function CadastrarCep() {
   const { user } = useUser();
-
-  const navigate = useNavigate();
 
   const [errors, setErrors] = useState({
     cep: "",
@@ -39,8 +37,9 @@ function CadastrarCep() {
 
       setShowData(true);
       setCep(user.cep);
-      setIsLoading(false);
     }
+
+    setIsLoading(false);
   }, [user]);
 
   function handleCEP() {
@@ -139,12 +138,12 @@ function CadastrarCep() {
     })
       .then((r) => r.json())
       .then((data) => {
+        console.log("data CEP", data);
+
         if (data.field === "cep_localidade") {
           setErrors({
             cep: "Desculpe não atendemos fora da cidade de Jaú  ",
           });
-          setIsProcessing(false);
-          return;
         }
 
         if (data === true) {
@@ -170,15 +169,16 @@ function CadastrarCep() {
               " com sucesso"
             }
             type={"success"}
-            link={"/"}
+            link={-1}
           />
         )}
 
-        <h2 className="dnv-logo" onClick={() => navigate("/")}>
-          DNV WEAR
-        </h2>
+        <Header title={user.cep ? "Atualizar CEP" : "Cadastrar Endereço"} />
 
-        <form className="endereco-form" onSubmit={cadastrarEndereco}>
+        <form
+          className={showData ? "endereco-form full" : "endereco-form"}
+          onSubmit={cadastrarEndereco}
+        >
           <h2>Meu endereço</h2>
           <div className="input-group">
             <label htmlFor="cep">CEP</label>
@@ -218,7 +218,7 @@ function CadastrarCep() {
               <input
                 type="text"
                 id="uf"
-                value={endereco.uf}
+                value={endereco.uf ?? ""}
                 placeholder="Estado"
                 readOnly
               />
@@ -229,7 +229,7 @@ function CadastrarCep() {
               <input
                 type="text"
                 id="cidade"
-                value={endereco.cidade}
+                value={endereco.cidade ?? ""}
                 placeholder="Cidade"
                 readOnly
               />
@@ -247,7 +247,7 @@ function CadastrarCep() {
               <input
                 type="text"
                 id="bairro"
-                value={endereco.bairro}
+                value={endereco.bairro ?? ""}
                 placeholder="Bairro"
                 readOnly
               />
@@ -259,7 +259,7 @@ function CadastrarCep() {
                 type="text"
                 id="complemento"
                 className={errors.complemento ? "erro" : ""}
-                value={endereco?.complemento}
+                value={endereco?.complemento ?? ""}
                 placeholder="Ex: casa dos fundos"
                 onChange={(e) => {
                   setEndereco({
@@ -284,7 +284,7 @@ function CadastrarCep() {
               <input
                 type="text"
                 id="rua"
-                value={endereco.rua}
+                value={endereco.rua ?? ""}
                 placeholder="Rua"
                 readOnly
               />
@@ -296,7 +296,7 @@ function CadastrarCep() {
                 type="text"
                 id="numero"
                 className={errors.numero ? "erro" : ""}
-                value={endereco?.numero}
+                value={endereco?.numero ?? ""}
                 placeholder="Ex: 123"
                 onChange={(e) => {
                   setEndereco({

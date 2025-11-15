@@ -8,29 +8,35 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  z-index: 1001;
 }
 
 .feedback-popup {
   background: #fff;
   padding: 20px 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); */
   min-width: 280px;
   animation: fadeIn 0.3s ease-in-out;
   transition: all 0.3s ease;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .feedback-popup p {
-  margin-bottom: 15px;
-  font-size: 1rem;
+  margin-bottom: 25px;
+  font-weight: 500;
+  font-size: large;
 }
 
 .feedback-popup button {
   padding: 8px 16px;
   border: none;
   border-radius: 8px;
-  background: #4caf50;
+  background: black;
   color: white;
   cursor: pointer;
   font-size: 0.9rem;
@@ -38,7 +44,7 @@
 }
 
 .feedback-popup button:hover {
-  background: #45a049;
+  background: #3a3a3a;
 }
 
 /* Tipos */

@@ -5,15 +5,15 @@
   flex-direction: column;
 
   width: 250px;
-  max-width: 250px;
+  max-width: 280px;
 
   transition: 0.2s;
   cursor: pointer;
 
-  border: 1px solid #ccc;
-  background-color: #fff;
+  /* border: 1px solid #ccc; */
+  /* background-color: #fff; */
 
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .card > .arrayColorsLength {
@@ -28,23 +28,33 @@
   left: 10px;
 }
 
-.card:hover {
-  color: #5555ff;
-}
+/* .card:hover {
+  color: #7f7f7f;
+} */
 
 .card > img {
   width: auto;
   min-height: 150px;
   height: 200px;
-  max-height: 200px;
+  max-height: 220px;
 
   object-fit: contain;
-  border-bottom: 1px solid #ccc;
+  color: #c2c2c2;
+  border: 1px solid;
+  background-color: #f2f2f2;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  transition: 0.2s;
 }
 
+/* .card:hover img {
+  color: #7f7f7f;
+} */
+
 .card > .likeBtn {
-  padding: 8px;
-  border: 1px solid #ccc;
+  padding: 10px;
+  color: #959595;
+  border: 1px solid;
   background-color: #fff;
   width: fit-content;
 
@@ -76,16 +86,20 @@
 }
 
 .card > .text {
-  padding: 10px;
+  /* padding: 10px; */
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
 
+/* .card > .text > strong {
+  font-size: larger;
+} */
+
 .card > .text > .price-content {
   display: flex;
+  flex-direction: column;
   gap: 10px;
-  align-items: center;
 }
 
 .clicked-button {
@@ -121,8 +135,8 @@
 .edit-buttons {
   /* display: flex; */
   /* justify-content: center; */
-  margin-top: -10px;
-  padding: 10px;
+  margin-top: 10px;
+  /* padding: 10px; */
 }
 
 .edit-buttons > button {
@@ -131,13 +145,13 @@
   border: none;
   padding: 8px;
   color: #fff;
-  background-color: blueviolet;
+  background-color: black;
   transition: 0.2s;
   cursor: pointer;
 }
 
 .edit-buttons > button:hover {
-  background-color: #d606d6;
+  background-color: #555555;
 }
 
 @keyframes spin {

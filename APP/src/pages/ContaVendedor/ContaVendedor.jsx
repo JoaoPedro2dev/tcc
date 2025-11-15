@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import "./contaVendedor.css";
+import "../ContaPessoal/contaPessoal.css";
 import { useNavigate } from "react-router-dom";
 import { formatPhone, formatCPF, formatCNPJ } from "../../helpers/functions";
 
@@ -230,17 +230,8 @@ function ContaPessoal() {
       setGeneralError(
         "Erro ao processar cadastro. Verifique sua conexão e tente novamente."
       );
-    } finally {
-      setIsSubmitting(false);
+      isSubmitting(false);
     }
-  };
-
-  const handleLoginNavigation = () => {
-    navigate("/login");
-  };
-
-  const handleSellerRegistration = () => {
-    navigate("/contavendedor");
   };
 
   const horarios = [
@@ -296,21 +287,14 @@ function ContaPessoal() {
 
   return (
     <div className="registration-container" id="registroPage">
-      <h1
-        className="logo"
-        onClick={() => {
-          navigate("/");
-        }}
-      >
-        MarketPlace
-      </h1>
-
       <main className="main-content">
         <div className="registration-card">
           <div className="card-header">
-            <h2>Quero ser um vendedor</h2>
-            <p>Junte-se ao nosso marketplace</p>
+            <h1 onClick={() => navigate("/login")}>DNV WEAR</h1>
+            <p>Seja um vendedor na DNV WEAR</p>
           </div>
+
+          <hr />
 
           {generalError && <div className="general-error">{generalError}</div>}
 
@@ -364,7 +348,7 @@ function ContaPessoal() {
 
             <div className="form-row">
               <div className="input-group">
-                <label htmlFor="open_hour">Horário de abrir</label>
+                <label htmlFor="open_hour">Horário para abrir</label>
                 <select
                   name="open_hour"
                   id="open_hour"
@@ -384,7 +368,7 @@ function ContaPessoal() {
               </div>
 
               <div className="input-group">
-                <label htmlFor="close_hour">Horário de fechar</label>
+                <label htmlFor="close_hour">Horário para fechar</label>
                 <select
                   name="close_hour"
                   id="close_hour"
@@ -533,25 +517,17 @@ function ContaPessoal() {
               className="submit-button"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Cadastrando..." : "Criar Conta de vendedor"}
+              {isSubmitting ? (
+                <span className="spinner"></span>
+              ) : (
+                "Criar conta de vendedor"
+              )}
             </button>
           </form>
 
           <div className="form-links">
-            <button
-              type="button"
-              className="link-button"
-              onClick={handleLoginNavigation}
-            >
-              Já tem uma conta? Faça login
-            </button>
-            <button
-              type="button"
-              className="link-button seller-link"
-              onClick={handleSellerRegistration}
-            >
-              Quer ser um cliente? Registre-se
-            </button>
+            <a href="/login">Já tem uma conta? Faça login</a>
+            <a href="/contapessoal">Quer ser um cliente? Registre-se</a>
           </div>
         </div>
       </main>

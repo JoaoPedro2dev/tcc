@@ -5,7 +5,19 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 25px;
+  gap: 15px;
+
+  background-color: #fff;
+  cursor: default;
+}
+
+#notFoundContainer > strong:first-child {
+  color: black;
+  font-size: xx-large;
+  cursor: pointer;
+  font-family: "Anton" !important;
+  margin-bottom: 20px;
+  cursor: default;
 }
 
 a {
@@ -13,18 +25,21 @@ a {
 }
 
 #indexBtn {
-  border: 2px solid #3f3fff;
-  padding: 10px 15px;
+  color: #fff;
+
+  border: 2px solid black;
+  padding: 10px 25px;
   text-decoration: none;
   border-radius: 6px;
   cursor: pointer;
   transition: 0.2s;
-  color: #3f3fff;
+  margin-top: 10px;
+  background-color: black;
 }
 
 #indexBtn:hover {
-  background-color: #3f3fff;
-  color: #fff;
+  background-color: transparent;
+  color: black;
 }
 
 #notFoundContainer > p:last-child {

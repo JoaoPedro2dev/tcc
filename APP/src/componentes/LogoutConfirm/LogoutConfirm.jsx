@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import "./LogoutConfirm.css";
 import { useUser } from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 export default function LogoutConfirm() {
   const [showPopup, setShowPopup] = useState(true);
   const { setUser } = useUser();
+  const navigate = useNavigate();
 
   const handleConfirm = () => {
     console.log("Usuário confirmou o logout!");
@@ -16,6 +18,7 @@ export default function LogoutConfirm() {
       .then((data) => {
         if (data) {
           setUser(null);
+          navigate("/login");
           setShowPopup(false);
         } else {
           alert("Logout não realizado");

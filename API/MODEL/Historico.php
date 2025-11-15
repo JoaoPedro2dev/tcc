@@ -13,7 +13,7 @@ class Historico {
     public string $productName;
     public string $images;
     public float $price;
-    public float $promotionPrice;
+    public ?float $promotionPrice;
     public float $shippingCost;
     
     public function getHistory(int $id_usuario){
@@ -93,10 +93,10 @@ class Historico {
     }
 
     // PROMOTIONPRICE
-    public function getPromotionPrice(): float {
+    public function getPromotionPrice(): ?float {
         return $this->promotionPrice;
     }
-    public function setPromotionPrice(float $PromotionPrice): void {
+    public function setPromotionPrice(?float $PromotionPrice): void {
         $this->promotionPrice = $PromotionPrice;
     }
 

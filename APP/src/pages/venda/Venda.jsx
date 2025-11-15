@@ -1,4 +1,4 @@
-import { json, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Contador from "../../componentes/Contador/Contador.jsx";
 import Footer from "../../componentes/Footer/Footer.jsx";
 import Header from "../../componentes/Header/Header.jsx";
@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import Feedback from "../../componentes/Feedback/Feedback";
 import Comentarios from "../../componentes/Comentarios/Comentarios.jsx";
 
-import tenis from "../../json/tenis.json";
 import LinkPerfil from "../../componentes/LinkPerfil/LinkPerfil.jsx";
 import {
   calculatinDelivery,
@@ -29,6 +28,13 @@ function Venda() {
   const location = useLocation();
   const id = location.state;
 
+  const coresMap = {
+    Vermelho: "#ff4d4d",
+    Azul: "#4d79ff",
+    Preto: "#000",
+    Branco: "#fff",
+  };
+
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
 
@@ -40,6 +46,8 @@ function Venda() {
   const [sizeSelecionado, setSizeSelecionado] = useState("");
 
   const [similarItems, setSimilarItems] = useState([]);
+
+  const [fullDescription, setFullDescription] = useState(false);
 
   const tamanhosDaCor =
     data?.itenStock?.find((item) => item.cor === corSelecionada)?.tamanhos ||
@@ -58,6 +66,7 @@ function Venda() {
       .then((data) => {
         setData(data);
 
+        console.log("venda", data);
         if (data) {
           if (user?.id) {
             fetch("http://localhost/tcc/API/POST/historico", {
@@ -141,7 +150,14 @@ function Venda() {
   }
 
   function handleBuy() {
-    setSales([{ id_item: id, quantidade_item: qtyIten ?? 1 }]);
+    setSales([
+      {
+        id_item: id,
+        quantidade_item: qtyIten ?? 1,
+        cor: corSelecionada,
+        tamanho: sizeSelecionado,
+      },
+    ]);
 
     navigate(user && user.id ? "/venda/finalizar-compra" : "/login");
   }
@@ -154,12 +170,67 @@ function Venda() {
 
   if (!data || !data.id) return <NotFound />;
 
+  const productImages = JSON.parse(data.images);
+
   return (
     <div id="telaVenda">
       <Header />
       <section>
         <div id="content">
-          <ImagesCarroussel images={JSON.parse(data.images)} />
+          <div className="produto-content">
+            {productImages.length > 1 ? (
+              <ImagesCarroussel images={productImages} />
+            ) : (
+              <div className="one-img-container">
+                <img src={productImages} alt="imagem de exemplo do produto" />
+              </div>
+            )}
+
+            <div className="characteristics-container">
+              <p>Características</p>
+              <ul>
+                <li>
+                  Marca: <span>{data.brand}</span>
+                </li>
+                <li>
+                  Gênero: <span>{data.gender}</span>
+                </li>
+                <li>
+                  Condição: <span>{data.condition}</span>
+                </li>
+                <li>
+                  Estilo: <span>{data.style}</span>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <p>Descrição</p>
+
+              <p
+                className={fullDescription ? "descricao full" : "descricao"}
+                id="descricao"
+              >
+                {data.description}
+              </p>
+
+              {data.description.length > 303 && (
+                <p
+                  className="verDescricao"
+                  onClick={() => {
+                    if (fullDescription) {
+                      setFullDescription(false);
+                    } else {
+                      setFullDescription(true);
+                    }
+                  }}
+                >
+                  {fullDescription
+                    ? "Ver menos descrição"
+                    : "Ver mais descrição"}
+                </p>
+              )}
+            </div>
+          </div>
 
           <div id="infosProduto">
             <LinkPerfil
@@ -168,16 +239,22 @@ function Venda() {
               url={`/paginaVendedor?seller=${data.seller_url}`}
             />
 
-            <p>{data.productName}</p>
+            <p>
+              Chegara até o dia
+              {" " + calculatinDelivery(data.deliveryTime) + " "}
+              comprando dentro de 24 horas
+            </p>
+
+            <p className="productName">{data.productName}</p>
 
             {data.promotionPrice ? (
               <div>
-                <strong className="xx-large weigth-500">
-                  {monetaryFormatting(data.promotionPrice)}
-                </strong>
                 <p className="line-through colorGray">
                   {monetaryFormatting(data.price)}
                 </p>
+                <strong className="xx-large weigth-500">
+                  {monetaryFormatting(data.promotionPrice)}
+                </strong>
               </div>
             ) : (
               <strong className="weigth-500">
@@ -185,80 +262,106 @@ function Venda() {
               </strong>
             )}
 
-            <p className="small">{data.description}</p>
-
-            <div className="displayRow">
-              <div className="selectBox">
-                <label htmlFor="colorSelect">Cor</label>
-                <select
-                  value={corSelecionada}
-                  id="colorSelect"
-                  onChange={(e) => setCorSelecionada(e.target.value)}
-                >
-                  {data.itenStock.map((item, key) => (
-                    <option key={key} value={item.cor}>
-                      {item.cor}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="selectBox">
-                <label htmlFor="sizeSeelct">Tamanho</label>
-                <select
-                  value={sizeSelecionado}
-                  id="sizeSelect"
-                  onChange={(e) => {
-                    setSizeSelecionado(e.target.value);
-                  }}
-                >
-                  {tamanhosDaCor.map((size, key) => (
-                    <option key={key} value={size.tamanho}>
-                      {size.tamanho}
-                    </option>
-                  ))}
-                </select>
+            <div className="opcoesCores">
+              <p>Cores</p>
+              <div>
+                {data.itenStock.map((item, key) => (
+                  <div
+                    key={key}
+                    className={`corItem ${
+                      corSelecionada === item.cor ? "ativo" : ""
+                    }`}
+                    onClick={() => setCorSelecionada(item.cor)}
+                  >
+                    {/* Mostra um círculo colorido + nome da cor */}
+                    <div
+                      className="circuloCor"
+                      style={{ backgroundColor: coresMap[item.cor] || "#ccc" }}
+                    ></div>
+                    <span>{item.cor}</span>
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
 
-          <div id="compraBox">
-            <span className="colorGray">
-              {data.salesQuantity > 0 &&
-                "+" + (data.salesQuantity - 1) + "vendas"}
-            </span>
+            <div className="opcoesTamanhos">
+              <p>Tamanhos</p>
+              <div>
+                {tamanhosDaCor.map((size, key) => (
+                  <div
+                    key={key}
+                    className={`tamanhoItem ${
+                      sizeSelecionado === size.tamanho ? "ativo" : ""
+                    }`}
+                    onClick={() => setSizeSelecionado(size.tamanho)}
+                  >
+                    {size.tamanho}
+                  </div>
+                ))}
+              </div>
+            </div>
 
-            <p>
-              Chegara até o dia{" "}
-              <strong className="strong">
-                {calculatinDelivery(data.deliveryTime)}
-              </strong>{" "}
-              comprando dentro de 24 horas
-            </p>
+            <div id="compraBox">
+              <span className="colorGray">
+                {data.salesQuantity > 0 &&
+                  "+" + (data.salesQuantity - 1) + "vendas"}
+              </span>
 
-            <p>
-              Frete{" "}
-              {data.shippingCost === 0 ? (
-                <span className="colorGreen">Grátis</span>
+              <p className="productFrete">
+                Frete{" "}
+                {data.shippingCost === 0 ? (
+                  <span className="colorGreen">Grátis</span>
+                ) : (
+                  "de " + monetaryFormatting(data.shippingCost)
+                )}
+              </p>
+
+              <Contador
+                isCart={false}
+                maxCount={stockDoTamanho}
+                qtyIten={qtyIten}
+                setQtyIten={setQtyIten}
+              />
+
+              <p className="small">
+                <span className="colorGray">Estoque disponível:</span>{" "}
+                {stockDoTamanho} unidade{stockDoTamanho > 1 && "s"}
+              </p>
+
+              {user?.seller_id ? (
+                user?.seller_id !== data.sellerId && (
+                  <div id="buttonsBox">
+                    <button
+                      onClick={() => {
+                        handleBuy();
+                      }}
+                    >
+                      Comprar agora
+                    </button>
+
+                    <button
+                      id="addToCartBtn"
+                      className={
+                        btnLoading
+                          ? "loading-button"
+                          : addedToCart
+                          ? "clicked-button"
+                          : ""
+                      }
+                      onClick={() => {
+                        user && user.id ? addToCart() : navigate("/login");
+                      }}
+                      disabled={btnLoading || addedToCart}
+                    >
+                      {btnLoading
+                        ? ""
+                        : addedToCart
+                        ? "Produto adicionado"
+                        : "Adicionar ao carrinho"}
+                    </button>
+                  </div>
+                )
               ) : (
-                "de " + monetaryFormatting(data.shippingCost)
-              )}
-            </p>
-
-            <Contador
-              isCart={false}
-              maxCount={stockDoTamanho}
-              qtyIten={qtyIten}
-              setQtyIten={setQtyIten}
-            />
-
-            <p className="small">
-              <span className="colorGray">Estoque disponível:</span>{" "}
-              {stockDoTamanho} unidade{stockDoTamanho > 1 && "s"}
-            </p>
-
-            {user?.seller_id ? (
-              user?.seller_id !== data.sellerId && (
                 <div id="buttonsBox">
                   <button
                     onClick={() => {
@@ -289,41 +392,10 @@ function Venda() {
                       : "Adicionar ao carrinho"}
                   </button>
                 </div>
-              )
-            ) : (
-              <div id="buttonsBox">
-                <button
-                  onClick={() => {
-                    handleBuy();
-                  }}
-                >
-                  Comprar agora
-                </button>
+              )}
 
-                <button
-                  id="addToCartBtn"
-                  className={
-                    btnLoading
-                      ? "loading-button"
-                      : addedToCart
-                      ? "clicked-button"
-                      : ""
-                  }
-                  onClick={() => {
-                    user && user.id ? addToCart() : navigate("/login");
-                  }}
-                  disabled={btnLoading || addedToCart}
-                >
-                  {btnLoading
-                    ? ""
-                    : addedToCart
-                    ? "Produto adicionado"
-                    : "Adicionar ao carrinho"}
-                </button>
-              </div>
-            )}
-
-            <p>Garantia de até 30 dias após receber o produto</p>
+              {/* <p>Garantia de até 30 dias após receber o produto</p> */}
+            </div>
           </div>
         </div>
       </section>

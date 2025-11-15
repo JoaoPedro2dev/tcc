@@ -16,14 +16,14 @@ const FeedbackPopup = ({ message, type = "info", onClose, link }) => {
     setClosing(true);
     setTimeout(() => {
       onClose ? onClose() : navigate(link);
-    }, 300); // tempo da animação
+    }, 500); // tempo da animação
   };
 
   return (
     <div className="feedback-overlay">
       <div className={`feedback-popup ${type} ${closing ? "closing" : ""}`}>
         <p>{message}</p>
-        {onClose && <button onClick={handleClose}>Ok</button>}
+        <button onClick={handleClose}>Entendi!</button>
       </div>
     </div>
   );

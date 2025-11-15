@@ -40,6 +40,12 @@ export function formatarData(data) {
   });
 }
 
+export function formatDefaultDate(data) {
+  const date = data.split(" ");
+  const [ano, mes, dia] = date[0].split("-");
+  return `${dia}/${mes}/${ano}`;
+}
+
 export function formatarMonetario(valor) {
   return Number(valor).toLocaleString("pt-BR", {
     style: "currency",
@@ -227,4 +233,51 @@ export function calcStockTotal(item) {
     );
     return total + corTotal;
   }, 0);
+}
+
+export function getStatusClass(status) {
+  switch (status) {
+    case "confirmado":
+      return "confirmed";
+    case "cancelado":
+      return "cancelled";
+    case "pendente":
+      return "pending";
+    case "entregue":
+      return "entregue";
+    case "em transporte":
+      return "em transporte";
+    default:
+      return "";
+  }
+}
+
+export function getStatusLabel(status) {
+  switch (status) {
+    case "confirmado":
+      return "Confirmado";
+    case "cancelado":
+      return "Cancelado";
+    case "pendente":
+      return "Pendente";
+    case "em transporte":
+      return "Em Transporte";
+    case "chegara hoje":
+      return "Chegará Hoje";
+    case "chegou":
+      return "Chegou";
+    case "entregue":
+      return "Entregue";
+    default:
+      return "Desconhecido";
+  }
+}
+
+export function calcularPorcentagem(parte, total) {
+  if (total === 0) {
+    return 0; // evita divisão por zero
+  }
+
+  const porcentagem = (parte / total) * 100;
+  return porcentagem.toFixed(2) + "%";
 }

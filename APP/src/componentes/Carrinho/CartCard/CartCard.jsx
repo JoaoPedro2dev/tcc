@@ -10,13 +10,26 @@ import "./CartCard.css";
 
 function CartCard({ item, setProductsArray }) {
   const { user } = useUser();
-  const [count, setCount] = useState(1);
+
+  console.log(item.quantity);
+
+  const [count, setCount] = useState(item.quantity ?? 2);
   const [isRemoving, setIsRemoving] = useState(false);
   const navigate = useNavigate();
 
   function navegarItem() {
     navigate("/venda?", { state: item.id });
   }
+
+  const maxCount = (product) => {
+    const colorItem = product?.itenStock?.find(
+      (item) => item.cor === product.cor
+    );
+
+    return (
+      colorItem?.tamanhos?.find((t) => t.tamanho === product.tamanho)?.qnt ?? 0
+    );
+  };
 
   function removeFromCart() {
     const url = `http://localhost/tcc/API/DELETE/cart-item?user_id=${user.id}&product_id=${item.id}`;
@@ -59,13 +72,17 @@ function CartCard({ item, setProductsArray }) {
           <div className="cart-card-pricing">
             {item.promotionPrice ? (
               <div>
-                <strong>{monetaryFormatting(item.promotionPrice)}</strong>
+                <strong className="cart-card-price-strong">
+                  {monetaryFormatting(item.promotionPrice)}
+                </strong>
                 <p className="line-through colorGray small">
                   {monetaryFormatting(item.price)}
                 </p>
               </div>
             ) : (
-              <strong>{monetaryFormatting(item.price)}</strong>
+              <strong className="cart-card-price-strong">
+                {monetaryFormatting(item.price)}
+              </strong>
             )}
           </div>
 
@@ -93,33 +110,37 @@ function CartCard({ item, setProductsArray }) {
               )}
             </span>
           </div>
-
-          <div className="cart-card-actions">
-            <Contador
-              id={item.id}
-              userId={user.id}
-              maxCount={item.stockTotal}
-              isCart={true}
-              qtyIten={count}
-              setQtyIten={(newQty) => {
-                setCount(newQty);
-                setProductsArray((prev) =>
-                  prev.map((p) =>
-                    p.id === item.id ? { ...p, quantity: newQty } : p
-                  )
-                );
-              }}
-            />
-
-            <button
-              className="remove-btn"
-              onClick={handleRemove}
-              title="Remover item"
-            >
-              <Trash2 />
-            </button>
-          </div>
         </div>
+      </div>
+
+      <div className="cart-card-actions">
+        <Contador
+          id={item.id}
+          userId={user.id}
+          maxCount={maxCount(item)}
+          isCart={true}
+          qtyIten={count}
+          setQtyIten={(newQty) => {
+            setCount(newQty);
+            setProductsArray((prev) =>
+              prev.map((p) =>
+                p.id === item.id ? { ...p, quantity: newQty } : p
+              )
+            );
+          }}
+        />
+
+        <p className="small colorGray">
+          Em estoque: <span className="colroBlack">{maxCount(item)}</span>
+        </p>
+
+        <button
+          className="remove-btn"
+          onClick={handleRemove}
+          title="Remover item"
+        >
+          Remover
+        </button>
       </div>
     </div>
   );

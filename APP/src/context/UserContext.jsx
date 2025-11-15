@@ -13,14 +13,18 @@ export function UserProvider({ children }) {
       .then((res) => res.json())
       .then((dataUser) => {
         if (dataUser.success) {
-          console.log("Usuário logado:", dataUser.user);
+          // console.log("Usuário logado:", dataUser.user);
           setUser(dataUser.user);
         } else {
           console.log("Erro usuário:", dataUser);
         }
-      });
-    // .catch((err) => console.error("Erro API user:", err));
+      })
+      .catch((err) => console.error("Erro API user:", err));
   }, []);
+
+  // useEffect(() => {
+  //   console.log("nova alteração em usuario", user);
+  // }, [user]);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

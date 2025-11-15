@@ -7,13 +7,13 @@ import "./imagesCarroussel.css";
 
 const PrevArrow = ({ onClick }) => (
   <div className="ic-arrow ic-prev" onClick={onClick}>
-    <ChevronLeft size={32} color="#fff" />
+    <ChevronLeft size={30} strokeWidth={1.5} />
   </div>
 );
 
 const NextArrow = ({ onClick }) => (
   <div className="ic-arrow ic-next" onClick={onClick}>
-    <ChevronRight size={32} color="#fff" />
+    <ChevronRight size={30} strokeWidth={1.5} />
   </div>
 );
 

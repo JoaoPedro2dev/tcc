@@ -64,7 +64,7 @@ function MyPurchases() {
             item.status.toLowerCase().includes("transporte") ||
             item.status.toLowerCase().includes("preparação")
           );
-        if (statusFilter === "cancelled")
+        if (statusFilter === "cancelado")
           return item.status.toLowerCase().includes("cancelado");
         return true;
       });
@@ -107,16 +107,11 @@ function MyPurchases() {
 
   return (
     <div className="page-container">
-      <Header />
+      <Header title={"Minhas compras"} link={"/"} />
 
       <div className="main-content">
         {/* Page Header */}
         <div className="page-header">
-          <div className="page-title">
-            <ShoppingBag className="title-icon" />
-            <h1 className="title-text">Minhas Compras</h1>
-          </div>
-
           {/* Search and Filters */}
           <div className="filters-container">
             {/* Search Input */}
@@ -183,7 +178,7 @@ function MyPurchases() {
         ) : (
           <div className="purchases-container">
             {filteredPurchases.map((purchase, index) => (
-              <PurchasesCard key={index} purchase={purchase} />
+              <PurchasesCard key={index} purchaseData={purchase} />
             ))}
 
             {/* Results Summary */}

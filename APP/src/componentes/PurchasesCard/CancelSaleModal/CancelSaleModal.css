@@ -1,0 +1,158 @@
+#dashboard-container {
+  /* Estilos específicos do modal de cancelamento */
+  .cancel-sale-content {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-4);
+    margin-bottom: var(--spacing-6);
+  }
+
+  .cancel-sale-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    background-color: var(--color-error-light);
+    border-radius: var(--border-radius-full);
+    flex-shrink: 0;
+  }
+
+  .cancel-sale-icon svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--color-error);
+  }
+
+  .cancel-sale-text {
+    flex: 1;
+  }
+
+  .cancel-sale-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-gray-900);
+    margin: 0 0 var(--spacing-2) 0;
+  }
+
+  .cancel-sale-description {
+    font-size: 0.875rem;
+    color: var(--color-gray-500);
+    margin: 0 0 var(--spacing-3) 0;
+  }
+
+  .cancel-sale-details {
+    background-color: var(--color-gray-100);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-3);
+  }
+
+  .cancel-sale-detail {
+    font-size: 0.875rem;
+    color: var(--color-gray-500);
+    margin: 0;
+  }
+
+  .cancel-sale-detail-value {
+    font-weight: 500;
+    color: var(--color-gray-900);
+  }
+
+  /* Estilos para a seção de motivos de cancelamento */
+  .cancellation-reasons-section {
+    margin-bottom: var(--spacing-6);
+  }
+
+  .cancellation-reasons-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-gray-900);
+    margin: 0 0 var(--spacing-3) 0;
+  }
+
+  .cancellation-reasons-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    margin-bottom: var(--spacing-3);
+  }
+
+  .cancellation-reason-option {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-3);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--border-radius-lg);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .cancellation-reason-option:hover {
+    background-color: var(--color-gray-50);
+    border-color: var(--color-gray-300);
+  }
+
+  .cancellation-reason-option:has(input:checked) {
+    background-color: var(--color-gray-100);
+    border-color: var(--color-gray-900);
+  }
+
+  .cancellation-reason-radio {
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+    accent-color: var(--color-gray-900);
+  }
+
+  .cancellation-reason-label {
+    font-size: 0.875rem;
+    color: var(--color-gray-700);
+    cursor: pointer;
+    flex: 1;
+  }
+
+  .cancellation-error-message {
+    font-size: 0.875rem;
+    color: var(--color-error);
+    margin-top: -10px;
+    margin-bottom: 20px;
+    padding: var(--spacing-2) var(--spacing-3);
+    background-color: var(--color-error-light);
+    border-radius: 5px;
+  }
+
+  /* Estilos para a seção de detalhes adicionais */
+  .cancellation-details-section {
+    margin-top: var(--spacing-4);
+  }
+
+  .cancellation-details-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-gray-700);
+    margin-bottom: var(--spacing-2);
+  }
+
+  .cancellation-details-textarea {
+    width: 100%;
+    padding: var(--spacing-3);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--border-radius-lg);
+    font-size: 0.875rem;
+    color: var(--color-gray-900);
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.2s ease;
+  }
+
+  .cancellation-details-textarea:focus {
+    outline: none;
+    border-color: var(--color-gray-900);
+  }
+
+  .cancellation-details-textarea::placeholder {
+    color: var(--color-gray-400);
+  }
+}

@@ -1,0 +1,120 @@
+#dashboard-container {
+  
+
+  /* Estilos específicos do modal de atualização de status */
+  .update-status-sale-info {
+    background-color: var(--color-gray-100);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-4);
+    margin-bottom: var(--spacing-6);
+  }
+
+  .update-status-sale-label {
+    font-size: 0.875rem;
+    color: var(--color-gray-500);
+    margin: 0;
+  }
+
+  .update-status-sale-id {
+    font-weight: 500;
+    color: var(--color-gray-900);
+    margin: 0;
+  }
+
+  .update-status-sale-product {
+    font-size: 0.875rem;
+    color: var(--color-gray-900);
+    margin: var(--spacing-1) 0 0 0;
+  }
+
+  .update-status-current-info {
+    font-size: 0.875rem;
+    color: var(--color-gray-500);
+    margin: var(--spacing-2) 0 0 0;
+  }
+
+  .update-status-current-value {
+    font-weight: 500;
+    color: var(--color-gray-900);
+  }
+
+  .update-status-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+  }
+
+  .update-status-options-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-gray-900);
+    margin-bottom: var(--spacing-3);
+  }
+
+  .update-status-option {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    padding: var(--spacing-4);
+    background-color: var(--color-white);
+    border: 2px solid var(--color-gray-200);
+    border-radius: var(--border-radius-lg);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .update-status-option:hover {
+    border-color: var(--color-gray-400);
+  }
+
+  .update-status-option.selected {
+    background-color: rgba(0, 0, 0, 0.02);
+    border-color: var(--color-black);
+  }
+
+  .update-status-option-radio {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--color-black);
+    cursor: pointer;
+  }
+
+  .update-status-option-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .update-status-option-icon.blue {
+    color: var(--color-info);
+  }
+
+  .update-status-option-icon.yellow {
+    color: var(--color-warning);
+  }
+
+  .update-status-option-icon.green {
+    color: var(--color-success);
+  }
+
+  .update-status-option-icon.orange {
+    color: #f97316;
+  }
+
+  .update-status-option-text {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-gray-900);
+  }
+
+  .update-status-actions {
+    display: flex;
+    gap: var(--spacing-3);
+    margin-top: var(--spacing-6);
+  }
+
+  .update-status-actions .modal-button {
+    flex: 1;
+    padding: var(--spacing-3) var(--spacing-4);
+  }
+}

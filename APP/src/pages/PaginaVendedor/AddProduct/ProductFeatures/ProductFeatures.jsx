@@ -13,7 +13,7 @@ function ProductFeatures({ formData, errors = false, removeError, onChange }) {
   }, [errors]);
 
   return (
-    <section id="productFeaturesBody" className=" borderRadius boxShadow ">
+    <section id="productFeaturesBody" className=" borderRadius">
       <h1>Características do produto</h1>
       <hr />
       <div className="displayRow">

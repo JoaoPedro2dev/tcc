@@ -142,7 +142,7 @@ function BasicsInfos({
   }, [formData?.category]);
 
   return (
-    <section className="basicsInfos borderRadius boxShadow ">
+    <section className="basicsInfos borderRadius">
       <h1>Informações básicas</h1>
 
       <hr />

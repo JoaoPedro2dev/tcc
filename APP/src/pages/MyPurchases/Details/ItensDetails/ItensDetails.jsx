@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import {
   formatarMonetario,
   verificarFrete,
@@ -5,15 +6,27 @@ import {
 import "./ItensDetails.css";
 
 function ItensDetails({ item, index }) {
+  const navigate = useNavigate();
+
   const valorPromocao = Number(item.preco_promocao);
   const frete = Number(item.frete);
 
   return (
-    <section id="itensDetailsBody" className="borderRadius boxShadow">
+    <section
+      id="itensDetailsBody"
+      className="borderRadius"
+      style={index != 1 ? { marginTop: 20 } : {}}
+    >
       <h1>Pacote {index}</h1>
 
       <div>
-        <img src={item.produc_image} alt={item.product_name} />
+        <img
+          src={item.produc_image}
+          alt={item.product_name}
+          onClick={() => {
+            navigate("/venda?", { state: item.id_produto });
+          }}
+        />
 
         <aside>
           <p>{item.product_name}</p>
@@ -41,6 +54,12 @@ function ItensDetails({ item, index }) {
             <p>Cor: {item.cor}</p>
             <p>Tamanho: {item.tamanho}</p>
           </div>
+
+          {item.status === "cancelado" && (
+            <div>
+              <p>Cancelado, o reembolso foi providenciado</p>
+            </div>
+          )}
         </aside>
       </div>
     </section>

@@ -7,8 +7,10 @@ import ProductImages from "./ProductImages/ProductImages.jsx";
 import { useEffect, useState } from "react";
 import { useUser } from "../../../context/UserContext.jsx";
 import FeedBack from "../../../componentes/Feedback/Feedback.jsx";
-import TitleLogo from "../../../componentes/TitleLogo/TitleLogo.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
+import ConfirmAlert from "../../../componentes/ConfirmAlert/ConfirmAlert.jsx";
+import Header from "../../../componentes/Header/Header";
+import { Trash2 } from "lucide-react";
 
 function AddProduct() {
   const navigate = useNavigate();
@@ -53,6 +55,9 @@ function AddProduct() {
   const [successAlert, setSuccessAlert] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [successDelete, setSuccessDelete] = useState(false);
+
   const handleFormChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -80,7 +85,7 @@ function AddProduct() {
       }
     }
 
-    form.append("seller_id", user.seller_id);
+    form.append("seller_id", user?.seller_id);
 
     fetch("http://localhost/tcc/API/POST/produto", {
       method: "POST",
@@ -184,80 +189,132 @@ function AddProduct() {
     });
   }
 
+  function deleteProduct() {
+    fetch(`http://localhost/tcc/API/POST/delete/produtos`, {
+      method: "POST",
+      body: new URLSearchParams({ id_produto: id }),
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        console.log(data);
+        setSuccessDelete(true);
+        setSuccessAlert(true);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  if (!user?.seller_id) {
+    return "error";
+  }
+
   return (
-    <div id="addProductBody">
-      <TitleLogo />
-      <h2>{id ? "Editar Produto" : "Adicionar produto"}</h2>
-      {successAlert && (
-        <FeedBack
-          message={
-            id
-              ? "Alterações salvas com sucesso!"
-              : "Produto cadastrado com sucesso!"
-          }
-          type={"success"}
-          link={`/paginaVendedor?seller=${user.url}`}
+    <>
+      <Header title={"Cadastrar Produto"} />
+      <div id="addProductBody">
+        {confirmDelete && (
+          <ConfirmAlert
+            message={
+              "Você deseja mesmo excluir este produto? não sera possível recupera-lo após isso!"
+            }
+            onClose={() => {
+              setConfirmDelete(false);
+            }}
+            onConfirm={deleteProduct}
+          />
+        )}
+
+        {successAlert && (
+          <FeedBack
+            message={
+              successDelete
+                ? "Produto deletado com sucesso!"
+                : id
+                ? "Alterações salvas com sucesso!"
+                : "Produto cadastrado com sucesso!"
+            }
+            type={"success"}
+            link={`/paginaVendedor?seller=${user.url}`}
+          />
+        )}
+
+        <BasicsInfos
+          formData={formData}
+          onChange={handleFormChange}
+          setSelectedCategory={setSelectedCategory}
+          errors={errors}
+          removeError={removeError}
         />
-      )}
 
-      <BasicsInfos
-        formData={formData}
-        onChange={handleFormChange}
-        setSelectedCategory={setSelectedCategory}
-        errors={errors}
-        removeError={removeError}
-      />
+        <ProductSize
+          formData={formData}
+          onChange={handleFormChange}
+          category={selectedCategory}
+          errors={errors}
+          removeError={removeError}
+        />
 
-      <ProductSize
-        formData={formData}
-        onChange={handleFormChange}
-        category={selectedCategory}
-        errors={errors}
-        removeError={removeError}
-      />
+        <ProductFeatures
+          formData={formData}
+          onChange={handleFormChange}
+          errors={errors}
+          removeError={removeError}
+        />
 
-      <ProductFeatures
-        formData={formData}
-        onChange={handleFormChange}
-        errors={errors}
-        removeError={removeError}
-      />
+        <PriceLogistics
+          formData={formData}
+          onChange={handleFormChange}
+          errors={errors}
+          removeError={removeError}
+        />
 
-      <PriceLogistics
-        formData={formData}
-        onChange={handleFormChange}
-        errors={errors}
-        removeError={removeError}
-      />
+        <ProductImages
+          formData={formData}
+          onChange={handleFormChange}
+          errors={errors}
+          removeError={removeError}
+        />
 
-      <ProductImages
-        formData={formData}
-        onChange={handleFormChange}
-        errors={errors}
-        removeError={removeError}
-      />
-
-      <div id="btnsBox">
-        {id ? (
-          <button onClick={editarProduto} disabled={isLoading}>
-            {" "}
-            {isLoading ? "PROCESSANDO..." : "SALVAR ALTERAÇÕES"}
-          </button>
-        ) : (
-          <button onClick={cadastrarProduto} disabled={isLoading}>
-            {isLoading ? "PROCESSANDO" : "CADASTRAR PRODUTOS"}
+        {id && (
+          <button
+            className="deleteBtn"
+            onClick={() => {
+              setConfirmDelete(true);
+            }}
+          >
+            <Trash2 size={20} /> Excluir produto
           </button>
         )}
 
-        <button
-          onClick={() => {
-            navigate(-1);
-          }}
-        >
-          CANCELAR
-        </button>
+        <div id="btnsBox">
+          <button
+            onClick={() => {
+              if (
+                confirm(
+                  "Caso deixe a página alguns dados podem não ser salvos!"
+                )
+              ) {
+                navigate(-1);
+              }
+            }}
+          >
+            Cancelar
+          </button>
+
+          {id ? (
+            <button onClick={editarProduto} disabled={isLoading}>
+              {" "}
+              {isLoading ? "Salvando..." : "SALVAR ALTERAÇÕES"}
+            </button>
+          ) : (
+            <button onClick={cadastrarProduto} disabled={isLoading}>
+              {isLoading ? "Cadastrando..." : "Cadastrar produto"}
+            </button>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

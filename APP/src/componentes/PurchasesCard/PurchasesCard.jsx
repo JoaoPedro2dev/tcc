@@ -6,16 +6,29 @@ import {
   User,
   Clock,
   AlertCircle,
+  X,
   CheckCircle,
+  Check,
+  EarthLock,
 } from "lucide-react";
-import { formatarData } from "../../helpers/functions";
+import { formatarData, monetaryFormatting } from "../../helpers/functions";
 import { useState } from "react";
 import "./PurchasesCard.css";
 import { useNavigate } from "react-router-dom";
+import CancelSaleModal from "../CancelSaleModal/CancelSaleModal";
+import FeedbackPopup from "../Feedback/Feedback";
+// import CancelSaleModal from "./CancelSaleModal/CancelSaleModal";
+// import CancelSaleModal from "./CancelSaleModal/CancelSaleModal";
 
-function PurchaseCard({ purchase }) {
+function PurchaseCard({ purchaseData }) {
   const navigate = useNavigate();
+  const [purchase, setPurchases] = useState(purchaseData);
   const [expandedItems, setExpandedItems] = useState(new Set());
+  const [cancelSale, setCancelSale] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [success, setSuccess] = useState(false);
+
+  console.log("Compra data", purchase);
 
   const toggleExpand = (productId) => {
     const newExpanded = new Set(expandedItems);
@@ -35,14 +48,19 @@ function PurchaseCard({ purchase }) {
           icon: CheckCircle,
           label: "Entregue",
         };
-      case "em_transporte":
-      case "a caminho":
+      case "em transporte":
         return {
           className: "status-shipping",
           icon: Package,
           label: "Em transporte",
         };
-      case "em preparação":
+      case "confirmado":
+        return {
+          className: "status-preparing",
+          icon: Check,
+          label: "Confirmado",
+        };
+
       case "pendente":
         return {
           className: "status-preparing",
@@ -51,12 +69,10 @@ function PurchaseCard({ purchase }) {
         };
       case "chegou":
         return { className: "status-arrived", icon: MapPin, label: "Chegou" };
-      case "cancelado por você":
-      case "cancelado pelo vendedor":
-      case "cancelado pela dnv wear":
+      case "cancelado":
         return {
           className: "status-cancelled",
-          icon: AlertCircle,
+          icon: X,
           label: "Cancelado",
         };
       case "não recebido":
@@ -78,7 +94,7 @@ function PurchaseCard({ purchase }) {
     }
 
     if (
-      (status === "em_transporte" || status === "pendente") &&
+      (status === "em transporte" || status === "pendente") &&
       product.data_previsao
     ) {
       return `Previsão de entrega: ${formatarData(product.data_previsao)}`;
@@ -92,28 +108,82 @@ function PurchaseCard({ purchase }) {
     }
 
     if (status.includes("cancelado")) {
-      return "Reembolso será processado em até 5 dias úteis";
+      return (
+        <>
+          <span>Quem cancelou: {product.quem_cancelou}</span>
+          <span>Motivo: {product.motivo_cancelamento}</span>
+          <span>
+            Seu reembolso de{" "}
+            {product.preco_promocao > 0
+              ? monetaryFormatting(product.preco_promocao)
+              : monetaryFormatting(product.preco_uniario)}{" "}
+            foi acionado
+          </span>
+        </>
+      );
     }
 
-    return "";
+    return;
+  };
+
+  const handleCancelSale = (selectedItemId) => {
+    setPurchases((prev) => ({
+      ...prev,
+      itens: prev.itens.map((item) =>
+        item.id_item === selectedItemId
+          ? {
+              ...item,
+              status: "cancelado",
+            }
+          : item
+      ),
+    }));
+
+    setCancelSale(false);
   };
 
   return (
     <div className="purchase-card">
+      {cancelSale && (
+        <CancelSaleModal
+          sale={selectedItem}
+          onCancel={() => handleCancelSale(selectedItem.id_item)}
+          success={setSuccess}
+          onClose={() => {
+            setCancelSale(false);
+          }}
+          isClient={true}
+        />
+      )}
+
+      {success && (
+        <FeedbackPopup
+          message={success.message}
+          type="success"
+          onClose={() => {
+            setSuccess(false);
+          }}
+        />
+      )}
+
       {/* Header */}
       <div className="purchase-header">
         <div className="purchase-date">
-          <Calendar className="date-icon" />
+          <Calendar size={20} color="black" />
           <span className="date-text">
             Pedido de {formatarData(purchase.data_compra)}
           </span>
         </div>
-        {purchase.metodoPagamento && (
-          <div className="payment-method">
-            <CreditCard className="payment-icon" />
-            <span className="payment-text">{purchase.metodoPagamento}</span>
-          </div>
-        )}
+        <div className="payment-method">
+          {purchase.forma_pagamento === "cartao" ? (
+            <CreditCard className="payment-icon" color="black" />
+          ) : (
+            <EarthLock className="payment-icon" color="black" />
+          )}
+          <span className="payment-text">
+            {purchase.forma_pagamento === "cartao" ? "Cartão" : "Pix"}
+          </span>
+        </div>
       </div>
 
       {/* Products */}
@@ -126,7 +196,16 @@ function PurchaseCard({ purchase }) {
             <div key={key} className="product-item">
               <div className="product-content">
                 {/* Product Image */}
-                <div className="product-image-container">
+                <div
+                  className="product-image-container"
+                  onClick={() => {
+                    product.status === "entregue" ||
+                      (product.status === "cancelado" &&
+                        navigate("/minhas-compras/detalhes", {
+                          state: purchase.id_compra,
+                        }));
+                  }}
+                >
                   <img
                     src={
                       product.produc_image ||
@@ -147,6 +226,10 @@ function PurchaseCard({ purchase }) {
                         {product.quantidade}{" "}
                         {product.quantidade === 1 ? "unidade" : "unidades"}
                       </p>
+                      <div className="displayRow small colorGray">
+                        <p>Cor: {product.cor}</p>
+                        <p>Tamanho: {product.tamanho}</p>
+                      </div>
                     </div>
 
                     {/* Status Badge */}
@@ -157,39 +240,35 @@ function PurchaseCard({ purchase }) {
                   </div>
 
                   {/* Status Message */}
-                  <div className="status-message">
-                    <p className="status-text">{getStatusMessage(product)}</p>
-                    {product.recebido_por && (
-                      <div className="received-by">
-                        <User className="received-icon" />
-                        <span className="received-text">
-                          Recebido por {product.recebido_por}
-                        </span>
-                      </div>
-                    )}
-                  </div>
+                  {getStatusMessage(product) && (
+                    <div className="status-message">
+                      <p className="status-text">{getStatusMessage(product)}</p>
+                      {product.recebido_por && (
+                        <div className="received-by">
+                          <User className="received-icon" />
+                          <span className="received-text">
+                            Recebido por {product.recebido_por}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   {/* Action Buttons */}
                   <div className="action-buttons">
-                    {(product.status === "em_transporte" ||
-                      product.status === "Em preparação") && (
-                      <button
-                        className="action-button track-button"
-                        onClick={() => {
-                          navigate("/minhas-compras/rastrear");
-                        }}
-                      >
-                        Rastrear
-                      </button>
-                    )}
-
-                    {(product.status === "em_transporte" ||
-                      product.status === "Em preparação" ||
-                      product.status === "Não recebido") && (
-                      <button className="action-button cancel-button">
-                        Cancelar
-                      </button>
-                    )}
+                    {product.status != "entregue" &&
+                      product.status != "cancelado" &&
+                      product.status != "não recebido" && (
+                        <button
+                          className="action-button cancel-button"
+                          onClick={() => {
+                            setSelectedItem(product);
+                            setCancelSale(true);
+                          }}
+                        >
+                          Cancelar
+                        </button>
+                      )}
 
                     {product.status === "Entregue" && (
                       <button className="action-button review-button">
@@ -202,6 +281,24 @@ function PurchaseCard({ purchase }) {
             </div>
           );
         })}
+      </div>
+
+      <div>
+        {purchase.itens.some(
+          (product) =>
+            product.status != "entregue" && product.status != "cancelado"
+        ) && (
+          <button
+            className="action-button track-button"
+            onClick={() => {
+              navigate("/minhas-compras/rastrear", {
+                state: purchase.id_compra,
+              });
+            }}
+          >
+            Rastrear Compra
+          </button>
+        )}
       </div>
     </div>
   );

@@ -4,7 +4,11 @@
   gap: 25px;
   background-color: #f2f2f2;
   max-width: 100vw;
-  padding: 120px 22%;
+  padding: 60px 18% 120px;
+}
+
+#addProductBody h1 {
+  font-size: x-large;
 }
 
 #addProductBody hr {
@@ -16,7 +20,7 @@
 }
 
 #addProductBody > div {
-  padding: 0px 23%;
+  padding: 0px 18%;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -27,18 +31,20 @@
 }
 
 #addProductBody > div > button {
-  border-radius: 5px;
-  border: 2px solid;
-  color: blue;
-  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  color: #fff;
+  background-color: black;
+  padding: 15px;
   width: 50%;
-  font-weight: bold;
+  font-size: medium;
+  font-weight: 500;
   cursor: pointer;
   transition: 0.2s;
 }
 
 #addProductBody > div > button:hover {
-  color: #4d4dff;
+  background-color: #3a3a3a;
 }
 
 #addProductBody > section {
@@ -71,9 +77,9 @@
 #addProductBody input[type="number"],
 #addProductBody textarea {
   padding: 13px 10px;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
-  border: 1px solid #ccc;
+  border: 1px solid black;
   transition: 0.2s;
   width: 100%;
   max-width: 100%;
@@ -85,13 +91,13 @@
   text-align: center;
 }
 
-#addProductBody select:focus,
+/* #addProductBody select:focus,
 #addProductBody input[type="text"]:focus,
 #addProductBody input[type="number"]:focus,
 #addProductBody textarea:focus {
   border-color: rgb(220, 3, 220);
   box-shadow: 0px 0px 2px rgba(220, 3, 220, 0.9);
-}
+} */
 
 #addProductBody textarea {
   min-width: 100%;
@@ -110,4 +116,30 @@
 
 .errorElement {
   border: 1px solid red !important;
+}
+
+#addProductBody .deleteBtn {
+  width: 100%;
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  /* right: -50%; */
+  /* transform: translateX(-50%); */
+  /* width: 50%; */
+  background-color: #f70f0f;
+  padding: 15px;
+  border-radius: 8px;
+  border: none;
+  color: #fff;
+  font-weight: 500;
+  font-size: medium;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#addProductBody .deleteBtn:hover {
+  background-color: #dd2424;
 }

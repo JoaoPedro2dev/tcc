@@ -1,12 +1,17 @@
-import { formatarData, formatarMonetario } from "../../../../helpers/functions";
+import {
+  formatarData,
+  formatarMonetario,
+  monetaryFormatting,
+} from "../../../../helpers/functions";
 import "./PaymentDetails.css";
 import { CircleAlert, CreditCard, SquareKanban, Wallet } from "lucide-react";
 
-function PaymentDetails(compra) {
+function PaymentDetails({ compra }) {
   console.log("compra detalhes", compra);
+
   function verificarMetodoPagamento(metodo, identificacao) {
     switch (metodo) {
-      case "PIX":
+      case "pix":
         return (
           <div>
             <span>
@@ -17,7 +22,7 @@ function PaymentDetails(compra) {
           </div>
         );
 
-      case "Cartão":
+      case "cartao":
         return (
           <div>
             <span>
@@ -25,17 +30,6 @@ function PaymentDetails(compra) {
             </span>
 
             <p className="colorGray">Cartão {identificacao}</p>
-          </div>
-        );
-
-      case "Boleto":
-        return (
-          <div>
-            <span>
-              <SquareKanban />
-            </span>
-
-            <p className="colorGray">Boleto {identificacao}</p>
           </div>
         );
 
@@ -53,27 +47,34 @@ function PaymentDetails(compra) {
   }
 
   return (
-    <div id="paymentDetailsBody" className="borderRadius boxShadow">
+    <div id="paymentDetailsBody" className="borderRadius">
       {verificarMetodoPagamento(compra.forma_pagamento, compra.identificação)}
 
       <aside>
         <p className="colorGray">
-          {formatarData(compra.data_compra)} | {compra.id_string}
+          {formatarData(compra.data_compra)} |{" "}
+          {compra.id_string ?? "#" + compra.id_compra}
         </p>
 
-        <p>
-          {compra.avista
-            ? `À vista ${formatarMonetario(compra.valor)}`
-            : `Parcelado ${compra.parcelas} x ${formatarMonetario(
-                compra.valor
-              )}`}
+        <p className="price-content">
+          {compra.parcelas <= 1 ? (
+            `À vista ${formatarMonetario(compra.preco_total)}`
+          ) : (
+            <>
+              <span>
+                Parcelado {compra.parcelas} X{" "}
+                {formatarMonetario(compra.valor_parcelas)}
+              </span>
+              <span>Total: {monetaryFormatting(compra.preco_total)}</span>
+            </>
+          )}
         </p>
 
-        <p className={compra.pagamentoAprovado ? "colorGreen" : "colorRed"}>
+        {/* <p className={compra.pagamentoAprovado ? "colorGreen" : "colorRed"}>
           {compra.pagamentoAprovado
             ? "Pagamento aprovado"
             : "Pagamento não aprovado"}
-        </p>
+        </p> */}
       </aside>
     </div>
   );

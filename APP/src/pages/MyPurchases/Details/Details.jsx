@@ -3,18 +3,25 @@ import Header from "../../../componentes/Header/Header.jsx";
 import PaymentCard from "./PaymentCard/PaymentCard.jsx";
 import PaymentDetails from "./PaymentDetails/PaymentDetails.jsx";
 import DeliveryDetails from "./DeliveryDetails/DeliveryDetails.jsx";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ItensDetails from "./ItensDetails/ItensDetails.jsx";
 import { useEffect, useState } from "react";
 
 function Details() {
+  const location = useLocation();
+  const compraId = location.state ?? false;
+
   const [compra, setCompra] = useState({});
 
   useEffect(() => {
-    fetch("http://localhost/tcc/API/GET/compra-by-id")
+    fetch("http://localhost/tcc/API/GET/compra-by-id", {
+      method: "POST",
+      body: new URLSearchParams({ id_compra: compraId }),
+    })
       .then((r) => r.json())
       .then((data) => {
         if (data) {
+          console.log("DETALHES", data);
           setCompra(data);
         }
       })
@@ -24,7 +31,7 @@ function Details() {
   const navigate = useNavigate();
   return (
     <div id="detailsBody">
-      <Header />
+      <Header title={"Detalhes da compra"} />
 
       {compra.itens && (
         <main>

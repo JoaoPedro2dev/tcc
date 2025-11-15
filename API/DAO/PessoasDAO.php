@@ -9,7 +9,7 @@ use Model\Pessoa;
     class PessoasDAO extends DAO{
 
         public function getAccountData(int $id) : ?Pessoa{
-            $sql = "SELECT p.id, p.email, p.name, p.first_name, p.last_name, p.username, p.cpf, p.telefone, p.profile_photo, v.`url`, p.cep, p.nivel_acesso, p.rua, p.bairro, p.cidade, p.uf, p.cep, p.num_residencia, p.complemento, p.address, v.id AS seller_id
+            $sql = "SELECT p.*, v.`url`, v.id AS seller_id, v.cnpj
                     FROM pessoas p
                     LEFT JOIN vendedores v ON v.id_pessoa = p.id
                     WHERE p.id = ?";
@@ -79,12 +79,15 @@ use Model\Pessoa;
             if($pessoa->getNivelAcesso() === 'vendedor'){
                 $sql = "INSERT INTO vendedores (id_pessoa, store_name, cnpj, open_hours, close_hours, `url`) VALUES(?, ?, ?, ?, ?, ?)";
                 $stmt = parent::$conexao->prepare($sql);
-                return $stmt->execute([$lastIdUser, $pessoa->getStoreName(), $pessoa->getCnpj(), $pessoa->getOpenHours(), $pessoa->getCloseHours(), $pessoa->getUrl()]);
+                $stmt->execute([$lastIdUser, $pessoa->getStoreName(), $pessoa->getCnpj(), $pessoa->getOpenHours(), $pessoa->getCloseHours(), $pessoa->getUrl()]);
             }else{
                 $sql = "INSERT INTO usuarios (id_pessoa) VALUES(?)";
                 $stmt = parent::$conexao->prepare($sql);
-                return $stmt->execute([$lastIdUser]);
+                $stmt->execute([$lastIdUser]);
             }
+
+            $stmt = parent::$conexao->prepare("INSERT INTO carrinhos (userId) VALUES(?)");
+            return $stmt->execute([$lastIdUser]);
         }
 
         public function update(Pessoa $pessoa) : bool{
@@ -154,8 +157,8 @@ use Model\Pessoa;
             $sql = "
                 SELECT * FROM (
                     SELECT 
-                        p.id, p.images, p.availableColors, p.productName, p.price, 
-                        p.promotionPrice, p.shippingCost, p.category, p.subCategory, `condition`, p.stockTotal,
+                        p.id, p.images, p.productName, p.price, 
+                        p.promotionPrice, promotionStartDate, promotionEndDate, p.shippingCost, p.category, p.subCategory, `condition`, p.stockTotal, p.sellerId, p.brand, style, gender, description,
                         (
                             (p.category IN (" . $placeholders($categories) . ")) +
                             (p.subCategory IN (" . $placeholders($subCategories) . "))
@@ -183,10 +186,74 @@ use Model\Pessoa;
 
             $stmt = parent::$conexao->prepare($sql);
             $stmt->execute($params);
+            $rows = $stmt->fetchAll(DAO::FETCH_ASSOC);
 
-            return $stmt->fetchAll(DAO::FETCH_CLASS, 'Model\Product');
+            // Agrupar produtos (no caso de array de ids)
+            $produtos = [];
+            foreach ($rows as $row) {
+                $pid = $row['id'];
+                if (!isset($produtos[$pid])) {
+                    $produto = new \Model\Product();
+                    $produto->setId($row['id']);
+                    $produto->setSellerId($row['sellerId']);
+                    // $produto->setSellerUrl($row['url']);
+                    $produto->setProductName($row['productName']);
+                    $produto->setCategory($row['category']);
+                    $produto->setSubCategory($row['subCategory']);
+                    $produto->setStyle($row['style']);
+                    $produto->setBrand($row['brand']);
+                    $produto->setGender($row['gender']);
+                    $produto->setCondition($row['condition']);
+                    $produto->setDescription($row['description']);
+                    $produto->setPrice($row['price']);
+                    $produto->setShippingCost($row['shippingCost']);
+                    // $produto->setSalesQuantity($row['salesQuantity']);
+                    $produto->setPromotionPrice($row['promotionPrice']);
+                    // $produto->setDeliveryTime($row['deliveryTime']);
+                    $produto->setPromotionStartDate($row['promotionStartDate']);
+                    $produto->setPromotionEndDate($row['promotionEndDate']);
+                    $produto->setImages(!empty($row['images']) ? json_decode($row['images']) : null);
+               
+                    // $produto->setItenStock([]);
+                    $produtos[$pid] = $produto;
+                }
+
+                // Adicionar cores e tamanhos ao itenStock
+                $produto = $produtos[$pid];
+                $itenStock = $produto->getItenStock();
+
+                if (!empty($row['cor'])) {
+                    $corExistente = false;
+                    foreach ($itenStock as &$corItem) {
+                        if ($corItem['cor'] === $row['cor']) {
+                            $corItem['tamanhos'][] = [
+                                'tamanho' => $row['tamanho'],
+                                'qnt' => $row['quantity'],
+                            ];
+                            $corExistente = true;
+                            break;
+                        }
+                    }
+                    if (!$corExistente) {
+                        $itenStock[] = [
+                            'cor' => $row['cor'],
+                            'tamanhos' => [
+                                [
+                                    'tamanho' => $row['tamanho'],
+                                    'qnt' => $row['quantity'],
+                                ]
+                            ],
+                            'stockTotalColor' => $row['stock_cor']
+                        ];
+                    }
+                }
+
+                $produto->setItenStock($itenStock, true);
+            }
+
+            return array_values($produtos);
+
         }
-
 
         public function profileUpdate(Pessoa $pessoa) : bool{
             $sql = "UPDATE pessoas SET 
@@ -194,9 +261,7 @@ use Model\Pessoa;
                     name = ?,
                     first_name = ?, 
                     last_name = ?, 
-                    username = ?, 
-                    store_name = ?,
-                    url = ?
+                    username = ?
                     WHERE id = ?";
 
             $stmt = parent::$conexao->prepare($sql);
@@ -207,22 +272,27 @@ use Model\Pessoa;
                 $pessoa->getFirstName(),     // first_name
                 $pessoa->getLastName(),      // last_name
                 $pessoa->getUserName(), 
-                $pessoa->getStoreName(), 
-                $pessoa->getUrl(),
                 $pessoa->getId(),
             ]);
 
             // if ($stmt->rowCount() > 0) {
-                $stmt = parent::$conexao->prepare("SELECT * FROM pessoas WHERE id = ?");
-                $stmt->execute([$pessoa->getId()]);
-                $pessoaAtualizada = $stmt->fetchObject("Model\Pessoa");
+                // $stmt = parent::$conexao->prepare("SELECT * FROM pessoas WHERE id = ?");
+                // $stmt->execute([$pessoa->getId()]);
+                // $pessoaAtualizada = $stmt->fetchObject("Model\Pessoa");
 
-                if($pessoaAtualizada){
-                    $pessoaAtualizada->createCookie($pessoaAtualizada);
-                    return true;
-                }
+                // if($pessoaAtualizada){
+                //     $pessoaAtualizada->createCookie($pessoaAtualizada);
+                //     return true;
+                // }
             // }
-            return false;
+            return true;
+        }
+
+        public function personalInfoUpdate(Pessoa $pessoa):bool{
+            $sql = "UPDATE pessoas SET cpf = ?, email = ?, date_birth = ?, telefone = ? WHERE id = ?";
+
+            $stmt = parent::$conexao->prepare($sql);
+            return $stmt->execute([$pessoa->getCpf(), $pessoa->getEmail(), $pessoa->getDateBirth(), $pessoa->getTelefone(), $pessoa->getId()]);
         }
 
         public function addressUpdate(Pessoa $pessoa) : bool{
@@ -250,6 +320,18 @@ use Model\Pessoa;
             ]);
         }
 
+        public function updatePassword(string $password, int $id): bool{
+            $sql = "UPDATE pessoas SET `password` = SHA1(?) WHERE id = ?";
+            $stmt = parent::$conexao->prepare($sql);
+            return $stmt->execute([$password, $id]);
+        }
+        
+        public function updateCnpj(string $cnpj, int $id): bool{
+            $sql = "UPDATE vendedores SET cnpj = ? WHERE id_pessoa = ?";
+            $stmt = parent::$conexao->prepare($sql);
+            return $stmt->execute([$cnpj, $id]);
+        }
+
         public function existsUsername(string $username, int $id) : bool{
             $sql = "SELECT COUNT(*) FROM pessoas WHERE username = ? AND id != ?";
             $stmt = parent::$conexao->prepare($sql);
@@ -264,10 +346,10 @@ use Model\Pessoa;
             return $stmt->fetchColumn() > 0;
         }
 
-        public function existsCPF(string $cpf) : bool{
-            $sql = "SELECT COUNT(*) FROM pessoas WHERE cpf = ?";
+        public function existsCPF(string $cpf, int $id = 0) : bool{
+            $sql = "SELECT COUNT(*) FROM pessoas WHERE cpf = ? AND id != ?";
             $stmt = parent::$conexao->prepare($sql);
-            $stmt->execute([$cpf]);
+            $stmt->execute([$cpf, $id]);
             return $stmt->fetchColumn() > 0;
         }
 
@@ -279,18 +361,18 @@ use Model\Pessoa;
         }
 
         
-        public function existsEmail(string $email) : bool{
-            $sql = "SELECT COUNT(*) FROM pessoas WHERE email = ?";
+        public function existsEmail(string $email, int $id = 0) : bool{
+            $sql = "SELECT COUNT(*) FROM pessoas WHERE email = ? AND id != ?";
             $stmt = parent::$conexao->prepare($sql);
-            $stmt->execute([$email]);
+            $stmt->execute([$email, $id]);
             return $stmt->fetchColumn() > 0;
         }
 
             
-        public function existsTelefone(string $telefone) : bool{
-            $sql = "SELECT COUNT(*) FROM pessoas WHERE telefone = ?";
+        public function existsTelefone(string $telefone, int $id = 0) : bool{
+            $sql = "SELECT COUNT(*) FROM pessoas WHERE telefone = ? AND id != ?";
             $stmt = parent::$conexao->prepare($sql);
-            $stmt->execute([$telefone]);
+            $stmt->execute([$telefone, $id]);
             return $stmt->fetchColumn() > 0;
         }
 

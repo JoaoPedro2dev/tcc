@@ -1,6 +1,6 @@
-import "./confirmAlert.css";
+import "./ConfirmAlert.css";
 
-const confirmAlert = ({ message, onClose, onConfirm }) => {
+function ConfirmAlert({ message, onClose, onConfirm }) {
   // Fecha ao clicar no fundo
   const handleOverlayClick = (e) => {
     if (e.target.classList.contains("popup-overlay")) {
@@ -12,7 +12,7 @@ const confirmAlert = ({ message, onClose, onConfirm }) => {
     <div className="popup-overlay" onClick={handleOverlayClick}>
       <div className="popup-container">
         <button className="popup-close" onClick={onClose}>
-          ✕
+          <X />
         </button>
         <p className="popup-message">{message}</p>
         <div className="popup-actions">
@@ -26,6 +26,6 @@ const confirmAlert = ({ message, onClose, onConfirm }) => {
       </div>
     </div>
   );
-};
+}
 
-export default confirmAlert;
+export default ConfirmAlert;

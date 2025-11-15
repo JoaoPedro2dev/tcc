@@ -1,0 +1,224 @@
+.UpdatePersonalInfoContainer {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  /* background-color: #; */
+  border-radius: 8px;
+
+  .personal-info-form {
+    padding: 2rem;
+    border-radius: 8px;
+
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* SEÇÃO DO FORMULÁRIO */
+  .form-section {
+    background-color: #ffffff;
+    box-shadow: none;
+    padding: 0;
+    /* border: 1px solid #e0e0e0; */
+  }
+
+  .form-section h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333333;
+    /* margin: 0 0 0.5rem 0; */
+    /* padding-bottom: 0.75rem; */
+    /* border-bottom: 2px solid #007bff; */
+  }
+
+  /* GRID DE FORMULÁRIO */
+  .form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    /* margin-bottom: 1.5rem; */
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-group.full-width {
+    grid-column: 1 / -1;
+  }
+
+  /* LABELS */
+  .form-group label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: black;
+
+    margin: 0;
+  }
+
+  /* INPUTS */
+  .form-group input {
+    outline: none;
+
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    border: 1px solid black;
+    border-radius: 8px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background-color: #ffffff;
+    color: #333333;
+  }
+
+  .form-group input::placeholder {
+    color: #999999;
+  }
+
+  .form-group input:hover:not(:focus) {
+    border-color: #999999;
+  }
+
+  /* INPUTS COM ERRO */
+  .form-group input.error {
+    border-color: #dc3545;
+    background-color: #fff8f8;
+  }
+
+  .form-group input.error:focus {
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+    border-color: #dc3545;
+  }
+
+  /* MENSAGENS DE ERRO */
+  .error-message {
+    font-size: 0.8rem;
+    color: #dc3545;
+    font-weight: 500;
+    margin: 0;
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  /* ALERTA DE ERRO GERAL */
+  .form-error-alert {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 1rem;
+    border-radius: 4px;
+    border-left: 4px solid #dc3545;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin: 1rem 0;
+  }
+
+  /* BOTÕES */
+  .form-actions {
+    position: absolute;
+    bottom: -20%;
+    right: 0;
+
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+  }
+
+  .button {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+
+    min-width: 140px;
+  }
+
+  .button.primary {
+    background-color: black;
+    color: #ffffff;
+  }
+  .button.primary:hover {
+    background-color: #3a3a3a;
+  }
+
+  .button.secondary {
+    background-color: transparent;
+    color: black;
+    border: 1px solid;
+  }
+  .button.secondary:hover {
+    color: #3a3a3a;
+  }
+
+  .button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .UpdatePersonalInfoContainer {
+      padding: 1rem;
+    }
+
+    .form-section {
+      padding: 1rem;
+    }
+
+    .form-grid-2 {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .form-actions {
+      flex-direction: column-reverse;
+    }
+
+    .button {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .UpdatePersonalInfoContainer {
+      padding: 0.5rem;
+    }
+
+    .form-section {
+      padding: 0.75rem;
+    }
+
+    .form-section h3 {
+      font-size: 1rem;
+    }
+
+    .form-group input {
+      font-size: 16px;
+    }
+
+    .form-actions {
+      gap: 0.5rem;
+    }
+
+    .button {
+      padding: 0.6rem 1rem;
+      font-size: 0.85rem;
+      min-width: auto;
+    }
+  }
+}

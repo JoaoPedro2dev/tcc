@@ -7,29 +7,29 @@
   align-items: center;
   justify-content: center;
 
-  padding: 40px 11% 90px;
+  padding: 40px 8% 90px;
 
-  background-color: #f2f2f2;
+  /* background-color: #f2f2f2; */
 }
 
 #trackBody > #backBtn {
   position: fixed;
   bottom: 20px;
-  right: 40px;
+  right: 8%;
 
-  padding: 15px 20px;
+  padding: 15px 25px;
   border-radius: 5px;
   border: none;
 
   color: #fff;
-  background-color: blue;
+  background-color: black;
 
-  font-weight: bold;
+  font-weight: 500;
   cursor: pointer;
 
   transition: 0.2s;
 }
 
 #trackBody > #backBtn:hover {
-  background-color: rgb(48, 48, 255);
+  background-color: #3a3a3a;
 }

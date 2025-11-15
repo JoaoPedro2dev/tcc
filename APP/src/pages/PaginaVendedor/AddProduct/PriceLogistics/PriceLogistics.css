@@ -11,14 +11,15 @@
   margin-top: 10px;
   border-radius: 8px;
   padding: 15px;
-  font-weight: bold;
+  font-weight: 500;
+  font-size: medium;
   color: #fff;
   border: none;
-  background-color: #b205b2;
+  background-color: black;
   cursor: pointer;
   transition: 0.2s;
 }
 
 #priceLogisticsBody #addPromotionBtn:hover {
-  background-color: #e216e2;
+  background-color: #3a3a3a;
 }
