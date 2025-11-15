@@ -70,8 +70,8 @@ use Exception;
             return ((new ProductDAO())->removePromotion($product_id));
         }
 
-        public function getSimilarItems(string $category, string $subCategory, string $style, int $id_produto){
-            return ((new ProductDAO())->getSimilarItems($category, $subCategory, $style, $id_produto));
+        public function getSimilarItems(string $category, int $id_produto){
+            return ((new ProductDAO())->getSimilarItems($category, $id_produto));
         }
 
         // Getters e Setters

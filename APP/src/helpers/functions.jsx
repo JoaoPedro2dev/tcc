@@ -46,6 +46,13 @@ export function formatDefaultDate(data) {
   return `${dia}/${mes}/${ano}`;
 }
 
+export function formatHour(data) {
+  const date = data.split(" ");
+  console.log("date", date);
+  const horario = date[1];
+  return horario.slice(0, -3);
+}
+
 export function formatarMonetario(valor) {
   return Number(valor).toLocaleString("pt-BR", {
     style: "currency",

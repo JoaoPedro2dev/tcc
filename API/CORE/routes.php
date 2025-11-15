@@ -57,15 +57,17 @@ switch(Functions::formatUrl()){
 
     case '/GET/produtos/similar_items':
         try{
-            $getArray = ['category', 'subCategory', 'style', 'id_produto'];
+            $getArray = ['category', 'id_produto'];
+
+            // echo $_GET['category'];  
             
             foreach ($getArray as $get) {
                 Functions::verifyVar($get);
             }
 
-            Functions::verifyIdPost('id_produto');
+            // Functions::verifyIdPost('id_produto');
 
-            echo json_encode(ProductController::getSimilarItems($_GET['category'], $_GET['subCategory'], $_GET['style'], $_POST['id_produto']), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE); 
+            echo json_encode(ProductController::getSimilarItems($_GET['category'], $_GET['id_produto']), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE); 
         }catch(Exception $e){
             echo $e->getMessage();
         }
@@ -891,8 +893,13 @@ switch(Functions::formatUrl()){
             if(!in_array($novo_estado, $statusArray)){
                 die(json_encode(['success' => false, 'field' => 'novo_estado', 'status' => 'Estado de produto não reconhecido'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
             }
+
+            if($novo_estado === 'entregue'){
+                $data = new DateTime();
+                $data_entregue = $data->format('Y-m-d H:i:s');
+            }
             
-            echo json_encode(ItensCompraController::alterarStatus($id_item, $novo_estado), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            echo json_encode(ItensCompraController::alterarStatus($id_item, $novo_estado, $data_entregue), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
         }catch(Exception $e){
             echo $e->getMessage();

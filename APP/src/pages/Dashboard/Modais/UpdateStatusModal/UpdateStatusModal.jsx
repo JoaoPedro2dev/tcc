@@ -27,8 +27,8 @@ function UpdateStatusModal({ sale, onUpdate, success, onClose }) {
           onUpdate(selectedStatus);
           success({ message: "status do pedido alterado com sucesso" });
         }
-      })
-      .catch((error) => console.error("erro", error));
+      });
+    // .catch((error) => console.error("erro", error));
   };
 
   // Opções de status de entrega com ícones

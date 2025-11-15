@@ -96,7 +96,7 @@ function Card({ item, showPorcentage = false, isProfile = false }) {
             </p>
             <p
               className="colorGray small"
-              style={{ color: item.stockTotal === 0 && "red" }}
+              style={{ color: stockTotal === 0 && "red" }}
             >
               {stockTotal} em estoque
             </p>

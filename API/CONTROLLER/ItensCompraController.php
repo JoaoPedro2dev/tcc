@@ -17,8 +17,8 @@ abstract class ItensCompraController{
         return ((new ItensCompra())->cancelarItem($id_item, $motivo_cancelamento, $quem_cancelou));
     }
 
-    static function alterarStatus(int $id_item, string $novo_estado):bool{
-        return ((new ItensCompra())->alterarStatus($id_item,  $novo_estado));
+    static function alterarStatus(int $id_item, string $novo_estado, string $data_entregue = null):bool{
+        return ((new ItensCompra())->alterarStatus($id_item,  $novo_estado, $data_entregue));
     }
 }
 

@@ -46,8 +46,8 @@ use Model\Product;
             return ((new Product())->removePromotion($product_id));
         }
 
-        public static function getSimilarItems(string $category, string $subCategory, string $style, int $id_produto){
-            return ((new Product())->getSimilarItems($category, $subCategory, $style, $id_produto));
+        public static function getSimilarItems(string $category, int $id_produto){
+            return ((new Product())->getSimilarItems($category, $id_produto));
         }
     }
 ?>

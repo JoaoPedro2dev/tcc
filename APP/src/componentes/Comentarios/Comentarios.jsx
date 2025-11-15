@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { ThumbsUp, ThumbsDown } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ThumbsUp, ThumbsDown, ChevronRight } from "lucide-react";
 import "./comentarios.css";
+import { useUser } from "../../context/UserContext";
 
 const initialComments = [
   {
@@ -42,10 +43,17 @@ const initialComments = [
 ];
 
 function Comentarios() {
+  const { user } = useUser();
+  const [userData, setUserData] = useState(false);
   const [comments, setComments] = useState(initialComments);
   const [visibleReplies, setVisibleReplies] = useState({});
+  const [inputValue, setInputValue] = useState("");
 
   const hasPurchased = true;
+
+  useEffect(() => {
+    setUserData(user);
+  }, [user]);
 
   const toggleReplies = (commentId) => {
     setVisibleReplies((prev) => ({
@@ -88,17 +96,34 @@ function Comentarios() {
     );
   };
 
+  const handleComment = () => {
+    if (!inputValue.trim()) return;
+
+    const newComment = {
+      id: Date.now,
+      user: {
+        name: userData.name,
+        avatar: userData.profile_photo,
+      },
+      date: new Date(),
+      text: inputValue,
+      likes: 0,
+      dislikes: 0,
+      replies: [],
+    };
+
+    setComments((prev) => [...prev, newComment]);
+
+    console.log("mudou", newComment);
+  };
+
   return (
     <div className="comment-list">
       <h3>Comentários</h3>
 
-      {hasPurchased ? (
+      {hasPurchased && userData?.id && (
         <div className="can-comment">
           Você pode comentar sobre este produto.
-        </div>
-      ) : (
-        <div className="cannot-comment">
-          Você precisa comprar este produto para deixar um comentário.
         </div>
       )}
 
@@ -108,77 +133,76 @@ function Comentarios() {
         </p>
       ) : (
         comments.map((comment) => (
-          <div key={comment.id} className="comment-card">
+          <div key={comment?.id} className="comment-card">
             <img
-              src={comment.user.avatar}
-              alt={comment.user.name}
+              src={comment?.user?.avatar}
+              alt={comment?.user?.name}
               className="avatar"
             />
             <div className="comment-content">
               <div className="comment-header">
-                <strong>{comment.user.name}</strong>
+                <strong>{comment?.user?.name}</strong>
                 <span className="date">
-                  {new Date(comment.date).toLocaleDateString("pt-BR")}
+                  {new Date(comment?.date).toLocaleDateString("pt-BR")}
                 </span>
               </div>
-              <p>{comment.text}</p>
+              <p>{comment?.text}</p>
               <div className="comment-actions">
-                <button onClick={() => handleLike(comment.id)}>
+                <button onClick={() => handleLike(comment?.id)}>
                   <ThumbsUp size={16} />
-                  <span>{comment.likes}</span>
+                  <span>{comment?.likes}</span>
                 </button>
-                <button onClick={() => handleDislike(comment.id)}>
+                <button onClick={() => handleDislike(comment?.id)}>
                   <ThumbsDown size={16} />
-                  <span>{comment.dislikes}</span>
+                  <span>{comment?.dislikes}</span>
                 </button>
               </div>
-
-              {comment.replies.length > 0 && (
+              {comment?.replies?.length > 0 && (
                 <>
                   <button
                     className="toggle-replies-btn"
                     onClick={() => toggleReplies(comment.id)}
                   >
-                    {visibleReplies[comment.id]
+                    {visibleReplies[comment?.id]
                       ? "Ocultar respostas"
                       : "Mostrar respostas"}
                   </button>
 
-                  {visibleReplies[comment.id] && (
+                  {visibleReplies[comment?.id] && (
                     <div className="replies">
-                      {comment.replies.map((reply) => (
+                      {comment?.replies?.map((reply) => (
                         <div key={reply.id} className="reply-card">
                           <img
-                            src={reply.user.avatar}
-                            alt={reply.user.name}
+                            src={reply?.user?.avatar}
+                            alt={reply?.user?.name}
                             className="avatar"
                           />
                           <div className="comment-content">
                             <div className="comment-header">
-                              <strong>{reply.user.name}</strong>
+                              <strong>{reply?.user?.name}</strong>
                               <span className="date">
-                                {new Date(reply.date).toLocaleDateString(
+                                {new Date(reply?.date).toLocaleDateString(
                                   "pt-BR"
                                 )}
                               </span>
                             </div>
-                            <p>{reply.text}</p>
+                            <p>{reply?.text}</p>
                             <div className="comment-actions">
                               <button
                                 onClick={() =>
-                                  handleLike(reply.id, true, comment.id)
+                                  handleLike(reply?.id, true, comment.id)
                                 }
                               >
                                 <ThumbsUp size={16} />
-                                <span>{reply.likes}</span>
+                                <span>{reply?.likes}</span>
                               </button>
                               <button
                                 onClick={() =>
-                                  handleDislike(reply.id, true, comment.id)
+                                  handleDislike(reply?.id, true, comment?.id)
                                 }
                               >
                                 <ThumbsDown size={16} />
-                                <span>{reply.dislikes}</span>
+                                <span>{reply?.dislikes}</span>
                               </button>
                             </div>
                           </div>
@@ -191,6 +215,24 @@ function Comentarios() {
             </div>
           </div>
         ))
+      )}
+
+      {hasPurchased && userData?.id && (
+        <div className="comment-input-box">
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => {
+              if (e.target.value.length > 300) return;
+
+              setInputValue(e.target.value);
+            }}
+            placeholder="De sua opinião sobre o produto"
+          />{" "}
+          <button onClick={() => handleComment()}>
+            <ChevronRight />
+          </button>
+        </div>
       )}
     </div>
   );

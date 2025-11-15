@@ -11,7 +11,12 @@ import {
   Check,
   EarthLock,
 } from "lucide-react";
-import { formatarData, monetaryFormatting } from "../../helpers/functions";
+import {
+  formatarData,
+  formatDefaultDate,
+  formatHour,
+  monetaryFormatting,
+} from "../../helpers/functions";
 import { useState } from "react";
 import "./PurchasesCard.css";
 import { useNavigate } from "react-router-dom";
@@ -90,7 +95,9 @@ function PurchaseCard({ purchaseData }) {
     const status = product.status.toLowerCase();
 
     if (status === "entregue" && product.data_entregue) {
-      return `Entregue em ${formatarData(product.data_entregue)}`;
+      return `Entregue em ${formatDefaultDate(
+        product.data_entregue
+      )} as ${formatHour(product.data_entregue)}`;
     }
 
     if (
@@ -201,9 +208,10 @@ function PurchaseCard({ purchaseData }) {
                   onClick={() => {
                     product.status === "entregue" ||
                       (product.status === "cancelado" &&
-                        navigate("/minhas-compras/detalhes", {
-                          state: purchase.id_compra,
-                        }));
+                        console.log("navegar"));
+                    navigate("/minhas-compras/detalhes", {
+                      state: purchase.id_compra,
+                    });
                   }}
                 >
                   <img
@@ -230,6 +238,15 @@ function PurchaseCard({ purchaseData }) {
                         <p>Cor: {product.cor}</p>
                         <p>Tamanho: {product.tamanho}</p>
                       </div>
+
+                      {/* {product.status === "entregue" && (
+                        <div className="colorGray small">
+                          <p>
+                            Entregue em{" "}
+                            {formatDefaultDate(product.data_entregue)}
+                          </p>
+                        </div>
+                      )} */}
                     </div>
 
                     {/* Status Badge */}
@@ -269,12 +286,11 @@ function PurchaseCard({ purchaseData }) {
                           Cancelar
                         </button>
                       )}
-
-                    {product.status === "Entregue" && (
+                    {/* {product.status === "entregue" && (
                       <button className="action-button review-button">
                         Avaliar
                       </button>
-                    )}
+                    )} */}
                   </div>
                 </div>
               </div>

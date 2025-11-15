@@ -74,10 +74,10 @@ class ItensCompraDAO extends DAO{
         return $stmt->execute([$motivo_cancelamento, $quem_cancelou, $id_item]);
     }
 
-    public function alterarStatus(int $id_item, string $novo_estado):bool{
-        $sql = "UPDATE itens_compra SET status = ? WHERE id_item = ?";
+    public function alterarStatus(int $id_item, string $novo_estado, string $data_entregue = null):bool{
+        $sql = "UPDATE itens_compra SET `status` = ?, data_entregue = ? WHERE id_item = ?";
 
         $stmt = parent::$conexao->prepare($sql);
-        return $stmt->execute([$novo_estado, $id_item]);
+        return $stmt->execute([$novo_estado, $data_entregue, $id_item]);
     }
 }

@@ -716,83 +716,66 @@ class ProductDAO extends DAO{
     }
 
 
-    public function getSimilarItems(string $category, string $subCategory, string $style, int $id_produto){
+    public function getSimilarItems(string $category, int $id_produto)
+    {
         $sql = "SELECT p.*, pi.cor, pi.stock_cor, pv.tamanho, pv.quantity
                 FROM produtos p
-                INNER JOIN produtos_itens pi ON pi.id_produto = p.id
-                INNER JOIN produtos_variacoes pv ON pv.id_item = pi.id
-                WHERE p.category = ? OR p.subCategory LIKE ? OR p.style LIKE ? AND p.id != ? 
-                LIMIT 15";
+                JOIN produtos_itens pi ON pi.id_produto = p.id
+                JOIN produtos_variacoes pv ON pv.id_item = pi.id
+                WHERE p.id != ?
+                AND p.category = ?
+                ORDER BY RAND()
+                LIMIT 40";  // pega mais linhas, mas depois agrupa
 
         $stmt = parent::$conexao->prepare($sql);
-        $stmt->execute([$category, "%$subCategory%", "%$style%"]);
-        $rows  = $stmt->fetchAll(DAO::FETCH_ASSOC);
-        
+        $stmt->execute([$id_produto, $category]);
+
+        $rows = $stmt->fetchAll(DAO::FETCH_ASSOC);
+
         $produtos = [];
+
         foreach ($rows as $row) {
+
             $id = $row['id'];
 
-            // Cria o produto se ainda não existir
             if (!isset($produtos[$id])) {
-                $produto = new \Model\Product();
-                $produto->setId($row['id']);
-                $produto->setSellerId($row['sellerId']);
-                $produto->setProductName($row['productName']);
-                $produto->setCategory($row['category']);
-                $produto->setSubCategory($row['subCategory']);
-                $produto->setStyle($row['style']);
-                $produto->setBrand($row['brand']);
-                $produto->setGender($row['gender']);
-                $produto->setCondition($row['condition']);
-                $produto->setDescription($row['description']);
-                $produto->setPrice($row['price']);
-                $produto->setShippingCost($row['shippingCost']);
-                $produto->setSalesQuantity($row['salesQuantity']);
-                $produto->setPromotionPrice($row['promotionPrice']);
-                $produto->setDeliveryTime($row['deliveryTime']);
-                $produto->setImages($row['images']);
 
-                $produto->itenStock = []; // cria array vazio
+                $produto = new \Model\Product();
+                foreach ($row as $campo => $valor) {
+                    if (property_exists($produto, $campo)) {
+                        $produto->$campo = $valor;
+                    }
+                }
+
+                $produto->itenStock = [];
                 $produtos[$id] = $produto;
             }
 
-            // adiciona cor e tamanho ao produto
+            // Cor e tamanhos
             $produto = $produtos[$id];
-            $itenStock = &$produto->itenStock; // referência direta
+            $itenStock = &$produto->itenStock;
 
-            $corExistente = false;
-            foreach ($itenStock as &$corItem) {
-                if ($corItem['cor'] === $row['cor']) {
-                    $corItem['tamanhos'][] = [
-                        "tamanho" => $row['tamanho'],
-                        "qnt" => $row['quantity'],
-                        "stockTotalColor" => $row['stock_cor']
-                    ];
-                    $corExistente = true;
-                    break;
-                }
-            }
-
-            if (!$corExistente) {
-                $itenStock[] = [
+            if (!isset($itenStock[$row['cor']])) {
+                $itenStock[$row['cor']] = [
                     "cor" => $row['cor'],
-                    "tamanhos" => [
-                        [
-                            "tamanho" => $row['tamanho'],
-                            "qnt" => $row['quantity'],
-                            "stockTotalColor" => $row['stock_cor']
-                        ]
-                    ]
+                    "stockTotalColor" => $row['stock_cor'],
+                    "tamanhos" => []
                 ];
             }
+
+            $itenStock[$row['cor']]["tamanhos"][] = [
+                "tamanho" => $row['tamanho'],
+                "qnt" => $row['quantity']
+            ];
         }
 
-        // Aplica o itenStock no final
+        // Aplicar ao model
         foreach ($produtos as $produto) {
-            $produto->setItenStock($produto->itenStock, true);
+            $produto->setItenStock(array_values($produto->itenStock));
         }
 
         return array_values($produtos);
     }
+
 }
 ?>

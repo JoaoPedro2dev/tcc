@@ -48,8 +48,8 @@ class ItensCompra
         return ((new ItensCompraDAO())->cancelarItem($id_item, $motivo_cancelamento, $quem_cancelou));
     }
 
-    public function alterarStatus(int $id_item, string $novo_estado):bool{
-        return ((new ItensCompraDAO())->alterarStatus($id_item,  $novo_estado));
+    public function alterarStatus(int $id_item, string $novo_estado, string $data_entregue = null):bool{
+        return ((new ItensCompraDAO())->alterarStatus($id_item, $novo_estado, $data_entregue));
     }
 
     // --- Getters e Setters ---

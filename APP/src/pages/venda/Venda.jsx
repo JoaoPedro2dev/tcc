@@ -83,20 +83,27 @@ function Venda() {
         setLoading(false);
       });
     // .catch((error) => console.log(error));
-  }, []);
+  }, [id]);
 
   const getSimilarItems = (item) => {
+    console.log("item ID", item);
+
     fetch(
-      `http://localhost/tcc/API/GET/produtos/similar_items?category=${item.category}&subCategory=${item.subCategory}&style=${item.style}`
+      `http://localhost/tcc/API/GET/produtos/similar_items?category=${item.category}&id_produto=${item.id}`
     )
       .then((r) => r.json())
       .then((data) => {
+        console.log("itens similares", data);
         if (data.length) {
           setSimilarItems(data);
         }
-      })
-      .catch((error) => console.error(error));
+      });
+    // .catch((error) => console.error(error));
   };
+
+  function criarPrateleira(itens) {
+    return <Prateleira title={"Itens parecidos"} itens={itens} />;
+  }
 
   useEffect(() => {
     if (data?.itenStock?.length) {
@@ -160,10 +167,6 @@ function Venda() {
     ]);
 
     navigate(user && user.id ? "/venda/finalizar-compra" : "/login");
-  }
-
-  function criarPrateleira(itens) {
-    return <Prateleira title={"Itens similares"} itens={itens} />;
   }
 
   if (loading) return <Loading />;
@@ -400,13 +403,13 @@ function Venda() {
         </div>
       </section>
 
+      {similarItems && (
+        <section id="similar-items">{criarPrateleira(similarItems)}</section>
+      )}
+
       <section>
         <Comentarios />
       </section>
-
-      {similarItems?.length > 2 && (
-        <section id="similar-items">{criarPrateleira(similarItems)}</section>
-      )}
 
       <Footer />
     </div>

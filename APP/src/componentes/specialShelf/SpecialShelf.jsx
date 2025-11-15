@@ -92,7 +92,7 @@ function SpecialShelf() {
     })
       .then((r) => r.json())
       .then((data) => {
-        console.log("prateleira especial", data);
+        // console.log("prateleira especial", data);
         if (data.length > 0) {
           setItens(data);
           setTitle("Inspirado nos últimos vistos");
